@@ -1,6 +1,7 @@
-import { Binary, Schema, model } from 'mongodb';
-/*
- */
+import { Schema, model } from 'mongoose';
+
+// Create CarSchema
+
 const CarSchema = new Schema({
   brandName: {
     type: String,
@@ -44,7 +45,7 @@ const CarSchema = new Schema({
     required: true,
   },
   images: {
-    type: Binary,
+    type: Array,
     required: true,
   },
   ownerID: {
