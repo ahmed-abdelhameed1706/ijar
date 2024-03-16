@@ -1,38 +1,8 @@
 import express from 'express';
 import { verifyToken } from '../utils/middlewares';
-import UserController from '../controllers/UserController';
 import CarController from '../controllers/CarController';
-import CartController from '../controllers/CartController';
 
-const router = express.Router();
-
-/**
- * @swagger
- * /signup:
- *   post:
- *     summary: User sign up
- *     description: Register a new user
- *     responses:
- *       200:
- *         description: User signed up successfully
- *       400:
- *         description: Invalid request data
- */
-router.post('/signup', UserController.signUp);
-
-/**
- * @swagger
- * /login:
- *   post:
- *     summary: User login
- *     description: Authenticate user and generate access token
- *     responses:
- *       200:
- *         description: User logged in successfully
- *       401:
- *         description: Invalid credentials
- */
-router.post('/login', UserController.login);
+const carRouter = express.Router();
 
 /**
  * @swagger
@@ -50,7 +20,7 @@ router.post('/login', UserController.login);
  *       400:
  *         description: Invalid request data
  */
-router.post('/cars', verifyToken, CarController.postCar);
+carRouter.post('/cars', verifyToken, CarController.postCar);
 
 /**
  * @swagger
@@ -64,17 +34,17 @@ router.post('/cars', verifyToken, CarController.postCar);
  *       400:
  *         description: Invalid request data
  */
-router.get('/cars', CarController.getCars);
+carRouter.get('/cars', CarController.getCars);
 
 /**
  * @swagger
- * /cars/{carId}:
+ * /cars/{id}:
  *   get:
  *     summary: Get a car by ID
  *     description: Retrieve a car by its ID
  *     parameters:
  *       - in: path
- *         name: carId
+ *         name: id
  *         required: true
  *         schema:
  *           type: string
@@ -87,11 +57,11 @@ router.get('/cars', CarController.getCars);
  *       404:
  *         description: Car not found
  */
-router.get('/cars/:id', CarController.getCar);
+carRouter.get('/cars/:id', CarController.getCar);
 
 /**
  * @swagger
- * /cars/{carId}:
+ * /cars/{id}:
  *   put:
  *     summary: Update a car by ID
  *     description: Update a car by its ID
@@ -99,7 +69,7 @@ router.get('/cars/:id', CarController.getCar);
  *       - bearerAuth: []
  *     parameters:
  *       - in: path
- *         name: carId
+ *         name: id
  *         required: true
  *         schema:
  *           type: string
@@ -114,11 +84,11 @@ router.get('/cars/:id', CarController.getCar);
  *       404:
  *         description: Car not found
  */
-router.put('/cars/:id', verifyToken, CarController.updateCar);
+carRouter.put('/cars/:id', verifyToken, CarController.updateCar);
 
 /**
  * @swagger
- * /cars/{carId}:
+ * /cars/{id}:
  *   delete:
  *     summary: Delete a car by ID
  *     description: Delete a car by its ID
@@ -126,7 +96,7 @@ router.put('/cars/:id', verifyToken, CarController.updateCar);
  *       - bearerAuth: []
  *     parameters:
  *       - in: path
- *         name: carId
+ *         name: id
  *         required: true
  *         schema:
  *           type: string
@@ -139,7 +109,6 @@ router.put('/cars/:id', verifyToken, CarController.updateCar);
  *       404:
  *         description: Car not found
  */
-router.delete('/cars/:id', verifyToken, CarController.deleteCar);
+carRouter.delete('/cars/:id', verifyToken, CarController.deleteCar);
 
-
-export default router;
+export default carRouter;
