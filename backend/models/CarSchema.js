@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose';
 
-// Create CarSchema
+// Create CarSchema for Object Car
 
 const CarSchema = new Schema({
   brandName: {
@@ -40,17 +40,16 @@ const CarSchema = new Schema({
     required: true,
     unique: true,
   },
-  status: {
-    type: String,
-    required: true,
+  available: {
+    type: Boolean,
+    default: true,
   },
   images: {
     type: Array,
-    required: true,
   },
-  ownerID: {
-    type: Schema.Types.ObjectId,
-    ref: 'Owner',
+  ownerId: {
+    type: Schema.ObjectId,
+    ref: 'User',
   },
   engineId: {
     type: String,

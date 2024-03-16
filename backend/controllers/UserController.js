@@ -28,6 +28,7 @@ export default class UserController {
         address,
         role,
       });
+      console.log(newUser);
 
       await newUser.save();
 
