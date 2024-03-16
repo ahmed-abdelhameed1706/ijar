@@ -41,23 +41,19 @@ export default class UserController {
     try {
       const { email, password } = req.body;
 
-      // Check if user exists
       const user = await User.findOne({ email });
       if (!user) {
         return res.status(404).json({ message: "User not found" });
       }
 
-      // Check password
       const isPasswordCorrect = await bcrypt.compare(password, user.password);
       if (!isPasswordCorrect) {
         return res.status(400).json({ message: "Invalid credentials" });
       }
 
-      // Generate JWT and refresh token
       const accessToken = generateAccessToken(user);
       const refreshToken = generateRefreshToken(user);
 
-      // Set refresh token as a cookie
       res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
         path: "/refresh-token",
