@@ -58,7 +58,6 @@ export default class UserController {
       //   httpOnly: true,
       //   path: '/refresh-token',
       // });
-      console.log(accessToken);
 
       res.status(200).json({ user: user, accessToken });
     } catch (error) {

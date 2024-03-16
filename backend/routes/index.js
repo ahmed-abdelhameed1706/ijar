@@ -87,7 +87,7 @@ router.get('/cars', CarController.getCars);
  *       404:
  *         description: Car not found
  */
-router.get('/cars/:carId', CarController.getCar);
+router.get('/cars/:id', CarController.getCar);
 
 /**
  * @swagger
@@ -114,7 +114,7 @@ router.get('/cars/:carId', CarController.getCar);
  *       404:
  *         description: Car not found
  */
-router.put('/cars/:carId', verifyToken, CarController.updateCar);
+router.put('/cars/:id', verifyToken, CarController.updateCar);
 
 /**
  * @swagger
@@ -139,7 +139,7 @@ router.put('/cars/:carId', verifyToken, CarController.updateCar);
  *       404:
  *         description: Car not found
  */
-router.delete('/cars/:carId', verifyToken, CarController.deleteCar);
+router.delete('/cars/:id', verifyToken, CarController.deleteCar);
 
 
 export default router;
