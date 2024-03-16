@@ -4,7 +4,8 @@ import dotenv from "dotenv";
 dotenv.config();
 
 export const verifyToken = (req, res, next) => {
-  const token = req.headers["authorization"];
+  console.log("Headers:", req.headers);
+  const token = req.headers["accesstoken"];
   if (!token) {
     return res.status(403).send({ message: "No token provided!" });
   }
