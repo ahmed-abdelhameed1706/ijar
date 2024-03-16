@@ -1,5 +1,5 @@
-import User from "../models/UserSchema";
-import bcrypt from "bcryptjs";
+import User from '../models/UserSchema';
+import bcrypt from 'bcryptjs';
 
 export default class UserController {
   static signUp = async (req, res) => {
@@ -11,7 +11,7 @@ export default class UserController {
         $or: [{ email }, { phoneNumber }],
       });
       if (existingUser) {
-        return res.status(400).json({ message: "User already exists" });
+        return res.status(400).json({ message: 'User already exists' });
       }
 
       const hashedPassword = await bcrypt.hash(password, 12);
@@ -24,12 +24,13 @@ export default class UserController {
         address,
         role,
       });
+      console.log(newUser);
 
       await newUser.save();
 
-      res.status(201).json({ message: "User created successfully" });
+      res.status(201).json({ message: 'User created successfully' });
     } catch (error) {
-      res.status(500).json({ message: "Something went wrong" });
+      res.status(500).json({ message: 'Something went wrong' });
     }
   };
 }
