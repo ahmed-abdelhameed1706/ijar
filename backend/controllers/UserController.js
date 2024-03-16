@@ -1,9 +1,9 @@
-import User from "../models/UserSchema";
-import bcrypt from "bcryptjs";
+import User from '../models/UserSchema';
+import bcrypt from 'bcryptjs';
 import {
   generateAccessToken,
   generateRefreshToken,
-} from "../utils/middlewares";
+} from '../utils/middlewares';
 
 export default class UserController {
   static signUp = async (req, res) => {
@@ -15,7 +15,7 @@ export default class UserController {
         $or: [{ email }, { phoneNumber }],
       });
       if (existingUser) {
-        return res.status(400).json({ message: "User already exists" });
+        return res.status(400).json({ message: 'User already exists' });
       }
 
       const hashedPassword = await bcrypt.hash(password, 12);
@@ -32,9 +32,9 @@ export default class UserController {
 
       await newUser.save();
 
-      res.status(201).json({ message: "User created successfully" });
+      res.status(201).json({ message: 'User created successfully' });
     } catch (error) {
-      res.status(500).json({ message: "Something went wrong" });
+      res.status(500).json({ message: 'Something went wrong' });
     }
   };
   static login = async (req, res) => {
@@ -43,25 +43,26 @@ export default class UserController {
 
       const user = await User.findOne({ email });
       if (!user) {
-        return res.status(404).json({ message: "User not found" });
+        return res.status(404).json({ message: 'User not found' });
       }
 
       const isPasswordCorrect = await bcrypt.compare(password, user.password);
       if (!isPasswordCorrect) {
-        return res.status(400).json({ message: "Invalid credentials" });
+        return res.status(400).json({ message: 'Invalid credentials' });
       }
 
       const accessToken = generateAccessToken(user);
-      const refreshToken = generateRefreshToken(user);
+      // const refreshToken = generateRefreshToken(user);
 
-      res.cookie("refreshToken", refreshToken, {
-        httpOnly: true,
-        path: "/refresh-token",
-      });
+      // res.cookie('refreshToken', refreshToken, {
+      //   httpOnly: true,
+      //   path: '/refresh-token',
+      // });
+      console.log(accessToken);
 
       res.status(200).json({ user: user, accessToken });
     } catch (error) {
-      res.status(500).json({ message: "Something went wrong" });
+      res.status(500).json({ message: 'Something went wrong' });
     }
   };
 }

@@ -1,17 +1,17 @@
-import jwt from "jsonwebtoken";
-import dotenv from "dotenv";
+import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
 
 dotenv.config();
 
 export const verifyToken = (req, res, next) => {
-  console.log("Headers:", req.headers);
-  const token = req.headers["accesstoken"];
+  console.log('Headers:', req.headers);
+  const token = req.headers['accesstoken'];
   if (!token) {
-    return res.status(403).send({ message: "No token provided!" });
+    return res.status(403).send({ message: 'No token provided!' });
   }
-  jwt.verify(token, process.env.SECRET, (err, decoded) => {
+  jwt.verify(token, process.env.SECRET || 'hsghs6', (err, decoded) => {
     if (err) {
-      return res.status(401).send({ message: "Unauthorized!" });
+      return res.status(401).send({ message: 'Unauthorized!' });
     }
     req.userId = decoded.id;
     next();
@@ -19,13 +19,17 @@ export const verifyToken = (req, res, next) => {
 };
 
 export const generateAccessToken = (user) => {
-  return jwt.sign({ email: user.email, id: user._id }, process.env.SECRET, {
-    expiresIn: "15m",
-  });
+  return jwt.sign(
+    { email: user.email, id: user._id },
+    process.env.SECRET || 'hsghs6',
+    {
+      expiresIn: '15m',
+    },
+  );
 };
 
 export const generateRefreshToken = (user) => {
   return jwt.sign({ email: user.email, id: user._id }, process.env.REFRESH, {
-    expiresIn: "7d",
+    expiresIn: '7d',
   });
 };

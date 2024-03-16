@@ -1,35 +1,34 @@
-import * as jwt from 'jsonwebtoken';
-import { Schema } from 'mongoose';
 import Car from '../models/CarSchema';
 import User from '../models/UserSchema';
 
 class CarController {
   static async postCar(req, res) {
-    const token = req.header('Authorization');
-    const { userId } = jwt.verify(token, process.env.SECRET_KEY);
-
-    const user = await User.findById(Schema.ObjectId(userId));
+    const user = await User.findById(req.userId);
 
     if (!user || user.role !== 'owner') {
       return res.status(401).send({ error: 'Unauthorized' });
     }
 
     req.body.ownerId = user.id;
-
-    const car = new Car(req.body);
-    car.save().catch((e) => res.status(400).send({ error: e.toString() }));
-    const { _id, ...rest } = car;
-    res.status(201).json({ id: _id, ...rest });
+    try {
+      const car = new Car(req.body);
+      await car.save();
+      const { _id, ...rest } = car._doc;
+      res.status(201).json({ id: _id, ...rest });
+    } catch (e) {
+      return res.status(400).send({ error: e.message });
+    }
   }
 
   static async getCar(req, res) {
-    const carId = req.params.id;
+    const carId = req.params.carId;
 
-    const car = await Car.findById(Schema.ObjectId(carId));
+    const car = await Car.findById(carId);
+    console.log(car._doc);
     if (!car) {
       return res.status(404).json({ error: 'Not found' });
     }
-    const { _id, ...rest } = car;
+    const { _id, ...rest } = car._doc;
     return res.json({ id: _id, ...rest });
   }
 
@@ -52,45 +51,44 @@ class CarController {
   }
 
   static async updateCar(req, res) {
-    const carId = req.params.id;
-    const data = req.body.data;
-    const token = req.header('Authorization');
-    const { userId } = jwt.verify(token, process.env.SECRET_KEY);
+    const carId = req.params.carId;
+    const data = req.body;
 
-    const user = await User.findById(Schema.ObjectId(userId));
+    const user = await User.findById(req.userId);
 
     if (!user || user.role !== 'owner') {
       return res.status(401).send({ error: 'Unauthorized' });
     }
-
-    const car = await Car.findById(Schema.ObjectId(carId));
+    const car = await Car.findOne({
+      _id: carId,
+      ownerId: user._id,
+    });
 
     if (!car) {
       return res.status(404).send({ error: 'Not found' });
     }
     const newCar = await Car.findByIdAndUpdate(car.id, data);
-    const { _id, isPublic, ...rest } = newCar;
-    return res.send({ id: _id, ...rest });
+    const { _id, isPublic, ...rest } = newCar._doc;
+    return res.send({ id: _id, ...rest, ...data });
   }
 
   static async deleteCar(req, res) {
-    const carId = req.params.id;
-    const data = req.body.data;
-    const token = req.header('Authorization');
-    const { userId } = jwt.verify(token, process.env.SECRET_KEY);
-
-    const user = await User.findById(Schema.ObjectId(userId));
+    const carId = req.params.carId;
+    const user = await User.findById(req.userId);
 
     if (!user || user.role !== 'owner') {
       return res.status(401).send({ error: 'Unauthorized' });
     }
 
-    const car = await Car.findById(Schema.ObjectId(carId));
+    const car = await Car.findOne({
+      _id: carId,
+      ownerId: user._id,
+    });
 
     if (!car) {
       return res.status(404).send({ error: 'Not found' });
     }
-    await Car.findOneAndDelete(car.id);
+    await Car.findByIdAndDelete(car.id);
     return res.status(204).send();
   }
 
