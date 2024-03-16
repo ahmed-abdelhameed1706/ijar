@@ -19,6 +19,10 @@ const CartSchema = new Schema({
     type: Date,
     required: true,
   },
+  rentalTerm: {
+    type: Number,
+    default: 1,
+  },
   totalCost: {
     type: Number,
     required: true,
