@@ -58,6 +58,10 @@ const CarSchema = new Schema({
   },
   averageRate: {
     type: Number,
+    default: 0,
+  },
+  comments: {
+    type: Array,
   },
   description: {
     type: String,

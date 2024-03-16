@@ -1,7 +1,7 @@
-import express from "express";
-import { verifyToken } from "../utils/middlewares";
-import UserController from "../controllers/UserController";
-import CarController from "../controllers/CarController";
+import express from 'express';
+import { verifyToken } from '../utils/middlewares';
+import CarController from '../controllers/CarController';
+import CommentController from '../controllers/CommentController';
 
 const apiRouter = express.Router();
 
@@ -21,7 +21,7 @@ const apiRouter = express.Router();
  *       400:
  *         description: Invalid request data
  */
-apiRouter.post("/cars", verifyToken, CarController.postCar);
+apiRouter.post('/cars', verifyToken, CarController.postCar);
 
 /**
  * @swagger
@@ -35,7 +35,7 @@ apiRouter.post("/cars", verifyToken, CarController.postCar);
  *       400:
  *         description: Invalid request data
  */
-apiRouter.get("/cars", CarController.getCars);
+apiRouter.get('/cars', CarController.getCars);
 
 /**
  * @swagger
@@ -58,7 +58,7 @@ apiRouter.get("/cars", CarController.getCars);
  *       404:
  *         description: Car not found
  */
-apiRouter.get("/cars/:carId", CarController.getCar);
+apiRouter.get('/cars/:id', CarController.getCar);
 
 /**
  * @swagger
@@ -85,7 +85,7 @@ apiRouter.get("/cars/:carId", CarController.getCar);
  *       404:
  *         description: Car not found
  */
-apiRouter.put("/cars/:carId", verifyToken, CarController.updateCar);
+apiRouter.put('/cars/:id', verifyToken, CarController.updateCar);
 
 /**
  * @swagger
@@ -110,6 +110,12 @@ apiRouter.put("/cars/:carId", verifyToken, CarController.updateCar);
  *       404:
  *         description: Car not found
  */
-apiRouter.delete("/cars/:carId", verifyToken, CarController.deleteCar);
+apiRouter.delete('/cars/:id', verifyToken, CarController.deleteCar);
+
+apiRouter.post('/comments', verifyToken, CommentController.postComment);
+
+apiRouter.get('/comments/:carId', CommentController.getComments);
+
+apiRouter.delete('/comments/:id', verifyToken, CommentController.deleteComment);
 
 export default apiRouter;

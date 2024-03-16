@@ -1,0 +1,5 @@
+POST http://0.0.0.0:3000/signup 
+content-type: application/json
+
+{"fullName": "abdo","email": "abdo@gmail.com", "password": "abdo1234", "phoneNumber": 1234, "address": "hi", "role": "owner"}
+
