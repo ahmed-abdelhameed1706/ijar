@@ -15,9 +15,9 @@ router.get('/cars/:carId', CarController.getCar);
 router.put('/cars/:carId', verifyToken, CarController.updateCar);
 router.delete('/cars/:carId', verifyToken, CarController.deleteCar);
 
-router.post('/api/cart/add', verifyToken, CartController.addToCart);
-router.get('/api/cart/view', verifyToken, CartController.getCart);
-router.delete('/api/cart/:id', verifyToken, CartController.deleteFromCart);
-router.post('/api/cart/checkout', verifyToken, CartController.checkout);
+router.post('/cart', verifyToken, CartController.addToCart);
+router.get('/cart', verifyToken, CartController.getCart);
+router.delete('/cart/:id', verifyToken, CartController.deleteFromCart);
+router.post('/checkout', verifyToken, CartController.checkout);
 
 export default router;
