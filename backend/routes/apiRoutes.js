@@ -1,38 +1,9 @@
-import express from 'express';
-import { verifyToken } from '../utils/middlewares';
-import UserController from '../controllers/UserController';
-import CarController from '../controllers/CarController';
-import CartController from '../controllers/CartController';
+import express from "express";
+import { verifyToken } from "../utils/middlewares";
+import UserController from "../controllers/UserController";
+import CarController from "../controllers/CarController";
 
-const router = express.Router();
-
-/**
- * @swagger
- * /signup:
- *   post:
- *     summary: User sign up
- *     description: Register a new user
- *     responses:
- *       200:
- *         description: User signed up successfully
- *       400:
- *         description: Invalid request data
- */
-router.post('/signup', UserController.signUp);
-
-/**
- * @swagger
- * /login:
- *   post:
- *     summary: User login
- *     description: Authenticate user and generate access token
- *     responses:
- *       200:
- *         description: User logged in successfully
- *       401:
- *         description: Invalid credentials
- */
-router.post('/login', UserController.login);
+const apiRouter = express.Router();
 
 /**
  * @swagger
@@ -50,7 +21,7 @@ router.post('/login', UserController.login);
  *       400:
  *         description: Invalid request data
  */
-router.post('/cars', verifyToken, CarController.postCar);
+apiRouter.post("/cars", verifyToken, CarController.postCar);
 
 /**
  * @swagger
@@ -64,7 +35,7 @@ router.post('/cars', verifyToken, CarController.postCar);
  *       400:
  *         description: Invalid request data
  */
-router.get('/cars', CarController.getCars);
+apiRouter.get("/cars", CarController.getCars);
 
 /**
  * @swagger
@@ -87,7 +58,7 @@ router.get('/cars', CarController.getCars);
  *       404:
  *         description: Car not found
  */
-router.get('/cars/:carId', CarController.getCar);
+apiRouter.get("/cars/:carId", CarController.getCar);
 
 /**
  * @swagger
@@ -114,7 +85,7 @@ router.get('/cars/:carId', CarController.getCar);
  *       404:
  *         description: Car not found
  */
-router.put('/cars/:carId', verifyToken, CarController.updateCar);
+apiRouter.put("/cars/:carId", verifyToken, CarController.updateCar);
 
 /**
  * @swagger
@@ -139,7 +110,6 @@ router.put('/cars/:carId', verifyToken, CarController.updateCar);
  *       404:
  *         description: Car not found
  */
-router.delete('/cars/:carId', verifyToken, CarController.deleteCar);
+apiRouter.delete("/cars/:carId", verifyToken, CarController.deleteCar);
 
-
-export default router;
+export default apiRouter;

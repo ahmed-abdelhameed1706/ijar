@@ -1,13 +1,14 @@
 import Cart from '../models/CartSchema';
 import User from '../models/UserSchema';
+import { ObjectId } from 'mongodb';
 
 class CartController {
   static async addToCart(req, res) {
     try {
       const userId = req.userId;
       const data = {
-        userId,
-        carId: req.body.carId,
+        userId: ObjectId(userId),
+        carId: ObjectId(req.body.carId),
         rentalTerm: req.body.rentalTerm || 1,
         totalCost: req.body.totalCost,
       };
