@@ -46,6 +46,9 @@ const authRouter = express.Router();
  *               role:
  *                 type: string
  *                 default: user
+ *               isVerified:
+ *                type: boolean
+ *                default: false
  *     tags: [Auth]
  *     responses:
  *       200:
