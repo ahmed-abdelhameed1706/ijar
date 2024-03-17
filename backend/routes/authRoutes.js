@@ -85,6 +85,28 @@ authRouter.post("/signup", AuthController.signUp);
  */
 authRouter.post("/login", AuthController.login);
 
+/**
+ * @swagger
+ * /auth/verify:
+ *  get:
+ *    summary: Verify user email
+ *    description: Verify user email using token
+ *    tags: [Auth]
+ *    security:
+ *      - bearerAuth: []
+ *    parameters:
+ *     - in: query
+ *       name: token
+ *       required: true
+ *       schema:
+ *          type: string
+ *    responses:
+ *      200:
+ *         description: User email verified successfully
+ *      400:
+ *         description: Invalid token
+ */
+
 authRouter.get("/verify/:token", AuthController.verifyEmail);
 
 export default authRouter;

@@ -85,6 +85,13 @@ cartRouter.get("/cart", verifyToken, CartController.getCart);
  *     tags: [Cart]
  *     security:
  *       - bearerAuth: []
+ *     parameters:
+ *      - in: path
+ *        name: id
+ *        required: true
+ *        schema:
+ *          type: string
+ *        description: ID of the car to delete
  *     responses:
  *       200:
  *         description: Car deleted from cart successfully

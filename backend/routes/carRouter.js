@@ -147,28 +147,7 @@ carRouter.get("/cars/:id", CarController.getCar);
  *         schema:
  *           type: string
  *         description: ID of the car to update
- *     responses:
- *       200:
- *         description: Car updated successfully
- *       401:
- *         description: Unauthorized access
- *       400:
- *         description: Invalid request data
- *       404:
- *         description: Car not found
- */
-carRouter.put("/cars/:id", verifyToken, CarController.updateCar);
-
-/**
- * @swagger
- * /api/cars/{id}:
- *   delete:
- *     summary: Delete a car by ID
- *     description: Delete a car by its ID
- *     tags: [Cars]
- *     security:
- *       - bearerAuth: []
- *     requestBody:
+ *    requestBody:
  *       required: true
  *       content:
  *         application/json:
@@ -231,6 +210,34 @@ carRouter.put("/cars/:id", verifyToken, CarController.updateCar);
  *               description:
  *                 type: string
  *                 default: ""
+ *     responses:
+ *       200:
+ *         description: Car updated successfully
+ *       401:
+ *         description: Unauthorized access
+ *       400:
+ *         description: Invalid request data
+ *       404:
+ *         description: Car not found
+ */
+carRouter.put("/cars/:id", verifyToken, CarController.updateCar);
+
+/**
+ * @swagger
+ * /api/cars/{id}:
+ *   delete:
+ *     summary: Delete a car by ID
+ *     description: Delete a car by its ID
+ *     tags: [Cars]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *      - in: path
+ *        name: id
+ *        required: true
+ *        schema:
+ *          type: string
+ *        description: ID of the car to delete
  *     responses:
  *       200:
  *         description: Car deleted successfully
