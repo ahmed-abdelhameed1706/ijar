@@ -77,32 +77,34 @@ class CartController {
   static async checkout(req, res) {
     try {
       const newCarts = await getAllCart(req, res);
-      console.log(newCarts);
       const result = {
         messages: [],
         errors: []
       };
 
-      newCarts.map(async (c) => {
-        const carId = c.carId;
-        const car = await Car.findOne({ _id: carId });
-        console.log(car);
-        if (car) {
-          if (car.available) {
-            car.available = false;
-            car.save();
-            result.messages.push(`${car.brandName} Booked Successfully`);
+      await Promise.all(
+        newCarts.map(async (c) => {
+          const carId = c.carId;
+          const car = await Car.findOne({ _id: carId });
+          if (car) {
+            if (car.available) {
+              car.available = false;
+              car.customerId = c.userId;
+              await car.save();
+              result.messages.push(`${car.brandName} Booked Successfully`);
+            } else {
+              if (car.customerId.toString() !== c.userId.toString()) {
+                await Cart.findByIdAndDelete(c.id);
+                result.errors.push(`${car.brandName} is not available`);
+              }
+            }
           } else {
             await Cart.findByIdAndDelete(c.id);
-            result.errors.push(`${car.brandName} is not available`);
+            result.errors.push(`Not found`);
           }
-        } else {
-          await Cart.findByIdAndDelete(c.id);
-          result.errors.push(`Not found`);
-        }
-      });
-      
-      return res.status(200).send(result);
+        }));
+
+      return res.status(200).json(result);
     } catch (err) {
       console.log(err);
       return res.status(500).json({ error: 'Internal Server Error' });
