@@ -28,6 +28,9 @@ const UserSchema = new mongoose.Schema({
     enum: ["user", "owner", "admin"],
     default: "user",
   },
+  resetToken: {
+    type: String,
+  },
 });
 
 const User = mongoose.model("User", UserSchema);
