@@ -12,6 +12,69 @@ const carRouter = express.Router();
  *     description: Create a new car entry
  *     security:
  *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *              - brandName
+ *              - model
+ *              - year
+ *              - type
+ *              - color
+ *              - price
+ *              - licensePlateNumber
+ *              - ownerId
+ *              - engineId
+ *             properties:
+ *               brandName:
+ *                 type: string
+ *                 default: Toyota
+ *               model:
+ *                 type: string
+ *                 default: Corolla
+ *               year:
+ *                 type: string
+ *                 default: 2020
+ *               type:
+ *                 type: string
+ *                 default: Sedan
+ *               color:
+ *                 type: string
+ *                 default: Black
+ *               price:
+ *                 type: number
+ *                 default: 100
+ *               licensePlateNumber:
+ *                 type: string
+ *                 default: 123456
+ *               available:
+ *                 type: boolean
+ *                 default: true
+ *               images:
+ *                 type: array
+ *                 items:
+ *                  type: string
+ *                 default: []
+ *               ownerId:
+ *                 type: string
+ *                 default: ""
+ *               engineId:
+ *                 type: string
+ *                 default: ""
+ *               averageRate:
+ *                 type: number
+ *                 default: 0
+ *               comments:
+ *                 type: array
+ *                 items:
+ *                  type: string
+ *                 default: []
+ *               description:
+ *                 type: string
+ *                 default: ""
  *     responses:
  *       200:
  *         description: Car created successfully
@@ -48,6 +111,7 @@ carRouter.get("/cars", CarController.getCars);
  *         required: true
  *         schema:
  *           type: string
+ *
  *         description: ID of the car to retrieve
  *     responses:
  *       200:
