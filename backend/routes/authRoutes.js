@@ -11,7 +11,7 @@ const authRouter = express.Router();
  */
 /**
  * @swagger
- * /signup:
+ * /auth/signup:
  *   post:
  *     summary: User sign up
  *     description: Register a new user
@@ -57,7 +57,7 @@ authRouter.post("/signup", AuthController.signUp);
 
 /**
  * @swagger
- * /login:
+ * /auth/login:
  *   post:
  *     summary: User login
  *     description: Authenticate user and generate access token

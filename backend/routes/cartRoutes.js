@@ -6,12 +6,49 @@ const cartRouter = express.Router();
 
 /**
  * @swagger
- * /cart:
- *   POST:
+ * tags:
+ *  name: Cart
+ *  description: Cart management
+ */
+/**
+ * @swagger
+ * /api/cart:
+ *   post:
  *     summary: Add to Cart
  *     description: Add Car to Cart
+ *     tags: [Cart]
  *     security:
  *       - bearerAuth: []
+ *     requestBody:
+ *      required: true
+ *      content:
+ *       application/json:
+ *        schema:
+ *          type: object
+ *          required:
+ *              - carId
+ *              - userId
+ *              - endDate
+ *              - totalCost
+ *          properties:
+ *             carId:
+ *              type: string
+ *              default: 60f3a0b2d3e4d4b5d4e9e4b5
+ *             userId:
+ *              type: string
+ *              default: 60f3a0b2d3e4d4b5d4e9e4b5
+ *             startDate:
+ *              type: date
+ *              default: 2021-07-01
+ *             endDate:
+ *              type: date
+ *              default: 2021-08-01
+ *             rentalTerm:
+ *              type: number
+ *              default: 1
+ *             totalCost:
+ *              type: number
+ *              default: 100
  *     responses:
  *       200:
  *         description: Car added to cart successfully
@@ -24,10 +61,11 @@ cartRouter.post("/cart", verifyToken, CartController.addToCart);
 
 /**
  * @swagger
- * /cart:
- *   GET:
+ * /api/cart:
+ *   get:
  *     summary: View Cart
  *     description: View Cart
+ *     tags: [Cart]
  *     security:
  *       - bearerAuth: []
  *     responses:
@@ -40,10 +78,11 @@ cartRouter.get("/cart", verifyToken, CartController.getCart);
 
 /**
  * @swagger
- * /cart/:id:
- *   DELETE:
+ * /api/cart/:id:
+ *   delete:
  *     summary: Delete car from cart
  *     description: Delete car from cart
+ *     tags: [Cart]
  *     security:
  *       - bearerAuth: []
  *     responses:
@@ -56,10 +95,11 @@ cartRouter.delete("/cart/:id", verifyToken, CartController.deleteFromCart);
 
 /**
  * @swagger
- * /checkout:
- *   POST:
+ * /api/checkout:
+ *   post:
  *     summary: Checkout
  *     description: Checkout
+ *     tags: [Cart]
  *     security:
  *       - bearerAuth: []
  *     responses:

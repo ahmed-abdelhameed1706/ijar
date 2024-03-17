@@ -10,7 +10,7 @@ const options = {
     },
     servers: [
       {
-        url: "http://localhost:5000/auth/",
+        url: "http://localhost:5000/",
         description: "Local server",
       },
     ],
