@@ -1,14 +1,13 @@
 import Cart from '../models/CartSchema';
 import User from '../models/UserSchema';
-import { ObjectId } from 'mongodb';
 
 class CartController {
   static async addToCart(req, res) {
     try {
       const userId = req.userId;
       const data = {
-        userId: ObjectId(userId),
-        carId: ObjectId(req.body.carId),
+        userId: userId,
+        carId: req.body.carId,
         rentalTerm: req.body.rentalTerm || 1,
         totalCost: req.body.totalCost,
       };
@@ -21,7 +20,7 @@ class CartController {
       const cart = new Cart(data);
       await cart.save();
       const { _id, ...rest } = cart._doc;
-      return res.status(201).json({ id: _id, ...rest });
+      return res.status(200).json({ id: _id, ...rest });
     } catch (err) {
       console.log(err);
       return res.status(500).json({ error: 'Internal Server Error' });
