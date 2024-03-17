@@ -1,5 +1,4 @@
 import Cart from '../models/CartSchema';
-import User from '../models/UserSchema';
 import Car from '../models/CarSchema';
 const cron = require('node-cron');
 
