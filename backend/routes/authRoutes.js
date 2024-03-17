@@ -1,5 +1,5 @@
 import express from "express";
-import UserController from "../controllers/UserController";
+import AuthController from "../controllers/AuthController";
 
 const authRouter = express.Router();
 
@@ -15,7 +15,7 @@ const authRouter = express.Router();
  *       400:
  *         description: Invalid request data
  */
-authRouter.post("/signup", UserController.signUp);
+authRouter.post("/signup", AuthController.signUp);
 
 /**
  * @swagger
@@ -29,5 +29,5 @@ authRouter.post("/signup", UserController.signUp);
  *       401:
  *         description: Invalid credentials
  */
-authRouter.post("/login", UserController.login);
+authRouter.post("/login", AuthController.login);
 export default authRouter;
