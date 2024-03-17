@@ -99,9 +99,11 @@ class CarController {
       if (!car) {
         return res.status(404).json({ error: "Not found" });
       }
-      const newCar = await Car.findByIdAndUpdate(car.id, req.body);
+      const newCar = await Car.findByIdAndUpdate(car.id, req.body, {
+        returnOriginal: false,
+      });
       const { _id, ...rest } = newCar._doc;
-      return res.json({ id: _id, ...rest, ...req.body });
+      return res.json({ id: _id, ...rest });
     } catch (e) {
       return res.status(400).json({ error: e.message });
     }
