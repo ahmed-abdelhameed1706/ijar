@@ -1,6 +1,7 @@
 import Cart from '../models/CartSchema';
 import User from '../models/UserSchema';
 import Car from '../models/CarSchema';
+const cron = require('node-cron');
 
 const getAllCart = async (req, res) => {
   try {
@@ -17,6 +18,24 @@ const getAllCart = async (req, res) => {
     return res.status(500).json({ error: 'Internal Server Error' });
   }
 }
+
+const checkAndUpdateCars = async () => {
+  const currentTime = new Date();
+  const carts = await Cart.find({ endDate: { $lte: currentTime } });
+  for (const cart of carts) {
+    const car = await Car.findOne({ _id: cart.carId });
+    car.available = true;
+    car.customerId = null;
+    await car.save();
+    await Cart.findByIdAndDelete(cart._id);
+    // Send Mail
+  }
+};
+
+// Schedule the checkAndUpdateCars function to execute every hour
+cron.schedule('0 * * * *', async () => {
+  await checkAndUpdateCars();
+});
 
 class CartController {
   static async addToCart(req, res) {
