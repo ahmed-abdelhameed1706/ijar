@@ -147,7 +147,7 @@ carRouter.get("/cars/:id", CarController.getCar);
  *         schema:
  *           type: string
  *         description: ID of the car to update
- *    requestBody:
+ *     requestBody:
  *       required: true
  *       content:
  *         application/json:
