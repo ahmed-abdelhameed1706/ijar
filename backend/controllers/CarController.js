@@ -1,13 +1,13 @@
-import Car from '../models/CarSchema';
-import User from '../models/UserSchema';
-import Comment from '../models/CommentSchema';
+import Car from "../models/CarSchema";
+import User from "../models/UserSchema";
+import Comment from "../models/CommentSchema";
 
 class CarController {
   static async postCar(req, res) {
     const user = await User.findById(req.userId);
 
-    if (!user || user.role !== 'owner') {
-      return res.status(401).json({ error: 'Unauthorized' });
+    if (!user || user.role === "user") {
+      return res.status(401).json({ error: "Unauthorized" });
     }
 
     req.body.ownerId = user.id;
@@ -27,7 +27,7 @@ class CarController {
     try {
       const car = await Car.findById(carId);
       if (!car) {
-        return res.status(404).json({ error: 'Not found' });
+        return res.status(404).json({ error: "Not found" });
       }
       const comments = await Comment.aggregate([
         {
@@ -73,8 +73,8 @@ class CarController {
 
       const user = await User.findById(req.userId);
 
-      if (!user || user.role !== 'owner') {
-        return res.status(401).json({ error: 'Unauthorized' });
+      if (!user || user.role === "user") {
+        return res.status(401).json({ error: "Unauthorized" });
       }
       const car = await Car.findOne({
         _id: carId,
@@ -82,7 +82,7 @@ class CarController {
       });
 
       if (!car) {
-        return res.status(404).json({ error: 'Not found' });
+        return res.status(404).json({ error: "Not found" });
       }
       const newCar = await Car.findByIdAndUpdate(car.id, data);
       const { _id, isPublic, ...rest } = newCar._doc;
@@ -98,8 +98,8 @@ class CarController {
     try {
       const user = await User.findById(req.userId);
 
-      if (!user || user.role !== 'owner') {
-        return res.status(401).json({ error: 'Unauthorized' });
+      if (!user || user.role === "user") {
+        return res.status(401).json({ error: "Unauthorized" });
       }
 
       const car = await Car.findOne({
@@ -108,7 +108,7 @@ class CarController {
       });
 
       if (!car) {
-        return res.status(404).json({ error: 'Not found' });
+        return res.status(404).json({ error: "Not found" });
       }
       await Comment.deleteMany({ carId: car.id });
       await Car.findByIdAndDelete(car.id);

@@ -1,14 +1,14 @@
-import Car from '../models/CarSchema';
-import User from '../models/UserSchema';
-import Comment from '../models/CommentSchema';
+import Car from "../models/CarSchema";
+import User from "../models/UserSchema";
+import Comment from "../models/CommentSchema";
 
 class CommentController {
   static async postComment(req, res) {
     try {
       const user = await User.findById(req.userId);
 
-      if (!user || user.role !== 'user') {
-        return res.status(401).json({ error: 'Unauthorized' });
+      if (!user || user.role === "owner") {
+        return res.status(401).json({ error: "Unauthorized" });
       }
 
       const { carId } = req.body;
@@ -16,7 +16,7 @@ class CommentController {
       const car = await Car.findById(carId);
 
       if (!car) {
-        return res.status(404).json({ error: 'No car found' });
+        return res.status(404).json({ error: "No car found" });
       }
 
       req.body.userId = user.id;
@@ -27,7 +27,7 @@ class CommentController {
         {
           $match: { carId: car._id },
         },
-        { $group: { _id: '$carId', averageRate: { $avg: '$rate' } } },
+        { $group: { _id: "$carId", averageRate: { $avg: "$rate" } } },
       ]);
 
       car.averageRate = rate[0].averageRate;
@@ -46,7 +46,7 @@ class CommentController {
 
       const car = await Car.findById(carId);
       if (!car) {
-        return res.status(404).json({ error: 'No car was found' });
+        return res.status(404).json({ error: "No car was found" });
       }
       const comments = await Comment.aggregate([
         {
@@ -74,8 +74,8 @@ class CommentController {
       const commentId = req.params.id;
       const user = await User.findById(req.userId);
 
-      if (!user || user.role !== 'user') {
-        return res.status(401).json({ error: 'Unauthorized' });
+      if (!user || user.role === "owner") {
+        return res.status(401).json({ error: "Unauthorized" });
       }
 
       const comment = await Comment.findOne({
@@ -84,7 +84,7 @@ class CommentController {
       });
 
       if (!comment) {
-        return res.status(404).json({ error: 'Not found' });
+        return res.status(404).json({ error: "Not found" });
       }
       await Comment.findByIdAndDelete(comment._id);
 
@@ -92,7 +92,7 @@ class CommentController {
         {
           $match: { carId: comment.carId },
         },
-        { $group: { _id: '$carId', averageRate: { $avg: '$rate' } } },
+        { $group: { _id: "$carId", averageRate: { $avg: "$rate" } } },
       ]);
 
       const { averageRate } = rate[0];

@@ -1,6 +1,6 @@
-import express from 'express';
-import { verifyToken } from '../utils/middlewares';
-import CarController from '../controllers/CarController';
+import express from "express";
+import { verifyToken } from "../utils/middlewares";
+import CarController from "../controllers/CarController";
 
 const carRouter = express.Router();
 
@@ -20,7 +20,7 @@ const carRouter = express.Router();
  *       400:
  *         description: Invalid request data
  */
-carRouter.post('/cars', verifyToken, CarController.postCar);
+carRouter.post("/cars", verifyToken, CarController.postCar);
 
 /**
  * @swagger
@@ -34,7 +34,7 @@ carRouter.post('/cars', verifyToken, CarController.postCar);
  *       400:
  *         description: Invalid request data
  */
-carRouter.get('/cars', CarController.getCars);
+carRouter.get("/cars", CarController.getCars);
 
 /**
  * @swagger
@@ -57,7 +57,7 @@ carRouter.get('/cars', CarController.getCars);
  *       404:
  *         description: Car not found
  */
-carRouter.get('/cars/:id', CarController.getCar);
+carRouter.get("/cars/:id", CarController.getCar);
 
 /**
  * @swagger
@@ -84,7 +84,7 @@ carRouter.get('/cars/:id', CarController.getCar);
  *       404:
  *         description: Car not found
  */
-carRouter.put('/cars/:id', verifyToken, CarController.updateCar);
+carRouter.put("/cars/:id", verifyToken, CarController.updateCar);
 
 /**
  * @swagger
@@ -109,6 +109,6 @@ carRouter.put('/cars/:id', verifyToken, CarController.updateCar);
  *       404:
  *         description: Car not found
  */
-carRouter.delete('/cars/:id', verifyToken, CarController.deleteCar);
+carRouter.delete("/cars/:id", verifyToken, CarController.deleteCar);
 
 export default carRouter;
