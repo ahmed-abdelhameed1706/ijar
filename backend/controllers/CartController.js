@@ -1,5 +1,22 @@
 import Cart from '../models/CartSchema';
 import User from '../models/UserSchema';
+import Car from '../models/CarSchema';
+
+const getAllCart = async (req, res) => {
+  try {
+    const userId = req.userId;
+    const carts = await Cart.find({ userId });
+  
+    const newCart = carts.map((car) => {
+      const { _id, ...rest } = car._doc;
+      return { id: _id, ...rest };
+    });
+    return (newCart)
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+}
 
 class CartController {
   static async addToCart(req, res) {
@@ -28,14 +45,8 @@ class CartController {
 
   static async getCart(req, res) {
     try {
-      const userId = req.userId;
-      const carts = await Cart.find({ userId });
-  
-      const newCars = carts.map((car) => {
-        const { _id, ...rest } = car._doc;
-        return { id: _id, ...rest };
-      });
-      return res.status(200).send(newCars);
+      const newCarts = await getAllCart(req, res);
+      return res.status(200).send(newCarts);
     } catch (err) {
       console.log(err);
       return res.status(500).json({ error: 'Internal Server Error' });
@@ -65,29 +76,38 @@ class CartController {
 
   static async checkout(req, res) {
     try {
-      const carId = req.params.carId;
-      const user = await User.findById(req.userId);
-  
-      if (!user || user.role !== 'owner') {
-        return res.status(401).send({ error: 'Unauthorized' });
-      }
-  
-      const car = await Cart.findOne({
-        _id: carId,
-        ownerId: user._id,
+      const newCarts = await getAllCart(req, res);
+      console.log(newCarts);
+      const result = {
+        messages: [],
+        errors: []
+      };
+
+      newCarts.map(async (c) => {
+        const carId = c.carId;
+        const car = await Car.findOne({ _id: carId });
+        console.log(car);
+        if (car) {
+          if (car.available) {
+            car.available = false;
+            car.save();
+            result.messages.push(`${car.brandName} Booked Successfully`);
+          } else {
+            await Cart.findByIdAndDelete(c.id);
+            result.errors.push(`${car.brandName} is not available`);
+          }
+        } else {
+          await Cart.findByIdAndDelete(c.id);
+          result.errors.push(`Not found`);
+        }
       });
-  
-      if (!car) {
-        return res.status(404).send({ error: 'Not found' });
-      }
-      await Cart.findByIdAndDelete(car.id);
-      return res.status(204).send();
+      
+      return res.status(200).send(result);
     } catch (err) {
       console.log(err);
       return res.status(500).json({ error: 'Internal Server Error' });
     }
   }
-
 }
 
 export default CartController;
