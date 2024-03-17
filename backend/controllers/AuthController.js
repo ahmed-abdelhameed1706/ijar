@@ -13,6 +13,8 @@ import nodemailer from "nodemailer";
 
 dotenv.config();
 
+let lastEmailSentTimestamp = 0;
+
 export default class AuthController {
   static signUp = async (req, res) => {
     try {
@@ -136,6 +138,65 @@ export default class AuthController {
         return res.status(400).json({ message: "Token has expired" });
       }
       res.status(400).json({ message: "Invalid token" });
+    }
+  };
+
+  static resendVerificationEmail = async (req, res) => {
+    try {
+      const { email } = req.body;
+
+      if (Date.now() - lastEmailSentTimestamp < 30000) {
+        return res.status(429).json({
+          message: "Please wait for 30 seconds before sending another email",
+        });
+      }
+
+      const user = await User.findOne({ email });
+
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      if (user.isVerified) {
+        return res.status(400).json({ message: "User is already verified" });
+      }
+
+      const verificationToken = generateVerificationToken(email);
+
+      user.verificationToken = verificationToken;
+
+      await user.save();
+
+      const transporter = nodemailer.createTransport({
+        host: "smtp.gmail.com",
+        port: 587,
+        secure: false,
+        auth: {
+          user: process.env.APP_EMAIL,
+          pass: process.env.APP_PASSWORD,
+        },
+      });
+
+      const mailOptions = {
+        from: process.env.APP_EMAIL,
+        to: email,
+        subject: "Account Verification",
+        html: `<p>Click <a href="http://localhost:5000/auth/verify/${verificationToken}">here</a> to verify your account.</p>`,
+      };
+
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.log(error);
+        } else {
+          console.log("Email sent: " + info.response);
+        }
+      });
+
+      lastEmailSentTimestamp = Date.now();
+
+      res.status(200).json({ message: "Verification email sent" });
+    } catch (error) {
+      res.status(500).json({ message: "Something went wrong" });
     }
   };
 }
