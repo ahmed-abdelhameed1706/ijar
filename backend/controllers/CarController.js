@@ -91,20 +91,6 @@ class CarController {
         });
       }
 
-      if (data.includes("_id")) {
-        return res.status(403).json({
-          error: "Forbidden",
-          message: "You cannot update your car id.",
-        });
-      }
-
-      if (data.includes("createdDate")) {
-        return res.status(403).json({
-          error: "Forbidden",
-          message: "You cannot update your car createdDate.",
-        });
-      }
-
       const car = await Car.findOne({
         _id: carId,
         ownerId: user._id,
@@ -114,8 +100,8 @@ class CarController {
         return res.status(404).json({ error: "Not found" });
       }
       const newCar = await Car.findByIdAndUpdate(car.id, req.body);
-      const { _id, isPublic, ...rest } = newCar._doc;
-      return res.json({ id: _id, ...rest, ...data });
+      const { _id, ...rest } = newCar._doc;
+      return res.json({ id: _id, ...rest, ...req.body });
     } catch (e) {
       return res.status(400).json({ error: e.message });
     }
