@@ -23,7 +23,7 @@ export const generateAccessToken = (user) => {
     { email: user.email, id: user._id },
     process.env.SECRET || "hsghs6",
     {
-      expiresIn: "1d",
+      expiresIn: "14d",
     }
   );
 };
@@ -31,5 +31,11 @@ export const generateAccessToken = (user) => {
 export const generateRefreshToken = (user) => {
   return jwt.sign({ email: user.email, id: user._id }, process.env.REFRESH, {
     expiresIn: "7d",
+  });
+};
+
+export const generateVerificationToken = (email) => {
+  return jwt.sign({ email }, process.env.VERIFICATION, {
+    expiresIn: "1d",
   });
 };

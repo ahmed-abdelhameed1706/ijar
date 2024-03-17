@@ -84,4 +84,7 @@ authRouter.post("/signup", AuthController.signUp);
  *         description: Invalid credentials
  */
 authRouter.post("/login", AuthController.login);
+
+authRouter.get("/verify/:token", AuthController.verifyEmail);
+
 export default authRouter;
