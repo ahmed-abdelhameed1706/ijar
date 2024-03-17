@@ -1,4 +1,4 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model } from "mongoose";
 
 // Create CarSchema for Object Car
 
@@ -49,7 +49,12 @@ const CarSchema = new Schema({
   },
   ownerId: {
     type: Schema.ObjectId,
-    ref: 'User',
+    ref: "User",
+    required: true,
+  },
+  customerId: {
+    type: Schema.ObjectId,
+    ref: "User",
   },
   engineId: {
     type: String,
@@ -60,13 +65,10 @@ const CarSchema = new Schema({
     type: Number,
     default: 0,
   },
-  comments: {
-    type: Array,
-  },
   description: {
     type: String,
   },
 });
 
-const Car = model('Car', CarSchema);
+const Car = model("Car", CarSchema);
 export default Car;

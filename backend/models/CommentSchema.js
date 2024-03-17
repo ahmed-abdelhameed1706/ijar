@@ -1,4 +1,4 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model } from "mongoose";
 
 // Create CommentSchema
 
@@ -6,10 +6,12 @@ const CommentSchema = new Schema({
   userId: {
     type: Schema.ObjectId,
     required: true,
+    ref: "User",
   },
   carId: {
     type: Schema.ObjectId,
     required: true,
+    ref: "Car",
   },
   createdDate: {
     type: Date,
@@ -25,5 +27,5 @@ const CommentSchema = new Schema({
   },
 });
 
-const Comment = model('Comment', CommentSchema);
+const Comment = model("Comment", CommentSchema);
 export default Comment;
