@@ -1,6 +1,17 @@
 import User from "../models/UserSchema";
 import bcrypt from "bcryptjs";
-import { generateAccessToken } from "../utils/middlewares";
+import {
+  generateAccessToken,
+  generateVerificationToken,
+} from "../utils/middlewares";
+
+import jwt from "jsonwebtoken";
+
+import dotenv from "dotenv";
+
+import nodemailer from "nodemailer";
+
+dotenv.config();
 
 export default class AuthController {
   static signUp = async (req, res) => {
@@ -17,6 +28,8 @@ export default class AuthController {
 
       const hashedPassword = await bcrypt.hash(password, 12);
 
+      const verificationToken = generateVerificationToken(email);
+
       const newUser = new User({
         fullName,
         email,
@@ -24,10 +37,36 @@ export default class AuthController {
         phoneNumber,
         address,
         role,
+        verificationToken,
       });
       console.log(newUser);
 
       await newUser.save();
+
+      const transporter = nodemailer.createTransport({
+        host: "smtp.gmail.com",
+        port: 587,
+        secure: false,
+        auth: {
+          user: process.env.APP_EMAIL,
+          pass: process.env.APP_PASSWORD,
+        },
+      });
+
+      const mailOptions = {
+        from: process.env.APP_EMAIL,
+        to: email,
+        subject: "Account Verification",
+        html: `<p>Click <a href="http://localhost:5000/auth/verify/${verificationToken}">here</a> to verify your account.</p>`,
+      };
+
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.log(error);
+        } else {
+          console.log("Email sent: " + info.response);
+        }
+      });
 
       res.status(201).json({
         userId: newUser.id,
@@ -54,6 +93,10 @@ export default class AuthController {
         return res.status(400).json({ message: "Invalid credentials" });
       }
 
+      if (!user.isVerified) {
+        return res.status(400).json({ message: "Email not verified" });
+      }
+
       const accessToken = generateAccessToken(user);
 
       res.status(200).json({
@@ -64,6 +107,35 @@ export default class AuthController {
       });
     } catch (error) {
       res.status(500).json({ message: "Something went wrong" });
+    }
+  };
+
+  static verifyEmail = async (req, res) => {
+    try {
+      const { token } = req.params;
+
+      const decoded = jwt.verify(token, process.env.VERIFICATION);
+
+      const user = await User.findOne({ email: decoded.email });
+
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      if (user.isVerified) {
+        return res.status(400).json({ message: "User is already verified" });
+      }
+
+      user.isVerified = true;
+      await user.save();
+
+      // Redirect the user to a success page or send a success message
+      res.status(200).send("Email verification successful. You can now login.");
+    } catch (error) {
+      if (error.name === "TokenExpiredError") {
+        return res.status(400).json({ message: "Token has expired" });
+      }
+      res.status(400).json({ message: "Invalid token" });
     }
   };
 }

@@ -35,6 +35,9 @@ const UserSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  verificationToken: {
+    type: String,
+  },
 });
 
 const User = mongoose.model("User", UserSchema);
