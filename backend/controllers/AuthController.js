@@ -18,8 +18,42 @@ let lastEmailSentTimestamp = 0;
 export default class AuthController {
   static signUp = async (req, res) => {
     try {
-      const { fullName, email, password, phoneNumber, address, role } =
-        req.body;
+      const {
+        fullName,
+        email,
+        password,
+        password2,
+        phoneNumber,
+        address,
+        role,
+      } = req.body;
+
+      if (
+        !fullName ||
+        !email ||
+        !password ||
+        !password2 ||
+        !phoneNumber ||
+        !address ||
+        !role
+      ) {
+        return res.status(400).json({ message: "Invalid request data" });
+      }
+
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailPattern.test(email)) {
+        return res.status(400).json({ message: "Invalid email format" });
+      }
+
+      if (password.length < 8) {
+        return res
+          .status(400)
+          .json({ message: "Password must be at least 6 characters" });
+      }
+
+      if (password !== password2) {
+        return res.status(400).json({ message: "Passwords do not match" });
+      }
 
       const existingUser = await User.findOne({
         $or: [{ email }, { phoneNumber }],
