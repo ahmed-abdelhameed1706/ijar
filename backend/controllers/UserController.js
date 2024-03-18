@@ -87,7 +87,7 @@ export default class UserController {
         return res.status(404).json({ error: "Not found" });
       }
 
-      const token = jwt.sign({ id: user._id }, process.env.VERIFICATION, {
+      const token = jwt.sign({ id: user._id }, process.env.RESET_TOKEN, {
         expiresIn: "2h",
       });
 
@@ -131,7 +131,7 @@ export default class UserController {
   static async getResetForm(req, res) {
     try {
       const { token } = req.params;
-      const decoded = jwt.verify(token, process.env.VERIFICATION);
+      const decoded = jwt.verify(token, process.env.RESET_TOKEN);
 
       const user = await User.findById(decoded.id);
       if (!user) {
@@ -154,7 +154,7 @@ export default class UserController {
     try {
       const { token, password } = req.body;
 
-      const decoded = jwt.verify(token, process.env.VERIFICATION);
+      const decoded = jwt.verify(token, process.env.RESET_TOKEN);
 
       const user = await User.findById(decoded.id);
       console.log(user);
