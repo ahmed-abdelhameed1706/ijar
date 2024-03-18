@@ -17,7 +17,10 @@ class CarController {
       const { _id, ...rest } = car._doc;
       res.status(201).json({ id: _id, ...rest });
     } catch (e) {
-      return res.status(400).json({ error: e.message });
+      return res.status(500).json({
+        error: "Internal Server Error",
+        message: e.message,
+      });
     }
   }
 
@@ -40,7 +43,10 @@ class CarController {
       const { _id, ...rest } = car._doc;
       return res.json({ id: _id, ...rest, comments });
     } catch (e) {
-      return res.status(400).json({ error: e.message });
+      return res.status(500).json({
+        error: "Internal Server Error",
+        message: e.message,
+      });
     }
   }
 
@@ -69,7 +75,10 @@ class CarController {
       });
       return res.json(newCars);
     } catch (e) {
-      return res.status(400).json({ error: e.message });
+      return res.status(500).json({
+        error: "Internal Server Error",
+        message: e.message,
+      });
     }
   }
 
@@ -105,7 +114,10 @@ class CarController {
       const { _id, ...rest } = newCar._doc;
       return res.json({ id: _id, ...rest });
     } catch (e) {
-      return res.status(400).json({ error: e.message });
+      return res.status(500).json({
+        error: "Internal Server Error",
+        message: e.message,
+      });
     }
   }
 
@@ -127,11 +139,14 @@ class CarController {
       if (!car) {
         return res.status(404).json({ error: "Not found" });
       }
-      await Comment.deleteMany({ carId: car.id });
+      await Comment.deleteMany({ userId: user.id });
       await Car.findByIdAndDelete(car.id);
       return res.status(204).json();
     } catch (e) {
-      return res.status(400).json({ error: e.message });
+      return res.status(500).json({
+        error: "Internal Server Error",
+        message: e.message,
+      });
     }
   }
 }
