@@ -113,6 +113,31 @@ authRouter.post("/login", AuthController.login);
 
 authRouter.get("/verify/:token", AuthController.verifyEmail);
 
+/**
+ * @swagger
+ * /auth/logout:
+ *   post:
+ *     summary: User logout
+ *     description: Logout user and invalidate access token
+ *     tags: [Auth]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *      content:
+ *          application/json:
+ *          schema:
+ *          type: object
+ *          properties:
+ *              refreshToken:
+ *              type: string
+ *     responses:
+ *       200:
+ *         description: User logged out successfully
+ *       401:
+ *         description: Unauthorized access
+ */
+authRouter.post("/logout", AuthController.logout);
+
 authRouter.post(
   "/resend-verification-email",
   AuthController.resendVerificationEmail

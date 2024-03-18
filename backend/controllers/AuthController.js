@@ -2,6 +2,7 @@ import User from "../models/UserSchema";
 import bcrypt from "bcryptjs";
 import {
   generateAccessToken,
+  generateRefreshToken,
   generateVerificationToken,
 } from "../utils/middlewares";
 
@@ -135,6 +136,15 @@ export default class AuthController {
 
       const accessToken = generateAccessToken(user);
 
+      const refreshToken = generateRefreshToken(user);
+
+      res.cookie("jwt", refreshToken, {
+        httpOnly: true, // The cookie cannot be accessed by client-side scripts
+        secure: true, // The cookie will only be sent over HTTPS
+        sameSite: "none", // The cookie will be sent on requests from other websites
+        maxAge: 7 * 24 * 60 * 60 * 1000, // The cookie will expire after 14 days
+      });
+
       res.status(200).json({
         userId: user.id,
         fullName: user.fullName,
@@ -142,8 +152,18 @@ export default class AuthController {
         accessToken,
       });
     } catch (error) {
+      console.log(error);
       res.status(500).json({ message: "Something went wrong" });
     }
+  };
+
+  static logout = async (req, res) => {
+    res.clearCookie("jwt", {
+      httpOnly: true, // The cookie cannot be accessed by client-side scripts
+      secure: true, // The cookie will only be sent over HTTPS
+      sameSite: "none", // The cookie will be sent on requests from other websites
+    });
+    res.status(200).json({ message: "Logged out" });
   };
 
   static verifyEmail = async (req, res) => {
