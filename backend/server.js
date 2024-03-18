@@ -9,6 +9,7 @@ import cartRouter from "./routes/cartRoutes";
 import ownerDashboardRouter from "./routes/ownerDashboardRoutes";
 import userRouter from "./routes/userRouters";
 import filterRouter from "./routes/filterRouter";
+import ticketRouter from "./routes/ticketRoutes";
 import { activityLogger } from "./utils/middlewares";
 
 const port = 5000;
@@ -56,3 +57,4 @@ app.use("/auth", authRouter);
 app.use("/api/owner-dashboard", ownerDashboardRouter);
 app.use("/api", userRouter);
 app.use("/search", filterRouter);
+app.use("/api", ticketRouter);
