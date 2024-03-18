@@ -28,9 +28,6 @@ const UserSchema = new mongoose.Schema({
     enum: ["user", "owner", "admin"],
     default: "user",
   },
-  resetToken: {
-    type: String,
-  },
   isVerified: {
     type: Boolean,
     default: false,
