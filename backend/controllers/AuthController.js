@@ -131,7 +131,6 @@ export default class AuthController {
       user.isVerified = true;
       await user.save();
 
-      // Redirect the user to a success page or send a success message
       res.status(200).send("Email verification successful. You can now login.");
     } catch (error) {
       if (error.name === "TokenExpiredError") {

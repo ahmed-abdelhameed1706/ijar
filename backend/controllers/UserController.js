@@ -91,6 +91,9 @@ export default class UserController {
         expiresIn: "2h",
       });
 
+      user.resetToken = token;
+      await user.save();
+
       const transporter = nodemailer.createTransport({
         host: "smtp.gmail.com",
         port: 587,
@@ -133,7 +136,7 @@ export default class UserController {
       const { token } = req.params;
       const decoded = jwt.verify(token, process.env.RESET_TOKEN);
 
-      const user = await User.findById(decoded.id);
+      const user = await User.findOne({ _id: decoded.id, resetToken: token });
       if (!user) {
         res.status(404).send("<h3>Invalid or expired token</h3>");
       }
@@ -156,15 +159,15 @@ export default class UserController {
 
       const decoded = jwt.verify(token, process.env.RESET_TOKEN);
 
-      const user = await User.findById(decoded.id);
-      console.log(user);
+      const user = await User.findOne({ _id: decoded.id, resetToken: token });
       if (!user) {
         res.status(404).send("<h3>Invalid or expired token<h3>");
       }
 
       const hashedPassword = await bcrypt.hash(password, 12);
       user.password = hashedPassword;
-      user.save();
+      user.resetToken = "";
+      await user.save();
 
       res.status(200).send("<h3>Password updated successfully<h3>");
     } catch (e) {
