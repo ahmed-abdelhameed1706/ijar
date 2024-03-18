@@ -82,7 +82,7 @@ export const generateRefreshToken = (user) => {
 
 export const generateVerificationToken = (email) => {
   return jwt.sign({ email }, process.env.VERIFICATION, {
-    expiresIn: "1d",
+    expiresIn: "10m",
   });
 };
 
