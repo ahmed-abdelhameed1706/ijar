@@ -1,10 +1,13 @@
 import User from "../models/UserSchema";
 import Cart from "../models/CartSchema";
 import Car from "../models/CarSchema";
+import { resetPasswordForm } from "../utils/mailFormer";
+import { sendEmail } from "../utils/utility";
 import jwt from "jsonwebtoken";
-import nodemailer from "nodemailer";
 import dotenv from "dotenv";
 import bcrypt from "bcryptjs";
+
+const path = require("path");
 
 dotenv.config();
 
@@ -94,34 +97,12 @@ export default class UserController {
       user.resetToken = token;
       await user.save();
 
-      const transporter = nodemailer.createTransport({
-        host: "smtp.gmail.com",
-        port: 587,
-        secure: false,
-        auth: {
-          user: process.env.APP_EMAIL,
-          pass: process.env.APP_PASSWORD,
-        },
-      });
+      const message = resetPasswordForm(user.fullName, token);
 
-      const mailOptions = {
-        from: process.env.APP_EMAIL,
-        to: email,
-        subject: "Password Reset",
-        html: `<h4>Click the following link to reset your password: <a href="http://localhost:5000/api/users/reset_password/${token}">Reset Password</a></h4>`,
-      };
+      sendEmail(email, "Reset Your Password for Ijar", message);
 
-      transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-          console.log(error);
-          res.status(500).send("Error sending email");
-        } else {
-          console.log(`Email sent: ${info.response}`);
-          res.status(200).json({
-            message:
-              "Check your email for instructions on resetting your password",
-          });
-        }
+      return res.status(200).json({
+        message: "Check your email for instructions on resetting your password",
       });
     } catch (e) {
       return res.status(500).json({
@@ -138,9 +119,9 @@ export default class UserController {
 
       const user = await User.findOne({ _id: decoded.id, resetToken: token });
       if (!user) {
-        res.status(404).send("<h3>Invalid or expired token</h3>");
+        const file = path.join(__dirname, "../templates/expireToken.html");
+        return res.status(404).sendFile(file);
       }
-      const path = require("path");
 
       const file = path.join(__dirname, "../templates/resetPassword.html");
 
@@ -155,19 +136,33 @@ export default class UserController {
 
   static async resetPassword(req, res) {
     try {
-      const { token, password } = req.body;
+      const { token, password, confPassword } = req.body;
 
       const decoded = jwt.verify(token, process.env.RESET_TOKEN);
 
       const user = await User.findOne({ _id: decoded.id, resetToken: token });
       if (!user) {
-        res
-          .status(404)
-          .json({ error: "<h3 id='error'>Invalid or expired token<h3>" });
+        const file = path.join(__dirname, "../templates/expireToken.html");
+
+        return res.status(404).sendFile(file);
       }
 
-      if (password.length < 8) {
-        res.status(403).json({ error: "<h3 id='error'>Invalid Password<h3>" });
+      if (!password || password.length < 8) {
+        user.resetToken = "";
+        await user.save();
+        return res.status(400).json({
+          message:
+            "<h3 id='error'>Password must be 8 to 24 characters. Must include uppercase and lowercase letters and a number.</h3>",
+        });
+      }
+
+      if (!confPassword || password !== confPassword) {
+        user.resetToken = "";
+        await user.save();
+        return res.status(400).json({
+          message:
+            "<h3 id='error'>Confirme password must match the first password.</h3>",
+        });
       }
 
       const hashedPassword = await bcrypt.hash(password, 12);
@@ -175,9 +170,9 @@ export default class UserController {
       user.resetToken = "";
       await user.save();
 
-      res
-        .status(200)
-        .json({ message: "<h3>Password updated successfully<h3>" });
+      res.status(200).json({
+        message: "<h3>Password updated successfully. Please login again.<h3>",
+      });
     } catch (e) {
       return res.status(500).json({
         error: "Internal Server Error",

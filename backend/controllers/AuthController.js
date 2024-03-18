@@ -6,6 +6,8 @@ import {
   generateVerificationToken,
 } from "../utils/middlewares";
 
+import { verifyEmailForm } from "../utils/mailFormer";
+
 import jwt from "jsonwebtoken";
 
 import dotenv from "dotenv";
@@ -80,7 +82,7 @@ export default class AuthController {
 
       await newUser.save();
 
-      const htmlContent = `<p>Click <a href="http://localhost:5000/auth/verify/${verificationToken}">here</a> to verify your account.</p>`;
+      const htmlContent = verifyEmailForm(fullName, verificationToken);
       sendEmail(email, "Account Verification", htmlContent);
 
       res.status(201).json({
@@ -198,7 +200,7 @@ export default class AuthController {
 
       await user.save();
 
-      const htmlContent = `<p>Click <a href="http://localhost:5000/auth/verify/${verificationToken}">here</a> to verify your account.</p>`;
+      const htmlContent = verifyEmailForm(user.fullName, verificationToken);
       sendEmail(email, "Account Verification", htmlContent);
 
       lastEmailSentTimestamp = Date.now();
