@@ -9,6 +9,7 @@ import cartRouter from "./routes/cartRoutes";
 import ownerDashboardRouter from "./routes/ownerDashboardRoutes";
 import userRouter from "./routes/userRouters";
 import filterRouter from "./routes/filterRouter";
+import { activityLogger } from "./utils/middlewares";
 
 const port = 5000;
 const app = express();
@@ -18,6 +19,9 @@ app.use(express.json());
 
 // CORS
 app.use(cors());
+
+// Activity logger
+app.use(activityLogger);
 
 app.disable("x-powered-by");
 
