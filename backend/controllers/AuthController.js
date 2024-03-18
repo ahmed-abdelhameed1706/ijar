@@ -10,7 +10,7 @@ import jwt from "jsonwebtoken";
 
 import dotenv from "dotenv";
 
-import nodemailer from "nodemailer";
+import { sendEmail } from "../utils/utility";
 
 dotenv.config();
 
@@ -80,30 +80,8 @@ export default class AuthController {
 
       await newUser.save();
 
-      const transporter = nodemailer.createTransport({
-        host: "smtp.gmail.com",
-        port: 587,
-        secure: false,
-        auth: {
-          user: process.env.APP_EMAIL,
-          pass: process.env.APP_PASSWORD,
-        },
-      });
-
-      const mailOptions = {
-        from: process.env.APP_EMAIL,
-        to: email,
-        subject: "Account Verification",
-        html: `<p>Click <a href="http://localhost:5000/auth/verify/${verificationToken}">here</a> to verify your account.</p>`,
-      };
-
-      transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-          console.log(error);
-        } else {
-          console.log("Email sent: " + info.response);
-        }
-      });
+      const htmlContent = `<p>Click <a href="http://localhost:5000/auth/verify/${verificationToken}">here</a> to verify your account.</p>`;
+      sendEmail(email, "Account Verification", htmlContent);
 
       res.status(201).json({
         userId: newUser.id,
@@ -113,7 +91,7 @@ export default class AuthController {
         address: newUser.address,
       });
     } catch (error) {
-      res.status(500).json({ message: "Something went wrong" });
+      res.status(500).json({ message: error.message });
     }
   };
   static login = async (req, res) => {
@@ -220,30 +198,8 @@ export default class AuthController {
 
       await user.save();
 
-      const transporter = nodemailer.createTransport({
-        host: "smtp.gmail.com",
-        port: 587,
-        secure: false,
-        auth: {
-          user: process.env.APP_EMAIL,
-          pass: process.env.APP_PASSWORD,
-        },
-      });
-
-      const mailOptions = {
-        from: process.env.APP_EMAIL,
-        to: email,
-        subject: "Account Verification",
-        html: `<p>Click <a href="http://localhost:5000/auth/verify/${verificationToken}">here</a> to verify your account.</p>`,
-      };
-
-      transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-          console.log(error);
-        } else {
-          console.log("Email sent: " + info.response);
-        }
-      });
+      const htmlContent = `<p>Click <a href="http://localhost:5000/auth/verify/${verificationToken}">here</a> to verify your account.</p>`;
+      sendEmail(email, "Account Verification", htmlContent);
 
       lastEmailSentTimestamp = Date.now();
 
