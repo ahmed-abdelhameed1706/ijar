@@ -8,6 +8,7 @@ import swaggerDocs from "./utils/swagger";
 import cartRouter from "./routes/cartRoutes";
 import ownerDashboardRouter from "./routes/ownerDashboardRoutes";
 import userRouter from "./routes/userRouters";
+import filterRouter from "./routes/filterRouter";
 
 const port = 5000;
 const app = express();
@@ -50,3 +51,4 @@ app.use("/api", cartRouter);
 app.use("/auth", authRouter);
 app.use("/api/owner-dashboard", ownerDashboardRouter);
 app.use("/api", userRouter);
+app.use("/search", filterRouter);
