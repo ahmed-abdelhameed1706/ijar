@@ -161,7 +161,13 @@ export default class UserController {
 
       const user = await User.findOne({ _id: decoded.id, resetToken: token });
       if (!user) {
-        res.status(404).send("<h3>Invalid or expired token<h3>");
+        res
+          .status(404)
+          .json({ error: "<h3 id='error'>Invalid or expired token<h3>" });
+      }
+
+      if (password.length < 8) {
+        res.status(403).json({ error: "<h3 id='error'>Invalid Password<h3>" });
       }
 
       const hashedPassword = await bcrypt.hash(password, 12);
@@ -169,7 +175,9 @@ export default class UserController {
       user.resetToken = "";
       await user.save();
 
-      res.status(200).send("<h3>Password updated successfully<h3>");
+      res
+        .status(200)
+        .json({ message: "<h3>Password updated successfully<h3>" });
     } catch (e) {
       return res.status(500).json({
         error: "Internal Server Error",
