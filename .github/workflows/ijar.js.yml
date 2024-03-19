@@ -33,6 +33,8 @@ jobs:
           echo "npm run build successful"
           cd ../backend
           echo "cd to backend for the second time successful"
+          # Install PM2
+          npm install pm2 -g
           # Restart the PM2 process
           pm2 restart 0
           echo "pm2 restart successful"
