@@ -14,33 +14,51 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+
+      - name: Check if backend package.json has changed
+        id: check_backend_package_json
+        run: |
+          git fetch origin main
+          backend_changed_files=$(git diff --name-only HEAD..origin/main backend/package.json)
+          if [[ -n $backend_changed_files ]]; then
+            echo "::set-output name=backend_changed::true"
+          else
+            echo "::set-output name=backend_changed::false"
+          fi
+
+      - name: Check if frontend package.json has changed
+        id: check_frontend_package_json
+        run: |
+          git fetch origin main
+          frontend_changed_files=$(git diff --name-only HEAD..origin/main frontend/package.json)
+          if [[ -n $frontend_changed_files ]]; then
+            echo "::set-output name=frontend_changed::true"
+          else
+            echo "::set-output name=frontend_changed::false"
+          fi
+
       - name: Use Node.js 20.x
         uses: actions/setup-node@v1
         with:
           node-version: 20.x
 
-      - name: Install Dependencies
+      - name: Install Backend Dependencies
+        if: steps.check_backend_package_json.outputs.backend_changed == 'true'
+        run: npm install
+        working-directory: backend
+
+      - name: Install Frontend Dependencies
+        if: steps.check_frontend_package_json.outputs.frontend_changed == 'true'
+        run: npm install
+        working-directory: frontend
+
+      - name: Build Frontend
+        run: npm run build
+        working-directory: frontend
+
+      - name: Manage PM2 and Nginx
         run: |
-          cd backend
-          echo "cd to backend successful"
-          npm install
-          echo "npm install successful"
-          cd ../frontend
-          echo "cd to frontend successful"
-          npm install
-          echo "npm install successful"
-          npm run build
-          echo "npm run build successful"
-          # Stop the PM2 process
           pm2 stop 0
-          echo "pm2 stop successful"
-          # Start the PM2 process
           pm2 start 0
-          echo "pm2 start successful"
-          echo "pm2 restart successful"
-          # Save the PM2 process list
           pm2 save
-          echo "pm2 save successful"
-          # Restart Nginx
           sudo service nginx restart
-          echo "nginx restart successful"
