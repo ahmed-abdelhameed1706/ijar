@@ -48,7 +48,6 @@ jobs:
 
       - name: Build Frontend
         run: |
-          cd frontend
           npm run build
         working-directory: frontend
 
