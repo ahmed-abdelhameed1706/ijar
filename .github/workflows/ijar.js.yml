@@ -19,18 +19,26 @@ jobs:
         with:
           node-version: 20.x
 
-      - run: |
+      - name: Install Dependencies
+        run: |
           cd backend
+          echo "cd to backend successful"
           npm install
+          echo "npm install successful"
           cd ../frontend
+          echo "cd to frontend successful"
           npm install
+          echo "npm install successful"
           npm run build
+          echo "npm run build successful"
           cd ../backend
-          # Ensure PM2 is installed globally
-          npm install -g pm2
+          echo "cd to backend for the second time successful"
           # Restart the PM2 process
           pm2 restart 0
+          echo "pm2 restart successful"
           # Save the PM2 process list
           pm2 save
+          echo "pm2 save successful"
           # Restart Nginx
           sudo service nginx restart
+          echo "nginx restart successful"
