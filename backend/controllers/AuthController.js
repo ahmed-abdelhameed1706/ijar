@@ -6,11 +6,15 @@ import {
   generateVerificationToken,
 } from "../utils/middlewares";
 
+import { verifyEmailForm } from "../utils/mailFormer";
+
 import jwt from "jsonwebtoken";
 
 import dotenv from "dotenv";
 
-import nodemailer from "nodemailer";
+import { sendEmail } from "../utils/utility";
+
+import path from "path";
 
 dotenv.config();
 
@@ -80,30 +84,8 @@ export default class AuthController {
 
       await newUser.save();
 
-      const transporter = nodemailer.createTransport({
-        host: "smtp.gmail.com",
-        port: 587,
-        secure: false,
-        auth: {
-          user: process.env.APP_EMAIL,
-          pass: process.env.APP_PASSWORD,
-        },
-      });
-
-      const mailOptions = {
-        from: process.env.APP_EMAIL,
-        to: email,
-        subject: "Account Verification",
-        html: `<p>Click <a href="http://localhost:5000/auth/verify/${verificationToken}">here</a> to verify your account.</p>`,
-      };
-
-      transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-          console.log(error);
-        } else {
-          console.log("Email sent: " + info.response);
-        }
-      });
+      const htmlContent = verifyEmailForm(fullName, verificationToken);
+      sendEmail(email, "Account Verification", htmlContent);
 
       res.status(201).json({
         userId: newUser.id,
@@ -113,7 +95,7 @@ export default class AuthController {
         address: newUser.address,
       });
     } catch (error) {
-      res.status(500).json({ message: "Something went wrong" });
+      res.status(500).json({ message: error.message });
     }
   };
   static login = async (req, res) => {
@@ -153,7 +135,7 @@ export default class AuthController {
       });
     } catch (error) {
       console.log(error);
-      res.status(500).json({ message: "Something went wrong" });
+      res.status(500).json({ message: error.message });
     }
   };
 
@@ -167,6 +149,7 @@ export default class AuthController {
   };
 
   static verifyEmail = async (req, res) => {
+    const file = path.join(__dirname, "../templates/expireToken.html");
     try {
       const { token } = req.params;
 
@@ -175,11 +158,13 @@ export default class AuthController {
       const user = await User.findOne({ email: decoded.email });
 
       if (!user) {
-        return res.status(404).json({ message: "User not found" });
+        console.log({ message: "User not found" });
+        return res.status(404).sendFile(file);
       }
 
       if (user.isVerified) {
-        return res.status(400).json({ message: "User is already verified" });
+        console.log({ message: "User is already verified" });
+        return res.status(404).sendFile(file);
       }
 
       user.isVerified = true;
@@ -188,7 +173,7 @@ export default class AuthController {
       res.status(200).send("Email verification successful. You can now login.");
     } catch (error) {
       if (error.name === "TokenExpiredError") {
-        return res.status(400).json({ message: "Token has expired" });
+        return res.status(404).sendFile(file);
       }
       res.status(400).json({ message: "Invalid token" });
     }
@@ -220,30 +205,8 @@ export default class AuthController {
 
       await user.save();
 
-      const transporter = nodemailer.createTransport({
-        host: "smtp.gmail.com",
-        port: 587,
-        secure: false,
-        auth: {
-          user: process.env.APP_EMAIL,
-          pass: process.env.APP_PASSWORD,
-        },
-      });
-
-      const mailOptions = {
-        from: process.env.APP_EMAIL,
-        to: email,
-        subject: "Account Verification",
-        html: `<p>Click <a href="http://localhost:5000/auth/verify/${verificationToken}">here</a> to verify your account.</p>`,
-      };
-
-      transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-          console.log(error);
-        } else {
-          console.log("Email sent: " + info.response);
-        }
-      });
+      const htmlContent = verifyEmailForm(user.fullName, verificationToken);
+      sendEmail(email, "Account Verification", htmlContent);
 
       lastEmailSentTimestamp = Date.now();
 
