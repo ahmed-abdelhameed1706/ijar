@@ -19,7 +19,7 @@ const app = express();
 // Middleware
 app.use(express.json());
 
-app.use(express.static(path.join(__dirname, "../frontend/build")));
+app.use(express.static(path.join(__dirname, "../frontend/dist")));
 // CORS
 app.use(cors());
 
