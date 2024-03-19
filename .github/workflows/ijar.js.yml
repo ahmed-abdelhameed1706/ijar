@@ -15,42 +15,36 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Check if backend package.json has changed
-        id: check_backend_package_json
-        run: |
-          git fetch origin main
-          backend_changed_files=$(git diff --name-only HEAD..origin/main backend/package.json)
-          if [[ -n $backend_changed_files ]]; then
-            echo "::set-output name=backend_changed::true"
-          else
-            echo "::set-output name=backend_changed::false"
-          fi
-
-      - name: Check if frontend package.json has changed
-        id: check_frontend_package_json
-        run: |
-          git fetch origin main
-          frontend_changed_files=$(git diff --name-only HEAD..origin/main frontend/package.json)
-          if [[ -n $frontend_changed_files ]]; then
-            echo "::set-output name=frontend_changed::true"
-          else
-            echo "::set-output name=frontend_changed::false"
-          fi
-
       - name: Use Node.js 20.x
         uses: actions/setup-node@v1
         with:
           node-version: 20.x
 
-      - name: Install Backend Dependencies
-        if: steps.check_backend_package_json.outputs.backend_changed == 'true'
-        run: npm install
-        working-directory: backend
+      - name: Check if backend package.json has changed
+        id: check_backend_package_json
+        run: |
+          cd backend
+          git fetch origin main
+          backend_changed_files=$(git diff --name-only HEAD..origin/main package.json)
+          if [[ -n $backend_changed_files ]]; then
+            echo "Changes detected in backend/package.json"
+            npm install
+          else
+            echo "No changes detected in backend/package.json"
+          fi
 
-      - name: Install Frontend Dependencies
-        if: steps.check_frontend_package_json.outputs.frontend_changed == 'true'
-        run: npm install
-        working-directory: frontend
+      - name: Check if frontend package.json has changed
+        id: check_frontend_package_json
+        run: |
+          cd ../frontend
+          git fetch origin main
+          frontend_changed_files=$(git diff --name-only HEAD..origin/main package.json)
+          if [[ -n $frontend_changed_files ]]; then
+            echo "Changes detected in frontend/package.json"
+            npm install
+          else
+            echo "No changes detected in frontend/package.json"
+          fi
 
       - name: Build Frontend
         run: npm run build
@@ -58,6 +52,7 @@ jobs:
 
       - name: Manage PM2 and Nginx
         run: |
+          cd ../backend
           pm2 stop 0
           pm2 start 0
           pm2 save
