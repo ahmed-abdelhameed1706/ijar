@@ -31,12 +31,12 @@ jobs:
           echo "npm install successful"
           npm run build
           echo "npm run build successful"
-          cd ../backend
-          echo "cd to backend for the second time successful"
-          # Install PM2
-          npm install pm2 -g
-          # Restart the PM2 process
-          pm2 start npm --name "ijarapp" -- run start-server
+          # Stop the PM2 process
+          pm2 stop 0
+          echo "pm2 stop successful"
+          # Start the PM2 process
+          pm2 start 0
+          echo "pm2 start successful"
           echo "pm2 restart successful"
           # Save the PM2 process list
           pm2 save
