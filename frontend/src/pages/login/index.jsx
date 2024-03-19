@@ -33,7 +33,7 @@ const formSchema = z.object({
   }),
 });
 
-function LoginPage() {
+const LoginPage = () => {
   // 1. Define your form.
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -108,6 +108,6 @@ function LoginPage() {
       </div>
     </div>
   );
-}
+};
 
 export default LoginPage;
