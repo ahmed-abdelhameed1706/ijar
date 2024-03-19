@@ -149,9 +149,9 @@ export default class AuthController {
   };
 
   static verifyEmail = async (req, res) => {
+    const file = path.join(__dirname, "../templates/expireToken.html");
     try {
       const { token } = req.params;
-      const file = path.join(__dirname, "../templates/expireToken.html");
 
       const decoded = jwt.verify(token, process.env.VERIFICATION);
 
