@@ -11,6 +11,9 @@ import userRouter from "./routes/userRouters";
 import filterRouter from "./routes/filterRouter";
 import ticketRouter from "./routes/ticketRoutes";
 import { activityLogger } from "./utils/middlewares";
+import path from "path";
+
+app.use(express.static(path.join(__dirname, "../frontend/build")));
 
 const port = 5000;
 const app = express();
