@@ -2,11 +2,11 @@
 import Routes from "./routes/routes";
 
 const App = () => {
-  return (
-    <div className="sm:h-screen h-full bg-gray-50">
-      <Routes />
-    </div>
-  );
-}
+	return (
+		<div className="h-full bg-gray-50">
+			<Routes />
+		</div>
+	);
+};
 
 export default App;
