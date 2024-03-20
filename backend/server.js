@@ -59,14 +59,3 @@ app.use("/api/owner-dashboard", ownerDashboardRouter);
 app.use("/api", userRouter);
 app.use("/search", filterRouter);
 app.use("/api", ticketRouter);
-
-// add middlewares
-const root = require("path").join(__dirname, "../frontend/dist");
-app.use(express.static(root));
-
-app.use("/*", (req, res) => {
-  const excludedPaths = ["/api", "/auth"];
-  if (!excludedPaths.some((path) => req.originalUrl.startsWith(path))) {
-    res.sendFile(path.join(__dirname, "../frontend/dist", "index.html"));
-  }
-});
