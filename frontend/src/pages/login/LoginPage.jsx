@@ -22,15 +22,12 @@ import {
 import { Input } from "@/components/ui/input";
 
 const formSchema = z.object({
-  email: z
-    .string()
-    .min(2, {
-      message: "Email must be at least 2 characters.",
-    })
-    .email(),
-  password: z.string().min(8, {
-    message: "Password must be at least 8 characters.",
-  }),
+  email: z.string()
+    .min(1, {message: 'Email is required'})
+    .email('Invalid email address'),
+  password: z.string()
+    .min(1, "Password is required")
+    .min(8, "Password must be at least 8 characters long"),
 });
 
 const LoginPage = () => {
@@ -52,7 +49,7 @@ const LoginPage = () => {
   return (
     <div className="flex justify-center items-center h-screen">
       <div className=" flex bg-white gap-6 h-[500px] p-8 rounded-lg shadow-lg">
-        <img src={loginImg} alt="car" className="w-[350px] rounded-lg" />
+        <img src={loginImg} alt="car" className="w-[250px] rounded-lg max-[800px]:hidden" />
 
         <Card className="w-[350px] border-none shadow-none">
           <CardHeader className="text-center">
@@ -74,7 +71,7 @@ const LoginPage = () => {
                     <FormItem>
                       <FormLabel>Email</FormLabel>
                       <FormControl>
-                        <Input placeholder="shadcn" type="email" {...field} />
+                        <Input placeholder="Email" type="email" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -88,7 +85,7 @@ const LoginPage = () => {
                       <FormLabel>Password</FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="shadcn"
+                          placeholder="Password"
                           {...field}
                           type="password"
                         />
@@ -97,7 +94,7 @@ const LoginPage = () => {
                     </FormItem>
                   )}
                 />
-                <Button type="submit">Submit</Button>
+                <Button type="submit">Login</Button>
               </form>
             </Form>
           </CardContent>

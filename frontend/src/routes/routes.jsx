@@ -1,5 +1,5 @@
-import LoginPage from "@/pages/login";
-import SignupPage from "@/pages/signup";
+import LoginPage from "@/pages/login/LoginPage";
+import SignupPage from "@/pages/signup/SignupPage";
 import { Routes as ReactRouterRoutes, Route } from "react-router-dom";
 function Routes() {
   return (
