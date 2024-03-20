@@ -60,4 +60,10 @@ app.use("/api", userRouter);
 app.use("/search", filterRouter);
 app.use("/api", ticketRouter);
 
-app.use(express.static(path.join(__dirname, "../frontend/dist")));
+// add middlewares
+const root = require("path").join(__dirname, "../frontend/dist");
+app.use(express.static(root));
+
+app.use("/*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../frontend/dist", "index.html"));
+});
