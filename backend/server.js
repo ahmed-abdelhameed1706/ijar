@@ -65,5 +65,8 @@ const root = require("path").join(__dirname, "../frontend/dist");
 app.use(express.static(root));
 
 app.use("/*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../frontend/dist", "index.html"));
+  const excludedPaths = ["/api", "/auth"];
+  if (!excludedPaths.some((path) => req.originalUrl.startsWith(path))) {
+    res.sendFile(path.join(__dirname, "../frontend/dist", "index.html"));
+  }
 });
