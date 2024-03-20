@@ -3,8 +3,7 @@ import { Routes } from "./routes/routes";
 
 function App() {
   return (
-    <div className="container bg-gray-50">
-      <h1>this is the home page</h1>
+    <div className="sm:h-screen h-full bg-gray-50">
       <Routes />
     </div>
   );
