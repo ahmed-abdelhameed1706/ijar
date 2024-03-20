@@ -88,12 +88,12 @@ const SignupPage = () => {
   }
 
   return (
-    <div className="flex justify-center items-center min-[650px]:h-full">
-      <div className=" flex bg-white gap-6 p-5 rounded-lg shadow-lg">
+    <div className="flex min-[650px]:py-3 min-[650px]::px-2 justify-center items-center w-full max-w-full min-[650px]:h-full">
+      <div className=" flex max-w-full bg-white gap-6 p-5 rounded-lg shadow-lg">
         <img
           src={loginImg}
           alt="car"
-          className="w-[350px]  rounded-lg max-[800px]:hidden"
+          className="w-[350px] srounded-lg max-[900px]:hidden"
         />
 
         <Card className="w-full  border-none shadow-none">
@@ -120,7 +120,7 @@ const SignupPage = () => {
               <div className="w-full mt-4 flex items-center justify-between">
                 <span className="border-b w-1/5 lg:w-1/4"></span>
                 <span className="text-xs text-center text-gray-500 uppercase">
-                  or signin with email
+                  or Sign Up with email
                 </span>
                 <span className="border-b w-1/5 lg:w-1/4"></span>
               </div>
