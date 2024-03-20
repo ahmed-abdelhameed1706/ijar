@@ -13,19 +13,19 @@ const people = [
 			"https://firebasestorage.googleapis.com/v0/b/portfolioecommerce-f1ee6.appspot.com/o/images%2Fa07fb189-7493-424d-b073-8216b4e293dd?alt=media&token=8f057f1b-c8a6-440d-ad22-3f3fc2e3b416",
 	},
 	{
-		name: "Mahmoud Easa",
+		name: "Mahmoud Easa1",
 		role: "Full Stack Software Engineer",
 		imageUrl:
 			"https://firebasestorage.googleapis.com/v0/b/portfolioecommerce-f1ee6.appspot.com/o/images%2Fa07fb189-7493-424d-b073-8216b4e293dd?alt=media&token=8f057f1b-c8a6-440d-ad22-3f3fc2e3b416",
 	},
 	{
-		name: "Mahmoud Easa",
+		name: "Mahmoud Easa2",
 		role: "Full Stack Software Engineer",
 		imageUrl:
 			"https://firebasestorage.googleapis.com/v0/b/portfolioecommerce-f1ee6.appspot.com/o/images%2Fa07fb189-7493-424d-b073-8216b4e293dd?alt=media&token=8f057f1b-c8a6-440d-ad22-3f3fc2e3b416",
 	},
 	{
-		name: "Mahmoud Easa",
+		name: "Mahmoud Easa3",
 		role: "Full Stack Software Engineer",
 		imageUrl:
 			"https://firebasestorage.googleapis.com/v0/b/portfolioecommerce-f1ee6.appspot.com/o/images%2Fa07fb189-7493-424d-b073-8216b4e293dd?alt=media&token=8f057f1b-c8a6-440d-ad22-3f3fc2e3b416",

@@ -31,4 +31,11 @@ const classNames = (...classes) => {
 	return classes.filter(Boolean).join(" ");
 };
 
-export { signOut, setActiveNav, classNames };
+const handleScrollToTop = () => {
+	window.scrollTo({
+		top: 0,
+		behavior: "smooth",
+	});
+};
+
+export { signOut, setActiveNav, classNames, handleScrollToTop };
