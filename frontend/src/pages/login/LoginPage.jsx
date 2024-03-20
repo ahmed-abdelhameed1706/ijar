@@ -19,10 +19,14 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { useState } from "react";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Link } from "react-router-dom";
 import GoogleIcon from "../../assets/icons/google-icon.png";
+import { Eye, EyeOff } from "lucide-react";
+
 
 const formSchema = z.object({
   email: z
@@ -36,6 +40,8 @@ const formSchema = z.object({
 });
 
 const LoginPage = () => {
+  const [showPassword, setShowPassword] = useState(false);
+
   // 1. Define your form.
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -54,8 +60,8 @@ const LoginPage = () => {
     }
   }
   return (
-    <div className="flex justify-center items-center h-screen">
-      <div className=" flex bg-white gap-6 h-[600px] p-8 rounded-lg shadow-lg">
+    <div className="flex p-8 justify-center items-center w-full">
+      <div className="flex max-w-full  bg-white gap-6 p-8 min-[650px]:rounded-lg  min-[650px]:shadow-lg">
         <img
           src={loginImg}
           alt="car"
@@ -80,7 +86,7 @@ const LoginPage = () => {
                 {/* <div className="bg-white p-2 rounded-full"> */}
                 <img src={GoogleIcon} alt="google icon" className="w-8" />
                 {/* </div> */}
-                <span className="ml-4">Sign Up with Google</span>
+                <span className="ml-4">Login with Google</span>
               </Button>
 
               <div className="w-full mt-4 flex items-center justify-between">
@@ -110,6 +116,7 @@ const LoginPage = () => {
                     </FormItem>
                   )}
                 />
+                <div className="pb-0.5">
                 <FormField
                   control={form.control}
                   name="password"
@@ -117,34 +124,68 @@ const LoginPage = () => {
                     <FormItem>
                       <FormLabel>Password</FormLabel>
                       <FormControl>
-                        <Input
-                          placeholder="Password"
-                          {...field}
-                          type="password"
-                        />
-                      </FormControl>
+                          <div className="relative">
+                            {showPassword ? (
+                              <Label
+                                className="absolute cursor-pointer inset-y-0 end-1 flex justify-center items-center px-2.5 "
+                                htmlFor="password"
+                                onClick={() => setShowPassword(!showPassword)}
+                              >
+                                <Eye
+                                  size={20}
+                                  strokeWidth={2}
+                                  absoluteStrokeWidth
+                                  className="text-gray-400"
+                                />
+                              </Label>
+                            ) : (
+                              <Label
+                                className="absolute  cursor-pointer  inset-y-0 end-1 flex justify-center items-center px-2.5 "
+                                htmlFor="password"
+                                onClick={() => setShowPassword(!showPassword)}
+                              >
+                                <EyeOff
+                                  size={20}
+                                  strokeWidth={2}
+                                  absoluteStrokeWidth
+                                  className="text-gray-400"
+                                />
+                              </Label>
+                            )}
+                            <Input
+                              placeholder="Password"
+                              {...field}
+                              type={showPassword ? "text" : "password"}
+                            />
+                          </div>
+                        </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-                <div className="flex justify-between">
-                  <div className="flex items-center space-x-2">
-                    <Checkbox id="terms" />
-                    <label
-                      htmlFor="terms"
-                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                    >
-                      Remember me
-                    </label>
-                  </div>
-                  <Link className="text-primary text-sm font-bold">
-                    {" "}
-                    Recover Password{" "}
-                  </Link>
+                </div>
+                <Link className="pl-1.5 leading-1 text-indigo-700 text-xs" to="/reset-password">
+                  Forget password?
+                </Link>
+                <div className="flex items-center space-x-2 space-y-0">
+                  <Checkbox id="terms" />
+                  <label
+                    htmlFor="terms"
+                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  >
+                    Remember me
+                  </label>
                 </div>
                 <Button className="w-full" type="submit">
                   Login
                 </Button>
+                <hr />
+                <div  className="flex justify-center items-center">
+                  <p>Don&apos;t have an account? 
+                  <Link className="pl-1 text-indigo-600" to="/signup">
+                    Sign Up.
+                  </Link></p>
+                </div>
               </form>
             </Form>
           </CardContent>

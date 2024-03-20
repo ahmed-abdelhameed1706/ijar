@@ -32,6 +32,7 @@ import "react-phone-input-2/lib/style.css";
 import { useState } from "react";
 import { Label } from "@/components/ui/label";
 import { Eye, EyeOff } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const SignupPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -88,8 +89,8 @@ const SignupPage = () => {
   }
 
   return (
-    <div className="flex min-[650px]:py-3 min-[650px]::px-2 justify-center items-center w-full max-w-full min-[650px]:h-full">
-      <div className=" flex max-w-full bg-white gap-6 p-5 rounded-lg shadow-lg">
+    <div className="flex min-[650px]:py-3 min-[650px]:px-2 justify-center items-center w-full max-w-full min-[650px]:h-full">
+      <div className=" flex max-w-full bg-white gap-6 p-5 min-[650px]:rounded-lg  min-[650px]:shadow-lg">
         <img
           src={loginImg}
           alt="car"
@@ -339,6 +340,13 @@ const SignupPage = () => {
                 <Button className="w-full" type="submit">
                   Signup
                 </Button>
+                <hr />
+                <div  className="flex justify-center items-center">
+                  <p>Already have an account?
+                  <Link className="pl-1 text-indigo-600" to="/login">
+                    Log in.
+                  </Link></p>
+                </div>
               </form>
             </Form>
           </CardContent>
