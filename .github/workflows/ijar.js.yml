@@ -14,18 +14,30 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+
       - name: Use Node.js 20.x
         uses: actions/setup-node@v1
         with:
           node-version: 20.x
 
-      - run: |
+      - name: Install Backend Dependencies
+        run: |
           cd backend
           npm install
-          cd ../frontend
+
+      - name: Install Frontend Dependencies
+        run: |
+          cd frontend
           npm install
+
+      - name: Build Frontend
+        run: |
+          cd frontend
           npm run build
-          cd ../backend
+
+      - name: Manage PM2 and Nginx
+        run: |
+          cd backend
           pm2 stop 0
           pm2 start 0
           pm2 save

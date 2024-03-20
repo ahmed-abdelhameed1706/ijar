@@ -20,17 +20,19 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Link } from "react-router-dom";
+import GoogleIcon from "../../assets/icons/google-icon.png";
 
 const formSchema = z.object({
   email: z
     .string()
-    .min(2, {
-      message: "Email must be at least 2 characters.",
-    })
-    .email(),
-  password: z.string().min(8, {
-    message: "Password must be at least 8 characters.",
-  }),
+    .min(1, { message: "Email is required" })
+    .email("Invalid email address"),
+  password: z
+    .string()
+    .min(1, "Password is required")
+    .min(8, "Password must be at least 8 characters long"),
 });
 
 const LoginPage = () => {
@@ -47,12 +49,18 @@ const LoginPage = () => {
   function onSubmit(values) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    console.log(values);
+    if (values) {
+      alert(values);
+    }
   }
   return (
     <div className="flex justify-center items-center h-screen">
-      <div className=" flex bg-white gap-6 h-[500px] p-8 rounded-lg shadow-lg">
-        <img src={loginImg} alt="car" className="w-[350px] rounded-lg" />
+      <div className=" flex bg-white gap-6 h-[600px] p-8 rounded-lg shadow-lg">
+        <img
+          src={loginImg}
+          alt="car"
+          className="w-[250px] rounded-lg max-[800px]:hidden"
+        />
 
         <Card className="w-[350px] border-none shadow-none">
           <CardHeader className="text-center">
@@ -62,6 +70,28 @@ const LoginPage = () => {
             </CardDescription>
           </CardHeader>
           <CardContent>
+            <div className="flex flex-col gap-4 items-center  mb-5">
+              <Button
+                variant="ghost"
+                size="lg"
+                className="shadow-md py-4"
+                // className="w-full max-w-xs font-bold shadow-lg rounded-lg py-5 bg-white text-gray-800 flex items-center justify-center transition-all duration-300 ease-in-out focus:outline-none hover:shadow focus:shadow-sm focus:shadow-outline"
+              >
+                {/* <div className="bg-white p-2 rounded-full"> */}
+                <img src={GoogleIcon} alt="google icon" className="w-8" />
+                {/* </div> */}
+                <span className="ml-4">Sign Up with Google</span>
+              </Button>
+
+              <div className="w-full mt-4 flex items-center justify-between">
+                <span className="border-b w-1/5 lg:w-1/4"></span>
+                <span className="text-xs text-center text-gray-500 uppercase">
+                  or login with email
+                </span>
+                <span className="border-b w-1/5 lg:w-1/4"></span>
+              </div>
+            </div>
+
             <Form {...form}>
               <form
                 onSubmit={form.handleSubmit(onSubmit)}
@@ -74,7 +104,7 @@ const LoginPage = () => {
                     <FormItem>
                       <FormLabel>Email</FormLabel>
                       <FormControl>
-                        <Input placeholder="shadcn" type="email" {...field} />
+                        <Input placeholder="Email" type="email" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -88,7 +118,7 @@ const LoginPage = () => {
                       <FormLabel>Password</FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="shadcn"
+                          placeholder="Password"
                           {...field}
                           type="password"
                         />
@@ -97,7 +127,24 @@ const LoginPage = () => {
                     </FormItem>
                   )}
                 />
-                <Button type="submit">Submit</Button>
+                <div className="flex justify-between">
+                  <div className="flex items-center space-x-2">
+                    <Checkbox id="terms" />
+                    <label
+                      htmlFor="terms"
+                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    >
+                      Remember me
+                    </label>
+                  </div>
+                  <Link className="text-primary text-sm font-bold">
+                    {" "}
+                    Recover Password{" "}
+                  </Link>
+                </div>
+                <Button className="w-full" type="submit">
+                  Login
+                </Button>
               </form>
             </Form>
           </CardContent>

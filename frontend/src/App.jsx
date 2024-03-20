@@ -3,7 +3,7 @@ import Routes from "./routes/routes";
 
 const App = () => {
   return (
-    <div className="container bg-gray-50">
+    <div className="sm:h-screen h-full bg-gray-50">
       <Routes />
     </div>
   );

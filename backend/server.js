@@ -19,7 +19,6 @@ const app = express();
 // Middleware
 app.use(express.json());
 
-app.use(express.static(path.join(__dirname, "../frontend/build")));
 // CORS
 app.use(cors());
 
@@ -60,3 +59,11 @@ app.use("/api/owner-dashboard", ownerDashboardRouter);
 app.use("/api", userRouter);
 app.use("/search", filterRouter);
 app.use("/api", ticketRouter);
+
+// add middlewares
+const root = require("path").join(__dirname, "../frontend/dist");
+app.use(express.static(root));
+
+app.use("/*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../frontend/dist", "index.html"));
+});
