@@ -1,7 +1,7 @@
 // import { Button } from "./components/ui/button";
-import { Routes } from "./routes/routes";
+import Routes from "./routes/routes";
 
-function App() {
+const App = () => {
   return (
     <div className="container bg-gray-50">
       <Routes />
