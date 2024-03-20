@@ -37,7 +37,6 @@ const ForgetPassword = () => {
         },
     });
 
-  // 2. Define a submit handler.
   function onSubmit(values) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
@@ -50,7 +49,7 @@ const ForgetPassword = () => {
       <div className="flex max-w-full bg-white gap-6  p-8 min-[650px]:rounded-lg  min-[650px]:shadow-lg">
         <Card className="w-[350px] border-none shadow-none">
           <CardHeader className="text-center">
-            <CardTitle>Password Reset Request</CardTitle>
+            <CardTitle>Reset your password</CardTitle>
             <CardDescription>
               Enter your email below to to request a password reset link
             </CardDescription>
