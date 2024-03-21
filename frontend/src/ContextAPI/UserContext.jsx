@@ -15,7 +15,7 @@ const UserProvider = ({ children }) => {
 		if (cookie) {
 			setCookieValue(cookie);
 			axios
-				.post(`${url}/auth/me`, {
+				.get(`${url}/api/users`, {
 					withCredentials: true,
 					Headers: {
 						authorization: cookieValue,
