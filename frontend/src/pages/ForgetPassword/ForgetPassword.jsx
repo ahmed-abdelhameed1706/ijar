@@ -1,4 +1,3 @@
-import loginImg from "../../assets/images/login-img.jpg";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -21,47 +20,42 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
-const formSchema = z.object({
-  email: z
-    .string()
-    .min(2, {
-      message: "Email must be at least 2 characters.",
-    })
-    .email(),
-  password: z.string().min(8, {
-    message: "Password must be at least 8 characters.",
-  }),
-});
+const ForgetPassword = () => {
 
-const LoginPage = () => {
-  // 1. Define your form.
-  const form = useForm({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      email: "",
-      password: "",
-    },
-  });
+    const formSchema = z.object({
+        email: z
+        .string()
+        .min(1, { message: "Email is required" })
+        .email("Invalid email address"),
+    });
 
-  // 2. Define a submit handler.
+    // 1. Define your form.
+    const form = useForm({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            email: "",
+        },
+    });
+
   function onSubmit(values) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    console.log(values);
+    if (values) {
+      alert(values);
+    }
   }
   return (
-    <div className="flex justify-center items-center h-screen">
-      <div className=" flex bg-white gap-6 h-[500px] p-8 rounded-lg shadow-lg">
-        <img src={loginImg} alt="car" className="w-[350px] rounded-lg" />
-
+    <div className="flex justify-center items-center w-full h-screen">
+      <div className="flex max-w-full bg-white gap-6  p-8 min-[650px]:rounded-lg  min-[650px]:shadow-lg">
         <Card className="w-[350px] border-none shadow-none">
           <CardHeader className="text-center">
-            <CardTitle>Signin in to your account</CardTitle>
+            <CardTitle>Reset your password</CardTitle>
             <CardDescription>
-              Enter your details to procede further
+              Enter your email below to to request a password reset link
             </CardDescription>
           </CardHeader>
           <CardContent>
+
             <Form {...form}>
               <form
                 onSubmit={form.handleSubmit(onSubmit)}
@@ -74,30 +68,15 @@ const LoginPage = () => {
                     <FormItem>
                       <FormLabel>Email</FormLabel>
                       <FormControl>
-                        <Input placeholder="shadcn" type="email" {...field} />
+                        <Input placeholder="Email" type="email" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-                <FormField
-                  control={form.control}
-                  name="password"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Password</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="shadcn"
-                          {...field}
-                          type="password"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <Button type="submit">Submit</Button>
+                <Button className="w-full" type="submit">
+                  Send
+                </Button>
               </form>
             </Form>
           </CardContent>
@@ -110,4 +89,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default ForgetPassword;
