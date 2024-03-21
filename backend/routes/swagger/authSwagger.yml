@@ -1,0 +1,168 @@
+swagger: "2.0"
+info:
+  title: Authentication API
+  version: "1.0.0"
+  description: Authentication managemen
+tags:
+  - name: Auth
+    description: Authentication managemen
+components:
+  securitySchemes:
+    bearerAuth:
+      type: apiKey
+      name: Authorization
+      in: header
+paths:
+  /auth/signup:
+    post:
+      tags:
+        - Auth
+      summary: User sign up
+      description: Register a new user
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - fullName
+                - email
+                - password
+                - confirmPassword
+                - phoneNumber
+                - address
+                - role
+              properties:
+                fullName:
+                  type: string
+                  default: John Doe
+                email:
+                  type: string
+                  default: johndoe@mail.com
+                password:
+                  type: string
+                  default: johnDoe20!@
+                password2:
+                  type: string
+                  default: johnDoe20!@
+                phoneNumber:
+                  type: string
+                  default: "1234567890"
+                address:
+                  type: string
+                  default: 123 Main St
+                role:
+                  type: string
+                  default: owner
+                isVerified:
+                  type: boolean
+                  default: false
+      responses:
+        "201":
+          description: User signed up successfully
+        "400":
+          description: Invalid request data
+  /auth/login:
+    post:
+      tags:
+        - Auth
+      summary: User login
+      description: Authenticate user and generate access token
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  default: johndoe@mail.com
+                password:
+                  type: string
+                  default: johnDoe20!@
+      responses:
+        "200":
+          description: User logged in successfully
+        "401":
+          description: Invalid credentials
+  /auth/verify/{token}:
+    get:
+      tags:
+        - Auth
+      summary: Verify user email
+      description: Verify user email using token
+      parameters:
+        - name: token
+          in: path
+          description: Verification token
+          required: true
+          type: string
+      responses:
+        "200":
+          description: User email verified successfully
+        "400":
+          description: Invalid token
+  /auth/logout:
+    post:
+      security:
+        - bearerAuth: []
+      tags:
+        - Auth
+      summary: User logout
+      description: Logout user and invalidate access token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                refreshToken:
+                  type: string
+      responses:
+        "200":
+          description: User logged out successfully
+        "401":
+          description: Unauthorized access
+  /auth/resend-verification-email:
+    post:
+      tags:
+        - Auth
+      summary: Resend verification email
+      description: Resend verification email to the user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+              properties:
+                email:
+                  type: string
+                  default: "johndoe@mail.com"
+      responses:
+        "200":
+          description: Verification email sent
+        "404":
+          description: User not found
+        "400":
+          description: User is already verified
+
+  /auth/test:
+    get:
+      security:
+        - bearerAuth: []
+      tags:
+        - Auth
+      summary: Test authorization
+      description: Test authorization middleware
+      responses:
+        "200":
+          description: You are authorized
+        "401":
+          description: Unauthorized access
