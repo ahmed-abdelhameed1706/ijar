@@ -31,19 +31,10 @@ export default class UserController {
 
   static async updateUser(req, res) {
     try {
-      const data = Object.keys(req.body);
-
       const user = await User.findById(req.userId);
 
       if (!user) {
         return res.status(404).json({ error: "Not found" });
-      }
-
-      if (data.includes("password")) {
-        return res.status(403).json({
-          error: "Forbidden",
-          message: "You cannot update your password.",
-        });
       }
 
       const newUser = await User.findByIdAndUpdate(user.id, req.body, {
