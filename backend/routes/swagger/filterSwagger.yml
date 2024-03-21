@@ -1,0 +1,102 @@
+swagger: "2.0"
+info:
+  title: Car Filtering API
+  version: "1.0.0"
+  description: Endpoint for filtering cars based on various criteria
+paths:
+  /search:
+    get:
+      summary: Filter cars
+      description: Filter cars based on specified criteria
+      tags: [Filter]
+      parameters:
+        - name: brandName
+          in: query
+          description: Filter by brand name
+          required: false
+          type: string
+        - name: type
+          in: query
+          description: Filter by car type
+          required: false
+          type: string
+        - name: color
+          in: query
+          description: Filter by color
+          required: false
+          type: string
+        - name: minPrice
+          in: query
+          description: Minimum price
+          required: false
+          type: number
+        - name: maxPrice
+          in: query
+          description: Maximum price
+          required: false
+          type: number
+        - name: minYear
+          in: query
+          description: Minimum manufacturing year
+          required: false
+          type: number
+        - name: maxYear
+          in: query
+          description: Maximum manufacturing year
+          required: false
+          type: number
+        - name: model
+          in: query
+          description: Filter by model
+          required: false
+          type: string
+        - name: averageRate
+          in: query
+          description: Filter by average rate
+          required: false
+          type: number
+      responses:
+        200:
+          description: Successful operation
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Car"
+        400:
+          description: Invalid input
+definitions:
+  Car:
+    type: object
+    properties:
+      brandName:
+        type: string
+      model:
+        type: string
+      year:
+        type: number
+      type:
+        type: string
+      color:
+        type: string
+      price:
+        type: number
+      licensePlateNumber:
+        type: string
+      available:
+        type: boolean
+      images:
+        type: array
+        items:
+          type: string
+      ownerId:
+        type: string
+      engineId:
+        type: string
+      averageRate:
+        type: number
+      comments:
+        type: array
+        items:
+          type: string
+      description:
+        type: string
