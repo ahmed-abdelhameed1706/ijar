@@ -15,7 +15,10 @@ const signOut = (cookieValue) => {
 			toast(data.data.message);
 			console.log(data);
 		})
-		.catch((err) => console.log(err));
+		.catch((err) => {
+			// toast.error(err.message);
+			console.log(err);
+		});
 };
 
 const setActiveNav = (navigation, setNavigation, location) => {

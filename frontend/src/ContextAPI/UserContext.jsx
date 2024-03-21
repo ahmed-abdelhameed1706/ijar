@@ -11,11 +11,11 @@ const UserProvider = ({ children }) => {
 	const [cookieValue, setCookieValue] = useState("");
 
 	useEffect(() => {
-		const cookie = Cookies.get("authorization");
+		const cookie = Cookies.get("jwt");
 		if (cookie) {
 			setCookieValue(cookie);
 			axios
-				.post(`${url}/auth/me`, {
+				.get(`${url}/api/users`, {
 					withCredentials: true,
 					Headers: {
 						authorization: cookieValue,
