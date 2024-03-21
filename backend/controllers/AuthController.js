@@ -107,6 +107,7 @@ export default class AuthController {
   static login = async (req, res) => {
     try {
       const { email, password } = req.body;
+      console.log(req.cookies);
 
       const user = await User.findOne({ email });
       if (!user) {
