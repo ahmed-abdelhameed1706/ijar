@@ -94,12 +94,12 @@ const SignupPage = () => {
         <img
           src={loginImg}
           alt="car"
-          className="w-[350px] srounded-lg max-[900px]:hidden"
+          className="w-[350px] rounded-lg max-[900px]:hidden"
         />
 
-        <Card className="w-full  border-none shadow-none">
+        <Card className="w-full border-none shadow-none">
           <CardHeader className="text-center">
-            <CardTitle>Signup a new account</CardTitle>
+            <CardTitle>Sign up a new account</CardTitle>
             <CardDescription>
               Enter your details to create a new Ijar account
             </CardDescription>
@@ -341,11 +341,13 @@ const SignupPage = () => {
                   Signup
                 </Button>
                 <hr />
-                <div  className="flex justify-center items-center">
-                  <p>Already have an account?
-                  <Link className="pl-1 text-indigo-600" to="/login">
-                    Log in.
-                  </Link></p>
+                <div className="flex justify-center items-center">
+                  <p>
+                    Already have an account?
+                    <Link className="pl-1 text-indigo-600" to="/login">
+                      Sign in.
+                    </Link>
+                  </p>
                 </div>
               </form>
             </Form>
