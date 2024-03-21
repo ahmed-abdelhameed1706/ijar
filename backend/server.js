@@ -4,7 +4,9 @@ import carRouter from "./routes/carRouter";
 import commentRouter from "./routes/commentRoutes";
 import authRouter from "./routes/authRoutes";
 import cors from "cors";
-import swaggerDocs from "./utils/swagger";
+// import swaggerDocs from "./utils/swagger";
+import swaggerSpec from "./utils/swagger";
+import swaggerUi from "swagger-ui-express";
 import cartRouter from "./routes/cartRoutes";
 import ownerDashboardRouter from "./routes/ownerDashboardRoutes";
 import userRouter from "./routes/userRouters";
@@ -33,6 +35,8 @@ mongoose.connect("mongodb://localhost:27017/Ijar", {
   // useUnifiedTopology: true,
 });
 
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
 // Event listeners for MongoDB connection
 mongoose.connection.on("connected", () => {
   // Start the server after successful connection
@@ -40,7 +44,6 @@ mongoose.connection.on("connected", () => {
     app.listen(port, () => {
       console.log(`Server connected to http://localhost:${port}`);
     });
-    swaggerDocs(app, port);
   } catch (error) {
     console.log("Cannot connect to the server");
   }
@@ -59,3 +62,11 @@ app.use("/api/owner-dashboard", ownerDashboardRouter);
 app.use("/api", userRouter);
 app.use("/search", filterRouter);
 app.use("/api", ticketRouter);
+
+// Serve static files
+app.use(express.static(path.join(__dirname, "../frontend/dist")));
+
+// Handle all other routes
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../frontend/dist/index.html"));
+});
