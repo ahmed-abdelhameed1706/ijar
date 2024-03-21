@@ -41,7 +41,7 @@ const NavBar = () => {
 									)}
 								</Disclosure.Button>
 							</div>
-							<div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
+							<div className="hidden sm:flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
 								<div className="flex flex-shrink-0 items-center">
 									<NavLink to="/">
 										<button className="block w-auto text-gray-200 overline font-black text-xl">
@@ -168,28 +168,35 @@ const NavBar = () => {
 									</Menu>
 								</div>
 							) : (
-								<>
+								<div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
 									<NavLink
 										to="/login"
-										className="block px-4 py-2 text-sm text-gray-300
+										className="block px-2 py-2 text-sm text-gray-300
 													hover:text-white"
 									>
 										Login
 									</NavLink>
 									<NavLink
 										to="/signup"
-										className="block px-4 py-2 text-sm text-gray-300
+										className="block px-2 py-2 text-sm text-gray-300
 													hover:text-white"
 									>
 										Sign UP
 									</NavLink>
-								</>
+								</div>
 							)}
 						</div>
 					</div>
 
 					<Disclosure.Panel className="sm:hidden">
 						<div className="space-y-1 px-2 pb-3 pt-2">
+							<div className="flex flex-shrink-0 items-center justify-center mb-8">
+								<NavLink to="/">
+									<button className="block w-auto text-gray-200 overline font-black text-xl">
+										Ijar
+									</button>
+								</NavLink>
+							</div>
 							{navigation.map((item) => (
 								<Disclosure.Button
 									key={item.name}
