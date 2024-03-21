@@ -7,7 +7,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -26,7 +25,6 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Link } from "react-router-dom";
 import GoogleIcon from "../../assets/icons/google-icon.png";
 import { Eye, EyeOff } from "lucide-react";
-
 
 const formSchema = z.object({
   email: z
@@ -60,17 +58,17 @@ const LoginPage = () => {
     }
   }
   return (
-    <div className="flex p-8 justify-center items-center w-full">
-      <div className="flex max-w-full  bg-white gap-6 p-8 min-[650px]:rounded-lg  min-[650px]:shadow-lg">
+    <div className="flex min-[650px]:py-3 min-[650px]:px-2 justify-center items-center w-full max-w-full min-[650px]:h-full">
+      <div className=" flex max-w-full bg-white gap-6 p-5 min-[650px]:rounded-lg  min-[650px]:shadow-lg">
         <img
           src={loginImg}
           alt="car"
-          className="w-[250px] rounded-lg max-[800px]:hidden"
+          className="w-[350px] rounded-lg max-[800px]:hidden"
         />
 
-        <Card className="w-[350px] border-none shadow-none">
+        <Card className="w-full border-none shadow-none">
           <CardHeader className="text-center">
-            <CardTitle>Signin in to your account</CardTitle>
+            <CardTitle>Sign in in to your account</CardTitle>
             <CardDescription>
               Enter your details to procede further
             </CardDescription>
@@ -86,13 +84,13 @@ const LoginPage = () => {
                 {/* <div className="bg-white p-2 rounded-full"> */}
                 <img src={GoogleIcon} alt="google icon" className="w-8" />
                 {/* </div> */}
-                <span className="ml-4">Login with Google</span>
+                <span className="ml-4">Sign in with Google</span>
               </Button>
 
               <div className="w-full mt-4 flex items-center justify-between">
                 <span className="border-b w-1/5 lg:w-1/4"></span>
                 <span className="text-xs text-center text-gray-500 uppercase">
-                  or login with email
+                  or sign in with email
                 </span>
                 <span className="border-b w-1/5 lg:w-1/4"></span>
               </div>
@@ -101,7 +99,7 @@ const LoginPage = () => {
             <Form {...form}>
               <form
                 onSubmit={form.handleSubmit(onSubmit)}
-                className="space-y-8"
+                className="space-y-4"
               >
                 <FormField
                   control={form.control}
@@ -117,13 +115,13 @@ const LoginPage = () => {
                   )}
                 />
                 <div className="pb-0.5">
-                <FormField
-                  control={form.control}
-                  name="password"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Password</FormLabel>
-                      <FormControl>
+                  <FormField
+                    control={form.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Password</FormLabel>
+                        <FormControl>
                           <div className="relative">
                             {showPassword ? (
                               <Label
@@ -159,39 +157,43 @@ const LoginPage = () => {
                             />
                           </div>
                         </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                 </div>
-                <Link className="pl-1.5 leading-1 text-indigo-700 text-xs" to="/reset-password">
-                  Forget password?
-                </Link>
-                <div className="flex items-center space-x-2 space-y-0">
-                  <Checkbox id="terms" />
-                  <label
-                    htmlFor="terms"
-                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                <div className="flex justify-between">
+                  <div className="flex items-center space-x-2 space-y-0">
+                    <Checkbox id="terms" />
+                    <label
+                      htmlFor="terms"
+                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    >
+                      Remember me
+                    </label>
+                  </div>
+                  <Link
+                    className=" leading-1 text-indigo-700 text-xs"
+                    to="/reset-password"
                   >
-                    Remember me
-                  </label>
+                    Forget password?
+                  </Link>
                 </div>
                 <Button className="w-full" type="submit">
                   Login
                 </Button>
                 <hr />
-                <div  className="flex justify-center items-center">
-                  <p>Don&apos;t have an account? 
-                  <Link className="pl-1 text-indigo-600" to="/signup">
-                    Sign Up.
-                  </Link></p>
+                <div className="flex justify-center items-center">
+                  <p>
+                    Don&apos;t have an account?
+                    <Link className="pl-1 text-indigo-600" to="/signup">
+                      Sign Up.
+                    </Link>
+                  </p>
                 </div>
               </form>
             </Form>
           </CardContent>
-          <CardFooter className="flex justify-between">
-            {/* <Button variant="outline">Cancel</Button> */}
-          </CardFooter>
         </Card>
       </div>
     </div>

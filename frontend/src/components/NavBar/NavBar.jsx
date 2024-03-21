@@ -7,6 +7,7 @@ import { signOut, setActiveNav, classNames } from "@/helper";
 import { UserContext } from "@/ContextAPI/UserContext";
 import { cn } from "@/lib/utils";
 import buttonVariants from "@/lib/buttonVariants";
+import logo from "@/assets/images/logo.png";
 
 const NavBar = () => {
   const [navigation, setNavigation] = useState(navData);
@@ -18,7 +19,10 @@ const NavBar = () => {
   }, [location]);
 
   return (
-    <Disclosure as="nav" className="bg-gray-800 sticky top-0 left-0 z-10">
+    <Disclosure
+      as="nav"
+      className="bg-white sticky top-0 left-0 z-10 shadow-lg"
+    >
       {({ open }) => (
         <>
           <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
@@ -38,30 +42,32 @@ const NavBar = () => {
               <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                 <div className="flex flex-shrink-0 items-center">
                   <NavLink to="/">
-                    <button className="block w-auto text-gray-200 overline font-black text-xl">
-                      Ijar
-                    </button>
+                    <img
+                      className="h-12 w-auto sm:h-14"
+                      src={logo}
+                      alt="ijar logo"
+                    />
                   </NavLink>
                 </div>
-                <div className="hidden sm:ml-6 sm:block">
-                  <div className="flex space-x-4">
-                    {navigation.map((item) => (
-                      <NavLink
-                        key={item.name}
-                        to={item.href}
-                        className={classNames(
-                          item.current
-                            ? "bg-gray-900 text-white"
-                            : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                          "rounded-md px-3 py-2 text-sm font-medium"
-                        )}
-                        aria-current={item.current ? "page" : undefined}
-                      >
-                        {item.name}
-                      </NavLink>
-                    ))}
-                  </div>
+                {/* <div className="hidden sm:ml-6 sm:block"> */}
+                <div className="hidden sm:ml-6 sm:flex space-x-4 items-center">
+                  {navigation.map((item) => (
+                    <NavLink
+                      key={item.name}
+                      to={item.href}
+                      className={classNames(
+                        item.current
+                          ? " text-primary border-b-2 border-primary"
+                          : "text-gray-700 hover:text-primary",
+                        " px-3 py-2 text-sm font-medium"
+                      )}
+                      aria-current={item.current ? "page" : undefined}
+                    >
+                      {item.name}
+                    </NavLink>
+                  ))}
                 </div>
+                {/* </div> */}
               </div>
               {user ? (
                 <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
@@ -141,21 +147,22 @@ const NavBar = () => {
                   </Menu>
                 </div>
               ) : (
-                <>
+                <div>
                   <NavLink
                     to="/login"
-                    className="block px-4 py-2 text-sm text-gray-300
-													hover:text-white"
+                    className={cn(buttonVariants({ variant: "outline" }))}
                   >
-                    Login
+                    Sign In
                   </NavLink>
                   <NavLink
                     to="/signup"
-                    className={cn(buttonVariants("default"))}
+                    className={cn(
+                      buttonVariants({ variant: "default", className: "ml-2" })
+                    )}
                   >
-                    Sign UP
+                    Sign Up
                   </NavLink>
-                </>
+                </div>
               )}
             </div>
           </div>
