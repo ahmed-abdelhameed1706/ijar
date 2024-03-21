@@ -33,6 +33,9 @@ import { useState } from "react";
 import { Label } from "@/components/ui/label";
 import { Eye, EyeOff } from "lucide-react";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import { toast } from "react-toastify";
+
 
 const SignupPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -79,13 +82,22 @@ const SignupPage = () => {
     },
   });
 
-  function onSubmit(values) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    if (values) {
-      alert(JSON.stringify(values, null, 2));
+  async function onSubmit(values) {
+    try {
+      const val = await axios.post('http://localhost:5000/auth/signup', values);
+      console.log(val)
+      toast.success(val.data.message)
+      setTimeout(() => {
+        toast.info(`We've sent a verification email to ${values.email}. Once you confirm it, you can sgin in.`)
+      }, 6002)
+    } catch (e) {
+      toast.error(e.response.data.message)
+      if (e.response.data.message1) {
+        setTimeout(() => {
+          toast.info(e.response.data.message1)
+        }, 6002)
+      }
     }
-    // form.reset();
   }
 
   return (
@@ -192,7 +204,7 @@ const SignupPage = () => {
                               </Label>
                             ) : (
                               <Label
-                                className="absolute  cursor-pointer  inset-y-0 end-1 flex justify-center items-center px-2.5 "
+                                className="absolute cursor-pointer  inset-y-0 end-1 flex justify-center items-center px-2.5 "
                                 htmlFor="password"
                                 onClick={() => setShowPassword(!showPassword)}
                               >

@@ -19,8 +19,10 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import axios from "axios";
+import { toast } from "react-toastify";
 
-const ForgetPassword = () => {
+const ResetPassword = () => {
 
     const formSchema = z.object({
         email: z
@@ -37,15 +39,17 @@ const ForgetPassword = () => {
         },
     });
 
-  function onSubmit(values) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    if (values) {
-      alert(values);
-    }
+    async function onSubmit(values) {
+      try {
+        const val = await axios.post('http://localhost:5000/api/users/reset_password', values);
+        toast.info(val.data.message)
+      } catch (e) {
+        toast.error(e.response.data.message)
+      }
   }
+
   return (
-    <div className="flex justify-center items-center w-full h-screen">
+    <div className="flex max-[650px]:bg-white justify-center items-center w-full h-screen">
       <div className="flex max-w-full bg-white gap-6  p-8 min-[650px]:rounded-lg  min-[650px]:shadow-lg">
         <Card className="w-[350px] border-none shadow-none">
           <CardHeader className="text-center">
@@ -89,4 +93,4 @@ const ForgetPassword = () => {
   );
 };
 
-export default ForgetPassword;
+export default ResetPassword;
