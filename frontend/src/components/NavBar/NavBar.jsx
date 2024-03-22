@@ -3,16 +3,28 @@ import { NavLink, useLocation } from "react-router-dom";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { navData } from "@/data";
-import { signOut, setActiveNav, classNames } from "@/helper";
+import { setActiveNav, classNames } from "@/helper";
 import { UserContext } from "@/ContextAPI/UserContext";
 import { cn } from "@/lib/utils";
 import buttonVariants from "@/lib/buttonVariants";
 import logo from "@/assets/images/logo.png";
+import useAuthUser from "react-auth-kit/hooks/useAuthUser";
+import useSignOut from "react-auth-kit/hooks/useSignOut";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const NavBar = () => {
   const [navigation, setNavigation] = useState(navData);
-  const { user, cookieValue } = useContext(UserContext);
+  const user = useAuthUser();
+  const logout = useSignOut();
+  const navigate = useNavigate();
   const location = useLocation();
+
+  const signOut = () => {
+    logout();
+    navigate("/");
+    toast.success("You have successfully signed out");
+  };
 
   useEffect(() => {
     setActiveNav(navigation, setNavigation, location);
@@ -132,7 +144,7 @@ const NavBar = () => {
                         <Menu.Item>
                           {({ active }) => (
                             <NavLink
-                              onClick={() => signOut(cookieValue)}
+                              onClick={() => signOut()}
                               className={classNames(
                                 active ? "bg-gray-100" : "",
                                 "block px-4 py-2 text-sm text-gray-700"

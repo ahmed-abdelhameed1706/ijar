@@ -28,6 +28,7 @@ import { Eye, EyeOff } from "lucide-react";
 import axios from "../../api/axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import useSignIn from "react-auth-kit/hooks/useSignIn";
 
 const formSchema = z.object({
   email: z
@@ -42,6 +43,7 @@ const formSchema = z.object({
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const signIn = useSignIn();
 
   const navigate = useNavigate();
 
@@ -63,8 +65,23 @@ const LoginPage = () => {
         },
         // withCredentials: true,
       });
-      toast.success("Welcome! Your account is now active. Let's get started!");
-      console.log(response);
+
+      signIn({
+        auth: {
+          token: response.data.accessToken,
+          expiresIn: 3600,
+          tokenType: "Bearer",
+          authState: {
+            userId: response.data.userId,
+            email: response.data.email,
+            role: response.data.role,
+          },
+        },
+      });
+
+      toast.success(
+        `Welcome ${response.data.fullName}! Your account is now active. Let's get started!`
+      );
 
       navigate("/dashboard");
     } catch (e) {

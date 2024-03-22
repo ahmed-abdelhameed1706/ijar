@@ -1,25 +1,6 @@
 import axios from "axios";
 import { toast } from "react-toastify";
 
-const signOut = (cookieValue) => {
-  console.log(cookieValue);
-  axios
-    .post(`/auth/logout`, {
-      withCredentials: true,
-      Headers: {
-        authorization: cookieValue,
-      },
-    })
-    .then((data) => {
-      toast(data.data.message);
-      console.log(data);
-    })
-    .catch((err) => {
-      // toast.error(err.message);
-      console.log(err);
-    });
-};
-
 const setActiveNav = (navigation, setNavigation, location) => {
   const newNave = navigation.map((el) => {
     if (el.href === location.pathname) el.current = true;
@@ -40,4 +21,4 @@ const handleScrollToTop = () => {
   });
 };
 
-export { signOut, setActiveNav, classNames, handleScrollToTop };
+export { setActiveNav, classNames, handleScrollToTop };
