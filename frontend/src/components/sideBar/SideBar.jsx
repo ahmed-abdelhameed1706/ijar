@@ -8,7 +8,7 @@ import { setActiveNav, classNames } from '@/helper';
 const SideBar = ({openBar, setOpenBar}) => {
 
     const [navigation, setNavigation] = useState([
-        { name: "Account Settings", href: "/settings/", current: true },
+        { name: "Account Settings", href: "/settings", current: true },
         { name: "Password & Security", href: "/settings/security", current: false },
         { name: "Delete Account", href: "/settings/delete", current: false },
     ]);
@@ -36,7 +36,7 @@ const SideBar = ({openBar, setOpenBar}) => {
                         <path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"/>
                     </svg>
                 </button>
-                <h1 className="text-4xl py-2 font-bold">Settings</h1>
+                <h1 className="text-3xl text-left py-2 font-bold">Settings</h1>
                 <p className="text-sm py-2">Control and manage your account, and explore various options to personalize your experience.</p>
                 <div className="h-full px-3 py-4 overflow-y-auto">
                     <div className="font-medium space-y-3">
@@ -48,7 +48,7 @@ const SideBar = ({openBar, setOpenBar}) => {
                                 item.current
                                 ? "text-primary text-left w-100 border-b-2 border-primary"
                                 : "text-gray-700 hover:text-primary",
-                                " py-2 block text-sm font-medium"
+                                " py-2 pl-1 block text-sm font-medium"
                             )}
                             aria-current={item.current ? "page" : undefined}
                             >

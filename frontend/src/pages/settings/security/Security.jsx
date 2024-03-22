@@ -23,43 +23,59 @@ import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { Label } from "@/components/ui/label";
 import { Eye, EyeOff } from "lucide-react";
+import axios from "../../../api/axios";
+import { toast } from "react-toastify";
+import useAuthHeader from 'react-auth-kit/hooks/useAuthHeader';
 
 const Security = ({ setOpenBar }) => {
-    const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
-    const formSchema = z
-    .object({
-        oldPassword: z.string().min(1, "Password is required"),
-        newPassword: z
-            .string()
-            .min(1, "Password is required")
-            .min(8, "Password must be at least 8 characters long")
-            .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
-            .regex(/[a-z]/, "Password must contain at least one lowercase letter")
-            .regex(/\d/, "Password must contain at least one number"),
-    })
-    .refine((data) => data.oldPassword === data.confirmPassword, {
-      path: ["confirmPassword"],
-      message: "Passwords does not match",
+  const auth = useAuthHeader()
+  const token = auth.split(" ")[1]
+
+  const formSchema = z
+  .object({
+      oldPassword: z.string().min(1, "Password is required"),
+      newPassword: z
+          .string()
+          .min(1, "Password is required")
+          .min(8, "Password must be at least 8 characters long")
+          .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
+          .regex(/[a-z]/, "Password must contain at least one lowercase letter")
+          .regex(/\d/, "Password must contain at least one number"),
+  })
+
+  const form = useForm({
+      resolver: zodResolver(formSchema),
+      defaultValues: {
+          oldPassword: "",
+          newPassword: "",
+      },
     });
-
-    const form = useForm({
-        resolver: zodResolver(formSchema),
-        defaultValues: {
-            oldPassword: "",
-            newPassword: "",
-        },
-      });
     
-      function onSubmit(values) {
-        // Do something with the form values.
-        // ✅ This will be type-safe and validated.
-        if (values) {
-          alert(JSON.stringify(values, null, 2));
+    async function onSubmit(values) {
+      try {
+        const response = await axios.put(
+          "/api/users/update_password",
+          JSON.stringify(values),
+          {
+            headers: {
+              "Content-Type": "application/json",
+              authorization: token
+            },
+          }
+        );
+        toast.success(response.data.message);
+        form.reset();
+      } catch (e) {
+        toast.error(e.response.data.message);
+        if (e.response.data.message1) {
+          setTimeout(() => {
+            toast.info(e.response.data.message1);
+          }, 6002);
         }
-        console.log(values)
-        // form.reset(); ProfileSetting.jsx
       }
+    }
     
     return (
         <Card onClick={() => setOpenBar(false)} className="w-full border-none shadow-none">

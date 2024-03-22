@@ -149,6 +149,9 @@ export default class AuthController {
         userId: user.id,
         fullName: user.fullName,
         email: user.email,
+        role: user.role,
+        address: user.address,
+        phoneNumber: user.phoneNumber,
         accessToken,
       });
     } catch (error) {

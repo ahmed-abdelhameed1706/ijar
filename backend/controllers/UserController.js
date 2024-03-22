@@ -16,7 +16,7 @@ export default class UserController {
     try {
       const user = await User.findById(req.userId);
       if (!user) {
-        return res.status(404).json({ message: "Not found" });
+        return res.status(404).json({ message: "Not Found" });
       }
 
       const { _id, password, ...rest } = user._doc;
@@ -34,14 +34,18 @@ export default class UserController {
       const user = await User.findById(req.userId);
 
       if (!user) {
-        return res.status(404).json({ error: "Not found" });
+        return res.status(404).json({ error: "Not Found" });
       }
 
       const newUser = await User.findByIdAndUpdate(user.id, req.body, {
         returnOriginal: false,
       });
       const { _id, password, ...rest } = newUser._doc;
-      return res.json({ id: _id, ...rest });
+      return res.json({
+        id: _id,
+        ...rest,
+        accessToken: req.headers["authorization"],
+      });
     } catch (e) {
       return res.status(500).json({
         error: "Internal Server Error",
@@ -50,13 +54,56 @@ export default class UserController {
     }
   }
 
-  static async deleteUser(req, res) {
+  static updatePassword = async (req, res) => {
     try {
+      const { oldPassword, newPassword } = req.body;
       const user = await User.findById(req.userId);
 
       if (!user) {
-        return res.status(404).json({ error: "Not found" });
+        return res.status(404).json({ error: "Not Found" });
       }
+
+      const isPasswordCorrect = await bcrypt.compare(
+        oldPassword,
+        user.password,
+      );
+      if (!isPasswordCorrect) {
+        return res.status(400).json({
+          message:
+            "The current password you entered is incorrect. Please try again.",
+        });
+      }
+
+      const hashedPassword = await bcrypt.hash(newPassword, 12);
+
+      user.password = String(hashedPassword);
+      await user.save();
+      return res.json({ message: "Password updated successfully." });
+    } catch (e) {
+      console.log(e);
+      return res.status(500).json({
+        error: "Internal Server Error",
+        message: e.message,
+      });
+    }
+  };
+
+  static async deleteUser(req, res) {
+    try {
+      const { password } = req.body;
+      const user = await User.findById(req.userId);
+
+      if (!user) {
+        return res.status(404).json({ error: "Not Found" });
+      }
+
+      const isPasswordCorrect = await bcrypt.compare(password, user.password);
+      if (!isPasswordCorrect) {
+        return res.status(400).json({
+          message: "The password you entered is incorrect. Please try again.",
+        });
+      }
+
       await Cart.deleteMany({ userId: user.id });
 
       await Car.deleteMany({ ownerId: user.id });
@@ -78,7 +125,7 @@ export default class UserController {
       const user = await User.findOne({ email });
 
       if (!user) {
-        return res.status(404).json({ error: "Not found" });
+        return res.status(404).json({ error: "Not Found" });
       }
 
       const token = jwt.sign({ id: user._id }, process.env.RESET_TOKEN, {

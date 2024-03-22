@@ -31,31 +31,66 @@ import {
   } from "@/components/ui/alert-dialog"
 import "react-phone-input-2/lib/style.css";
 import { Input } from "@/components/ui/input";
+import axios from "../../../api/axios";
+import { toast } from "react-toastify";
+import useAuthHeader from 'react-auth-kit/hooks/useAuthHeader';
+import { useNavigate } from "react-router-dom";
+import useSignOut from "react-auth-kit/hooks/useSignOut";
+
+
 
 const Delete = ({ setOpenBar }) => {
 
-    const formSchema = z
-    .object({
-        password: z.string().min(1, "Password is required")
-    })
+  const auth = useAuthHeader()
+  const token = auth.split(" ")[1]
+  const logout = useSignOut();
+	const navigate = useNavigate();
 
-    const form = useForm({
-        resolver: zodResolver(formSchema),
-        defaultValues: {
-            password: "",
-        },
-      });
-    
-      function onSubmit(values) {
-        // Do something with the form values.
-        // ✅ This will be type-safe and validated.
-        if (values) {
-          alert(JSON.stringify(values, null, 2));
-        }
-        console.log(values)
-        // form.reset(); ProfileSetting.jsx
+
+  const formSchema = z
+  .object({
+      password: z.string()
+  })
+
+  const form = useForm({
+      resolver: zodResolver(formSchema),
+      defaultValues: {
+          password: "",
+      },
+    });
+  
+    async function onSubmit(values) {
+      if (!values.password) {
+        toast.info("Password is required.");
+        return;
       }
-    
+      console.log(token)
+      try {
+        await axios.delete(
+          "/api/users",
+          {
+            headers: {
+              "Content-Type": "application/json",
+              authorization: token
+            },
+            data: {
+              ...values
+            }
+          }
+        );
+        toast.success("Your account has been successfully deleted.");
+        await logout();
+        navigate("/");
+      } catch (e) {
+        toast.error(e.response.data.message);
+        if (e.response.data.message1) {
+          setTimeout(() => {
+            toast.info(e.response.data.message1);
+          }, 6002);
+        }
+      }
+    }
+  
     return (
         <Card onClick={() => setOpenBar(false)} className="w-full border-none shadow-none">
           <CardHeader className="max-[700px]:text-center">

@@ -19,8 +19,8 @@ const NavBar = () => {
 	const navigate = useNavigate();
 	const location = useLocation();
 
-	const signOut = () => {
-		logout();
+	const signOut = async () => {
+		await logout();
 		navigate("/");
 		toast.success("You have successfully signed out");
 	};
@@ -32,7 +32,7 @@ const NavBar = () => {
 	return (
 		<Disclosure
 			as="nav"
-			className="bg-white sticky top-0 left-0 z-10 shadow-lg"
+			className="bg-white sticky top-0 left-0 z-20 shadow-lg"
 		>
 			{({ open }) => (
 				<>
