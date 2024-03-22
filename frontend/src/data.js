@@ -33,5 +33,6 @@ const people = [
 ];
 
 const url = "http://164.92.225.123:5000";
+// const url = "http://localhost:5000";
 
 export { navData, url, people };

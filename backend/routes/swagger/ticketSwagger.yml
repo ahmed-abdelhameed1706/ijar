@@ -1,0 +1,180 @@
+swagger: "2.0"
+info:
+  title: Ticket API
+  version: "1.0.0"
+  description: Endpoint for managing tickets
+security:
+  - bearerAuth: []
+securityDefinitions:
+  bearerAuth:
+    type: apiKey
+    name: Authorization
+    in: header
+tags:
+  - name: Tickets
+    description: Ticket management
+paths:
+  /api/tickets:
+    post:
+      security:
+        - bearerAuth: []
+      tags:
+        - Tickets
+      summary: Create a new ticket
+      description: Endpoint to create a new ticket
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: Title of the ticket
+                  example: Sample Ticket Title
+                description:
+                  type: string
+                  description: Description of the ticket
+                  example: Sample Ticket Description
+                priority:
+                  type: string
+                  enum: [low, medium, high]
+                  description: Priority level of the ticket (low, medium, high)
+                  example: low
+      responses:
+        201:
+          description: Ticket created successfully
+        400:
+          description: Invalid request payload
+        500:
+          description: Internal server error
+    get:
+      summary: Get all tickets
+      description: Retrieve all tickets from the system
+      tags:
+        - Tickets
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: An array of tickets
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/definitions/Ticket"
+        401:
+          description: Unauthorized, authentication token is missing or invalid
+        403:
+          description: Forbidden, user does not have access to this resource
+        500:
+          description: Internal server error
+  /api/tickets/{id}:
+    get:
+      summary: Get a ticket by ID
+      description: Retrieve a ticket by its ID
+      tags:
+        - Tickets
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: ID of the ticket to retrieve
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: A ticket object
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/Ticket"
+        400:
+          description: Invalid request data
+        401:
+          description: Unauthorized, authentication token is missing or invalid
+        403:
+          description: Forbidden, user does not have access to this resource
+        404:
+          description: Ticket not found
+        500:
+          description: Internal server error
+    put:
+      summary: Update a ticket by ID
+      description: Update a ticket's details by its ID
+      tags:
+        - Tickets
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: ID of the ticket to update
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/definitions/Ticket"
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: Updated ticket object
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/Ticket"
+        400:
+          description: Invalid request data
+        401:
+          description: Unauthorized, authentication token is missing or invalid
+        403:
+          description: Forbidden, user does not have access to this resource
+        404:
+          description: Ticket not found
+        500:
+          description: Internal server error
+    delete:
+      summary: Delete a ticket by ID
+      description: Delete a ticket by its ID
+      tags:
+        - Tickets
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: ID of the ticket to delete
+      security:
+        - bearerAuth: []
+      responses:
+        204:
+          description: Ticket deleted successfully
+        401:
+          description: Unauthorized, authentication token is missing or invalid
+        403:
+          description: Forbidden, user does not have access to this resource
+        404:
+          description: Ticket not found
+definitions:
+  Ticket:
+    type: object
+    properties:
+      title:
+        type: string
+      description:
+        type: string
+      priority:
+        type: string
+        enum:
+          - low
+          - medium
+          - high

@@ -1,0 +1,233 @@
+swagger: "2.0"
+info:
+  title: Car Rental API
+  version: "1.0.0"
+  description: Car management for a car rental application
+security:
+  - bearerAuth: []
+securityDefinitions:
+  bearerAuth:
+    type: apiKey
+    name: Authorization
+    in: header
+tags:
+  - name: Cars
+    description: Car management
+
+paths:
+  /api/cars:
+    post:
+      security:
+        - bearerAuth: []
+      tags:
+        - Cars
+      summary: Create a new car
+      description: Create a new car entry
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - brandName
+                - model
+                - year
+                - type
+                - color
+                - price
+                - licensePlateNumber
+                - ownerId
+                - engineId
+              properties:
+                brandName:
+                  type: string
+                  default: Toyota
+                model:
+                  type: string
+                  default: Corolla
+                year:
+                  type: string
+                  default: "2020"
+                type:
+                  type: string
+                  default: Sedan
+                color:
+                  type: string
+                  default: Black
+                price:
+                  type: number
+                  default: 100
+                licensePlateNumber:
+                  type: string
+                  default: "123456"
+                available:
+                  type: boolean
+                  default: true
+                images:
+                  type: array
+                  items:
+                    type: string
+                  default: []
+                ownerId:
+                  type: string
+                  default: "65fbbb77e68252cd2415e7f5"
+                engineId:
+                  type: string
+                  default: "123123123"
+                averageRate:
+                  type: number
+                  default: 0
+                comments:
+                  type: array
+                  items:
+                    type: string
+                  default: []
+                description:
+                  type: string
+                  default: ""
+      responses:
+        "200":
+          description: Car created successfully
+        "401":
+          description: Unauthorized access
+        "400":
+          description: Invalid request data
+    get:
+      tags:
+        - Cars
+      summary: Get all cars
+      description: Retrieve all cars
+      responses:
+        "200":
+          description: Cars retrieved successfully
+        "400":
+          description: Invalid request data
+  /api/cars/{id}:
+    get:
+      tags:
+        - Cars
+      summary: Get a car by ID
+      description: Retrieve a car by its ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: ID of the car to retrieve
+      responses:
+        "200":
+          description: Car retrieved successfully
+        "400":
+          description: Invalid request data
+        "404":
+          description: Car not found
+    put:
+      security:
+        - bearerAuth: []
+      tags:
+        - Cars
+      summary: Update a car by ID
+      description: Update a car by its ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: ID of the car to update
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - brandName
+                - model
+                - year
+                - type
+                - color
+                - price
+                - licensePlateNumber
+                - ownerId
+                - engineId
+              properties:
+                brandName:
+                  type: string
+                  default: Toyota
+                model:
+                  type: string
+                  default: Corolla
+                year:
+                  type: string
+                  default: "2020"
+                type:
+                  type: string
+                  default: Sedan
+                color:
+                  type: string
+                  default: Black
+                price:
+                  type: number
+                  default: 100
+                licensePlateNumber:
+                  type: string
+                  default: "123456"
+                available:
+                  type: boolean
+                  default: true
+                images:
+                  type: array
+                  items:
+                    type: string
+                  default: []
+                ownerId:
+                  type: string
+                  default: ""
+                engineId:
+                  type: string
+                  default: ""
+                averageRate:
+                  type: number
+                  default: 0
+                comments:
+                  type: array
+                  items:
+                    type: string
+                  default: []
+                description:
+                  type: string
+                  default: ""
+      responses:
+        "200":
+          description: Car updated successfully
+        "401":
+          description: Unauthorized access
+        "400":
+          description: Invalid request data
+        "404":
+          description: Car not found
+    delete:
+      security:
+        - bearerAuth: []
+      tags:
+        - Cars
+      summary: Delete a car by ID
+      description: Delete a car by its ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: ID of the car to delete
+      responses:
+        "204":
+          description: Car deleted successfully
+        "401":
+          description: Unauthorized access
+        "404":
+          description: Car not found
