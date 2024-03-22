@@ -25,9 +25,10 @@ app.use(express.json());
 // CORS
 app.use(cors());
 app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
-  res.setHeader("Access-Control-Allow-Credentials", "true");
-  next();
+	res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+	res.setHeader("Access-Control-Allow-Origin", "http://localhost:3001");
+	res.setHeader("Access-Control-Allow-Credentials", "true");
+	next();
 });
 
 app.use(cookieParser());
@@ -39,26 +40,26 @@ app.disable("x-powered-by");
 
 // Connect to MongoDB
 mongoose.connect("mongodb://localhost:27017/Ijar", {
-  // useNewUrlParser: true,
-  // useUnifiedTopology: true,
+	// useNewUrlParser: true,
+	// useUnifiedTopology: true,
 });
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Event listeners for MongoDB connection
 mongoose.connection.on("connected", () => {
-  // Start the server after successful connection
-  try {
-    app.listen(port, () => {
-      console.log(`Server connected to http://localhost:${port}`);
-    });
-  } catch (error) {
-    console.log("Cannot connect to the server");
-  }
+	// Start the server after successful connection
+	try {
+		app.listen(port, () => {
+			console.log(`Server connected to http://localhost:${port}`);
+		});
+	} catch (error) {
+		console.log("Cannot connect to the server");
+	}
 });
 
 mongoose.connection.on("error", (err) => {
-  console.error("Failed to connect to MongoDB:", err);
+	console.error("Failed to connect to MongoDB:", err);
 });
 
 // Routes
@@ -76,5 +77,5 @@ app.use(express.static(path.join(__dirname, "../frontend/dist")));
 
 // Handle all other routes
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../frontend/dist/index.html"));
+	res.sendFile(path.join(__dirname, "../frontend/dist/index.html"));
 });
