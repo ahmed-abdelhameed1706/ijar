@@ -17,7 +17,7 @@ import { sendEmail } from "../utils/utility";
 
 import path from "path";
 
-dotenv.config();
+// dotenv.config();
 
 let lastEmailSentTimestamp = 0;
 
