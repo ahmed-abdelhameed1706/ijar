@@ -4,6 +4,7 @@ import {
   generateAccessToken,
   generateRefreshToken,
   generateVerificationToken,
+  validateToken,
 } from "../utils/middlewares";
 
 import { verifyEmailForm } from "../utils/mailFormer";
@@ -21,6 +22,16 @@ dotenv.config();
 let lastEmailSentTimestamp = 0;
 
 export default class AuthController {
+  static checkAuthentication = async (req, res) => {
+    const token = req.cookies?.jwt;
+    console.log("Cookies: ", token);
+    const user = validateToken(token);
+    return {
+      user: user,
+      jwt: token,
+    };
+  };
+
   static signUp = async (req, res) => {
     try {
       const {
@@ -127,11 +138,11 @@ export default class AuthController {
 
       const refreshToken = generateRefreshToken(user);
 
-      res.cookie("jwt", refreshToken, {
+      res.cookie("jwt", accessToken, {
         httpOnly: true, // The cookie cannot be accessed by client-side scripts
         secure: true, // The cookie will only be sent over HTTPS
         sameSite: "none", // The cookie will be sent on requests from other websites
-        maxAge: 7 * 24 * 60 * 60 * 1000, // The cookie will expire after 14 days
+        maxAge: 7 * 24 * 60 * 60 * 1000, // The cookie will expire after 7 days
       });
 
       res.status(200).json({

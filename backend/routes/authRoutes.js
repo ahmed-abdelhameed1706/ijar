@@ -21,4 +21,6 @@ authRouter.get("/test", verifyToken, (req, res) => {
   res.status(200).json({ message: "You are authorized" });
 });
 
+authRouter.get("/check", AuthController.checkAuthentication);
+
 export default authRouter;
