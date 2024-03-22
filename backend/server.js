@@ -13,6 +13,7 @@ import userRouter from "./routes/userRouters";
 import filterRouter from "./routes/filterRouter";
 import ticketRouter from "./routes/ticketRoutes";
 import { activityLogger } from "./utils/middlewares";
+import cookieParser from "cookie-parser";
 import path from "path";
 
 const port = 5000;
@@ -23,6 +24,13 @@ app.use(express.json());
 
 // CORS
 app.use(cors());
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  next();
+});
+
+app.use(cookieParser());
 
 // Activity logger
 app.use(activityLogger);

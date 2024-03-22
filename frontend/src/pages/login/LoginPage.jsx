@@ -25,8 +25,9 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Link } from "react-router-dom";
 import GoogleIcon from "../../assets/icons/google-icon.png";
 import { Eye, EyeOff } from "lucide-react";
-import axios from "axios";
+import axios from "../../api/axios";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const formSchema = z.object({
   email: z
@@ -42,6 +43,8 @@ const formSchema = z.object({
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
 
+  const navigate = useNavigate();
+
   // 1. Define your form.
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -54,14 +57,24 @@ const LoginPage = () => {
   // 2. Define a submit handler.
   async function onSubmit(values) {
     try {
-      const val = await axios.post('http://localhost:5000/auth/login', values);
-      toast.success("Welcome! Your account is now active. Let's get started!")
+      const response = await axios.post("/auth/login", JSON.stringify(values), {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        // withCredentials: true,
+      });
+      toast.success("Welcome! Your account is now active. Let's get started!");
+      console.log(response);
+
+      navigate("/dashboard");
     } catch (e) {
-      toast.error(e.response.data.message)
+      toast.error(e.response.data.message);
       if (e.response.status === 401) {
         setTimeout(() => {
-          toast.info(`We've sent a verification email to ${values.email}. Once you confirm it, you can sign in.`)
-        }, 6002)
+          toast.info(
+            `We've sent a verification email to ${values.email}. Once you confirm it, you can sign in.`
+          );
+        }, 6002);
       }
     }
   }

@@ -1,39 +1,30 @@
-import { url } from "@/data";
-import axios from "axios";
 import { createContext, useEffect, useState } from "react";
-import Cookies from "js-cookie";
+import authService from "@/services/authService";
 
 const UserContext = createContext();
 
 // eslint-disable-next-line react/prop-types
 const UserProvider = ({ children }) => {
-	const [user, setUser] = useState(null);
-	const [cookieValue, setCookieValue] = useState("");
+  const [user, setUser] = useState(null);
 
-	useEffect(() => {
-		const cookie = Cookies.get("jwt");
-		if (cookie) {
-			setCookieValue(cookie);
-			axios
-				.get(`${url}/api/users`, {
-					withCredentials: true,
-					Headers: {
-						authorization: cookieValue,
-					},
-				})
-				.then((data) => {
-					setUser(data);
-					console.log(data);
-				})
-				.catch((err) => console.log(err));
-		}
-	}, []);
+  const checkAuthentication = async () => {
+    const { isAuthenticated, user } = await authService.checkAuthentication();
 
-	return (
-		<UserContext.Provider value={{ user, cookieValue }}>
-			{children}
-		</UserContext.Provider>
-	);
+    if (isAuthenticated) {
+      setUser(user ?? null);
+    }
+  };
+
+  useEffect(() => {
+    checkAuthentication();
+  }, []);
+  console.log(user);
+
+  return (
+    <UserContext.Provider value={{ user, setUser }}>
+      {children}
+    </UserContext.Provider>
+  );
 };
 
 export { UserContext, UserProvider };

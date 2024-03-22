@@ -64,6 +64,14 @@ export const verifyToken = (req, res, next) => {
   });
 };
 
+export const validateToken = (token) => {
+  try {
+    return jwt.verify(token, process.env.SECRET);
+  } catch (error) {
+    return null;
+  }
+};
+
 export const generateAccessToken = (user) => {
   return jwt.sign(
     { email: user.email, id: user._id },
