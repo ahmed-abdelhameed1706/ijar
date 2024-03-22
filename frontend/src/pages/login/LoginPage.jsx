@@ -25,6 +25,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Link } from "react-router-dom";
 import GoogleIcon from "../../assets/icons/google-icon.png";
 import { Eye, EyeOff } from "lucide-react";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const formSchema = z.object({
   email: z
@@ -50,15 +52,22 @@ const LoginPage = () => {
   });
 
   // 2. Define a submit handler.
-  function onSubmit(values) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    if (values) {
-      alert(values);
+  async function onSubmit(values) {
+    try {
+      const val = await axios.post('http://localhost:5000/auth/login', values);
+      toast.success("Welcome! Your account is now active. Let's get started!")
+    } catch (e) {
+      toast.error(e.response.data.message)
+      if (e.response.status === 401) {
+        setTimeout(() => {
+          toast.info(`We've sent a verification email to ${values.email}. Once you confirm it, you can sign in.`)
+        }, 6002)
+      }
     }
   }
+
   return (
-    <div className="flex min-[650px]:py-3 min-[650px]:px-2 justify-center items-center w-full max-w-full min-[650px]:h-full">
+    <div className="flex max-[650px]:bg-white min-[650px]:py-3 min-[650px]:px-2 justify-center items-center w-full max-w-full min-[650px]:h-full">
       <div className=" flex max-w-full bg-white gap-6 p-5 min-[650px]:rounded-lg  min-[650px]:shadow-lg">
         <img
           src={loginImg}

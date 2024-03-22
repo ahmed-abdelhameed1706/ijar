@@ -27,7 +27,7 @@ export default class AuthController {
         fullName,
         email,
         password,
-        password2,
+        confirmPassword,
         phoneNumber,
         address,
         role,
@@ -37,7 +37,7 @@ export default class AuthController {
         !fullName ||
         !email ||
         !password ||
-        !password2 ||
+        !confirmPassword ||
         !phoneNumber ||
         !address ||
         !role
@@ -56,7 +56,7 @@ export default class AuthController {
           .json({ message: "Password must be at least 6 characters" });
       }
 
-      if (password !== password2) {
+      if (password !== confirmPassword) {
         return res.status(400).json({ message: "Passwords do not match" });
       }
 
@@ -64,7 +64,10 @@ export default class AuthController {
         $or: [{ email }, { phoneNumber }],
       });
       if (existingUser) {
-        return res.status(400).json({ message: "User already exists" });
+        return res.status(400).json({
+          message: "This email address is already registered.",
+          message1: "Please sign in instead.",
+        });
       }
 
       const hashedPassword = await bcrypt.hash(password, 12);
@@ -80,27 +83,31 @@ export default class AuthController {
         role,
         verificationToken,
       });
-      console.log(newUser);
 
       await newUser.save();
 
       const htmlContent = verifyEmailForm(fullName, verificationToken);
       sendEmail(email, "Account Verification", htmlContent);
 
-      res.status(201).json({
-        userId: newUser.id,
-        fullName: newUser.fullName,
-        email: newUser.email,
-        role: newUser.role,
-        address: newUser.address,
-      });
+      // res.status(201).json({
+      //   userId: newUser.id,
+      //   fullName: newUser.fullName,
+      //   email: newUser.email,
+      //   role: newUser.role,
+      //   address: newUser.address,
+      // });
+      res
+        .status(201)
+        .json({ message: "Your account has been successfully created." });
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
   };
+
   static login = async (req, res) => {
     try {
       const { email, password } = req.body;
+      console.log(req.cookies);
 
       const user = await User.findOne({ email });
       if (!user) {
@@ -113,7 +120,7 @@ export default class AuthController {
       }
 
       if (!user.isVerified) {
-        return res.status(400).json({ message: "Email not verified" });
+        return res.status(401).json({ message: "Email not verified" });
       }
 
       const accessToken = generateAccessToken(user);

@@ -25,7 +25,7 @@ const UserSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ["user", "owner", "admin"],
+    enum: ["User", "Owner", "Admin"],
     default: "user",
   },
   isVerified: {
@@ -37,6 +37,9 @@ const UserSchema = new mongoose.Schema({
     default: "",
   },
   verificationToken: {
+    type: String,
+  },
+  imageUrl: {
     type: String,
   },
 });

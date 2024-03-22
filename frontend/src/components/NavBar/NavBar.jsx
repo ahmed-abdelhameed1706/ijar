@@ -150,14 +150,21 @@ const NavBar = () => {
                 <div>
                   <NavLink
                     to="/login"
-                    className={cn(buttonVariants({ variant: "outline" }))}
+                    className={cn(
+                      buttonVariants({
+                        variant: "outline",
+                      })
+                    )}
                   >
                     Sign In
                   </NavLink>
                   <NavLink
                     to="/signup"
                     className={cn(
-                      buttonVariants({ variant: "default", className: "ml-2" })
+                      buttonVariants({
+                        variant: "default",
+                        className: "ml-2",
+                      })
                     )}
                   >
                     Sign Up
