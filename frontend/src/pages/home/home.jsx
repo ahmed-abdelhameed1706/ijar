@@ -5,7 +5,8 @@ import { motion } from "framer-motion";
 
 const Home = () => {
 	return (
-		<ImagesSlider className="flex-1" images={slideImages}>
+		<ImagesSlider className="flex-1 relative" images={slideImages}>
+			<div className="bg-black h-full w-full z-10 absolute opacity-50"></div>
 			<motion.div
 				initial={{
 					opacity: 0,
@@ -26,7 +27,7 @@ const Home = () => {
 				</motion.p>
 				<Link
 					to="/cars"
-					className="px-8 py-2 backdrop-blur-sm border text-xl border-primary hover:opacity-80 text-white mx-auto text-center rounded-full relative mt-4"
+					className="px-14 py-4 backdrop-blur-sm border text-4xl border-primary hover:opacity-80 text-white mx-auto text-center rounded-full relative mt-4"
 				>
 					<span>All Cars →</span>
 					<div className="absolute inset-x-0  h-px -bottom-px bg-gradient-to-r w-3/4 mx-auto from-transparent via-emerald-500 to-transparent" />
