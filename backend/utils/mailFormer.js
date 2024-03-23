@@ -1,11 +1,12 @@
 import dotenv from "dotenv";
 
 dotenv.config();
+const env_mode = process.env.ENV_MODE;
+let URL = process.env.MAIL_URL;
 
-const URL =
-  process.env.ENV_MODE == "development"
-    ? process.env.MAIL_URL_LOCAL
-    : process.env.MAIL_URL;
+if (env_mode === "dev") {
+  URL = process.env.MAIL_URL_LOCAL;
+}
 
 export const resetPasswordForm = (name, token) => {
   return `<!DOCTYPE html> 
