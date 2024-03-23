@@ -1,3 +1,13 @@
+import dotenv from "dotenv";
+
+dotenv.config();
+const env_mode = process.env.ENV_MODE;
+let URL = process.env.MAIL_URL;
+
+if (env_mode === "dev") {
+  URL = process.env.MAIL_URL_LOCAL;
+}
+
 export const resetPasswordForm = (name, token) => {
   return `<!DOCTYPE html> 
     <html lang="en"> 
@@ -9,7 +19,7 @@ export const resetPasswordForm = (name, token) => {
                     <p style="text-align: left;">We received a request to reset your password for your account on <strong>Ijar</strong>.</p>
                     <p style="text-align: left;">If you requested this password reset, please click the following button to access a like to create a new password:</p>
                     <br>
-                    <a href="http://localhost:5000/api/users/reset_password/${token}" style="background-color: #4CAF50;
+                    <a href="${URL}/api/users/reset_password/${token}" style="background-color: #4CAF50;
                                 color: white;
                                 text-decoration: none;
                                 padding: 8px 20px;
@@ -48,7 +58,7 @@ export const verifyEmailForm = (name, token) => {
                     <p style="text-align: left;">Thanks for signing up for <strong>Ijar</strong>!</p>
                     <p style="text-align: left;">To complete your registration and access all our features, please verify your email address by clicking the button below:</p>
                     <br>
-                    <a href="http://localhost:5000/auth/verify/${token}" style="background-color: #4CAF50;
+                    <a href="${URL}/auth/verify/${token}" style="background-color: #4CAF50;
                         color: white;
                         text-decoration: none;
                         padding: 8px 20px;

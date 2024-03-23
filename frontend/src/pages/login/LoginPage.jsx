@@ -71,11 +71,14 @@ const LoginPage = () => {
           token: response.data.accessToken,
           expiresIn: 3600,
           tokenType: "Bearer",
-          authState: {
-            userId: response.data.userId,
-            email: response.data.email,
-            role: response.data.role,
-          },
+        },
+        userState: {
+          userId: response.data.userId,
+          fullName: response.data.fullName,
+          phoneNumber: response.data.phoneNumber,
+          email: response.data.email,
+          role: response.data.role,
+          address: response.data.address,
         },
       });
 

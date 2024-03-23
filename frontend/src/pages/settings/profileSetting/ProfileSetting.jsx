@@ -21,42 +21,87 @@ import {
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { Input } from "@/components/ui/input";
-
+import useAuthUser from "react-auth-kit/hooks/useAuthUser";
+import axios from "../../../api/axios";
+import { toast } from "react-toastify";
+import useAuthHeader from 'react-auth-kit/hooks/useAuthHeader';
+import useSignIn from "react-auth-kit/hooks/useSignIn";
 
 const ProfileSetting = ({ setOpenBar }) => {
-    const formSchema = z
-    .object({
-      fullName: z.string().min(1, { message: "Name is required" }),
-      email: z
-        .string()
-        .min(1, { message: "Email is required" })
-        .email("Invalid email address"),
-      phoneNumber: z.string().min(1, "Phone Number is required"),
-      brithDate: z
-        .string()
-        .regex(/\d{4}-\d{2}-\d{2}$/, "Birth Date is required"),
-      address: z.string().min(1, { message: "Address is required" }),
-    })
 
-    const form = useForm({
-        resolver: zodResolver(formSchema),
-        defaultValues: {
-          fullName: "",
-          email: "",
-          phoneNumber: "",
-          brithDate: "",
-          address: "",
-        },
-      });
+  const signIn = useSignIn();
+  const user = useAuthUser();
+  const auth = useAuthHeader()
+  const token = auth.split(" ")[1]
+
+  const formSchema = z
+  .object({
+    fullName: z.string().min(1, { message: "Name is required" }),
+    email: z
+      .string()
+      .min(1, { message: "Email is required" })
+      .email("Invalid email address"),
+    phoneNumber: z.string().min(1, "Phone Number is required"),
+    brithDate: z
+      .string()
+      .regex(/\d{4}-\d{2}-\d{2}$/, "Birth Date is required"),
+    address: z.string().min(1, { message: "Address is required" }),
+  })
+
+  const form = useForm({
+      resolver: zodResolver(formSchema),
+      defaultValues: {
+        fullName: user.fullName,
+        email: user.email,
+        phoneNumber: user.phoneNumber,
+        brithDate: "",
+        address: user.address,
+      },
+    });
     
-      function onSubmit(values) {
-        // Do something with the form values.
-        // ✅ This will be type-safe and validated.
-        if (values) {
-          alert(JSON.stringify(values, null, 2));
-        }
-        // form.reset(); ProfileSetting.jsx
+    async function onSubmit(values) {
+      if ((user.fullName === values.fullName && user.email === values.email && user.phoneNumber === values.phoneNumber && user.address === values.address)) {
+        toast.info("Modify the information you want to update before submitting.");
+        return;
       }
+      try {
+        const response = await axios.put(
+          "/api/users",
+          JSON.stringify(values),
+          {
+            headers: {
+              "Content-Type": "application/json",
+              authorization: token
+            },
+          }
+        );
+
+        signIn({
+          auth: {
+            token: response.data.accessToken,
+            expiresIn: 3600,
+            tokenType: "Bearer",
+          },
+          userState: {
+            userId: response.data.userId,
+            fullName: response.data.fullName,
+            phoneNumber: response.data.phoneNumber,
+            email: response.data.email,
+            role: response.data.role,
+            address: response.data.address,
+          },
+        });
+
+        toast.success("Account data updated successfully.");
+      } catch (e) {
+        toast.error(e.response.data.message);
+        if (e.response.data.message1) {
+          setTimeout(() => {
+            toast.info(e.response.data.message1);
+          }, 6002);
+        }
+      }
+    }
     
     return (
         <Card onClick={() => setOpenBar(false)} className="w-full border-none shadow-none">

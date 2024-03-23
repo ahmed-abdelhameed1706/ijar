@@ -8,6 +8,12 @@ userRouter.get("/users", verifyToken, UserController.getUser);
 
 userRouter.put("/users", verifyToken, UserController.updateUser);
 
+userRouter.put(
+  "/users/update_password",
+  verifyToken,
+  UserController.updatePassword,
+);
+
 userRouter.delete("/users", verifyToken, UserController.deleteUser);
 
 userRouter.post("/users/reset_password", UserController.forgotPassword);

@@ -14,7 +14,7 @@ const logger = createLogger({
         format.timestamp(),
         format.printf(({ timestamp, level, message }) => {
           return `${timestamp} ${level}: ${message}`;
-        })
+        }),
       ),
     }),
   ],
@@ -78,7 +78,7 @@ export const generateAccessToken = (user) => {
     process.env.SECRET || "hsghs6",
     {
       expiresIn: "14d",
-    }
+    },
   );
 };
 
