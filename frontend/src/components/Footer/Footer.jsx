@@ -1,11 +1,11 @@
 import { NavLink } from "react-router-dom";
-import { handleScrollToTop } from "@/helper";
+// import { handleScrollToTop } from "@/helper";
 import darkLogo from "@/assets/images/dark-logo.png";
 
 const Footer = () => {
 	return (
 		<footer className="bg-gray-600 relative py-4 px-7">
-			<div className="absolute end-4 top-4 lg:-top-3/4">
+			{/* <div className="absolute end-4 top-4 lg:-top-3/4">
 				<NavLink
 					className="inline-block rounded-full p-2 text-white shadow transition sm:p-3 lg:p-4 bg-gray-700 hover:opacity-80"
 					to="#"
@@ -26,7 +26,7 @@ const Footer = () => {
 						/>
 					</svg>
 				</NavLink>
-			</div>
+			</div> */}
 
 			<div className="lg:flex flex-row lg:items-center lg:justify-between">
 				<div>
