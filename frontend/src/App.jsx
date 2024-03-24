@@ -6,14 +6,12 @@ import Routes from "./routes/routes";
 
 const App = () => {
   return (
-    <>
-      <div className="h-full min-h-screen flex flex-col justify-between bg-gray-50">
-        <NavBar />
-        <Routes />
-        <Footer />
-      </div>
-      <ToastContainer pauseOnFocusLoss={false} />
-    </>
+    <div className="min-h-full relative bg-gray-50">
+      <NavBar />
+      <Routes />
+      <Footer />
+      <ToastContainer pauseOnFocusLoss={false}  />
+    </div>
   );
 };
 

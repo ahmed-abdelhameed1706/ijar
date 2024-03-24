@@ -9,20 +9,29 @@ import DashboardLayout from "@/pages/dashboard/DashboardLayout";
 import Settings from "@/pages/settings/Settings";
 import Cars from "@/pages/cars/cars";
 
+
+import BookingList from "@/pages/dashboard/bookingList/BookingList";
+import Chat from "@/pages/dashboard/chat/Chat";
+import DashboardPage from "@/pages/dashboard/DashboardPage";
+
 const Routes = () => {
-	return (
-		<ReactRouterRoutes>
-			<Route path="/" element={<Home />} />
-			<Route path="/login" element={<LoginPage />} />
-			<Route path="/signup" element={<SignupPage />} />
-			<Route path="/reset-password" element={<ResetPassword />} />
-			<Route path="/cars" element={<Cars />} />
-			<Route path="/dashboard" element={<DashboardLayout />} />
-			<Route path="/about" element={<About />} />
-			<Route path="/settings/*" element={<Settings />} />
-			<Route path="*" element={<NotFound />} />
-		</ReactRouterRoutes>
-	);
+  return (
+    <ReactRouterRoutes>
+      <Route path="/" element={<Home />} />
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/signup" element={<SignupPage />} />
+      <Route path="/reset-password" element={<ResetPassword />} />
+      <Route path="/about" element={<About />} />
+      <Route path="/settings/*" element={<Settings />} />
+      <Route path="/cars" element={<Cars />} />
+      <Route path="*" element={<NotFound />} />
+      <Route path="/dashboard" element={<DashboardLayout />}>
+        <Route path="booking" element={<BookingList />} />
+        <Route path="chat" element={<Chat />} />
+        <Route path="" element={<DashboardPage />} />
+      </Route>
+    </ReactRouterRoutes>
+  );
 };
 
 export default Routes;
