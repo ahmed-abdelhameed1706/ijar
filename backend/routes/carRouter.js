@@ -14,4 +14,6 @@ carRouter.put("/cars/:id", verifyToken, CarController.updateCar);
 
 carRouter.delete("/cars/:id", verifyToken, CarController.deleteCar);
 
+carRouter.post("/add-to-cart", verifyToken, CarController.addCarToCart);
+
 export default carRouter;

@@ -10,8 +10,6 @@ import { Link, Outlet, useLocation } from "react-router-dom";
 const DashboardLayout = () => {
   const location = useLocation();
 
-  console.log(location.pathname);
-
   const dashNav = [
     {
       name: "Dashboard",

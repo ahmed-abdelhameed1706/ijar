@@ -56,7 +56,7 @@ const DashboardPage = () => {
       <div className="flex md:flex-row flex-col gap-3">
         {cards.map((item) => (
           <DashboardCard
-            key={item}
+            key={item.title}
             Icon={item.Icon}
             title={item.title}
             score={item.score}
