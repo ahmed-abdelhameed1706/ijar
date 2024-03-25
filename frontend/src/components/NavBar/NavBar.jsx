@@ -67,21 +67,23 @@ const NavBar = () => {
                 </div>
                 {/* <div className="hidden md:ml-6 md:block"> */}
                 <div className="hidden md:ml-6 md:flex space-x-2 items-center">
-                  {navigation.map((item) => (
-                    <NavLink
-                      key={item.name}
-                      to={item.href}
-                      className={classNames(
-                        item.current
-                          ? "text-primary border-b-2 border-primary"
-                          : "text-gray-700 hover:text-primary",
-                        "px-3 py-2 text-sm font-medium"
-                      )}
-                      aria-current={item.current ? "page" : undefined}
-                    >
-                      {item.name}
-                    </NavLink>
-                  ))}
+                  {navigation.map((item) =>
+                    item.name === "Dashboard" && user === null ? null : (
+                      <NavLink
+                        key={item.name}
+                        to={item.href}
+                        className={classNames(
+                          item.current
+                            ? "text-primary border-b-2 border-primary"
+                            : "text-gray-700 hover:text-primary",
+                          "px-3 py-2 text-sm font-medium"
+                        )}
+                        aria-current={item.current ? "page" : undefined}
+                      >
+                        {item.name}
+                      </NavLink>
+                    )
+                  )}
                 </div>
                 {/* </div> */}
               </div>
@@ -122,19 +124,21 @@ const NavBar = () => {
                       leaveTo="transform opacity-0 scale-95"
                     >
                       <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                        <Menu.Item>
-                          {({ active }) => (
-                            <NavLink
-                              to="/dashboard"
-                              className={classNames(
-                                active ? "bg-gray-100" : "",
-                                "block px-4 py-2 text-sm text-gray-700"
-                              )}
-                            >
-                              Dashboard
-                            </NavLink>
-                          )}
-                        </Menu.Item>
+                        {user === null && (
+                          <Menu.Item>
+                            {({ active }) => (
+                              <NavLink
+                                to="/dashboard"
+                                className={classNames(
+                                  active ? "bg-gray-100" : "",
+                                  "block px-4 py-2 text-sm text-gray-700"
+                                )}
+                              >
+                                Dashboard
+                              </NavLink>
+                            )}
+                          </Menu.Item>
+                        )}
                         <Menu.Item>
                           {({ active }) => (
                             <NavLink

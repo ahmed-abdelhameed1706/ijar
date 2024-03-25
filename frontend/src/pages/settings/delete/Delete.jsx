@@ -39,7 +39,7 @@ import useSignOut from "react-auth-kit/hooks/useSignOut";
 
 const Delete = ({ setOpenBar }) => {
   const auth = useAuthHeader();
-  const token = auth.split(" ")[1];
+  // const token = ;
   const logout = useSignOut();
   const navigate = useNavigate();
 
@@ -63,7 +63,7 @@ const Delete = ({ setOpenBar }) => {
       await axios.delete("/api/users", {
         headers: {
           "Content-Type": "application/json",
-          authorization: token,
+          authorization: auth?.split(" ")[1],
         },
         data: {
           ...values,
