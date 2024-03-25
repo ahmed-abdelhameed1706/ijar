@@ -1,6 +1,7 @@
 import Car from "../models/CarSchema";
 import User from "../models/UserSchema";
 import Comment from "../models/CommentSchema";
+import Cart from "../models/CartSchema";
 
 class CarController {
   static async postCar(req, res) {
@@ -149,6 +150,50 @@ class CarController {
       });
     }
   }
+
+  static addCarToCart = async (req, res) => {
+    try {
+      const userId = req.userId;
+      const { carId, startDate, endDate } = req.body;
+      const car = await Car.findById(carId);
+      if (!car || !car.available) {
+        return res
+          .status(404)
+          .json({ error: "Car not found or it's not available" });
+      }
+
+      const parsedStartDate = new Date(startDate);
+      const parsedEndDate = new Date(endDate);
+      if (parsedStartDate > parsedEndDate) {
+        return res
+          .status(400)
+          .json({ error: "End date cannot be before start date!" });
+      }
+      const rentalDays = Math.ceil(
+        (parsedEndDate - parsedStartDate) / (1000 * 60 * 60 * 24)
+      );
+      const totalCost = car.price * rentalDays;
+
+      car.available = false;
+
+      await car.save();
+
+      const newCart = new Cart({
+        userId,
+        carId,
+        startDate: parsedStartDate,
+        endDate: parsedEndDate,
+        rentalTerm: rentalDays,
+        totalCost,
+      });
+
+      await newCart.save();
+      return res.status(201).json(newCart);
+    } catch (err) {
+      console.log(err);
+      return res.status(500).json({ error: err.message });
+    }
+  };
 }
 
 export default CarController;

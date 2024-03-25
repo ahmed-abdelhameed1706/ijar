@@ -101,7 +101,7 @@ export default class AuthController {
         .status(201)
         .json({ message: "Your account has been successfully created." });
     } catch (error) {
-      res.status(500).json({ message: error.message });
+      res.status(500).json({ error: error.message });
     }
   };
 

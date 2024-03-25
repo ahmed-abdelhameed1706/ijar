@@ -1,38 +1,53 @@
-import Cart from '../models/CartSchema';
-import Car from '../models/CarSchema';
-const cron = require('node-cron');
+import Cart from "../models/CartSchema";
+import Car from "../models/CarSchema";
+const cron = require("node-cron");
+import User from "../models/UserSchema";
+import { sendEmail } from "../utils/utility";
 
 const getAllCart = async (req, res) => {
   try {
     const userId = req.userId;
     const carts = await Cart.find({ userId });
-  
+
     const newCart = carts.map((car) => {
       const { _id, ...rest } = car._doc;
       return { id: _id, ...rest };
     });
-    return (newCart)
+    return newCart;
   } catch (err) {
     console.log(err);
-    return res.status(500).json({ error: 'Internal Server Error' });
+    return res.status(500).json({ error: "Internal Server Error" });
   }
-}
+};
 
 const checkAndUpdateCars = async () => {
   const currentTime = new Date();
   const carts = await Cart.find({ endDate: { $lte: currentTime } });
   for (const cart of carts) {
     const car = await Car.findOne({ _id: cart.carId });
+    const user = await User.findOne({ _id: cart.userId });
+    const owner = await User.findOne({ _id: car.ownerId });
     car.available = true;
     car.customerId = null;
     await car.save();
     await Cart.findByIdAndDelete(cart._id);
-    // Send Mail
+    const htmlContentForUser = `Hello ${user.fullName},<br/><br/>
+    rental time for ${car.brandName} is over.<br/>
+    Please return the car to the owner ${owner.fullName}<br/><br/>
+    Regards,<br/>
+    Ijarapp Team`;
+    const htmlContentForOwner = `Hello ${owner.fullName},<br/><br/>
+    rental time for ${car.brandName} is over.<br/>
+    Please collect the car from the user ${user.fullName}<br/><br/>
+    Regards,<br/>
+    Ijarapp Team`;
+    sendEmail(user.email, "Rental Time Over", htmlContentForUser);
+    sendEmail(owner.email, "Rental Time Over", htmlContentForOwner);
   }
 };
 
 // Schedule the checkAndUpdateCars function to execute every hour
-cron.schedule('0 * * * *', async () => {
+cron.schedule("0 * * * *", async () => {
   await checkAndUpdateCars();
 });
 
@@ -47,8 +62,8 @@ class CartController {
       };
 
       const date = new Date();
-      date.setHours(date.getHours() + (data.rentalTerm * 24));
-  
+      date.setHours(date.getHours() + data.rentalTerm * 24);
+
       data.endDate = date;
       data.totalCost = data.rentalTerm * data.totalCost;
       const cart = new Cart(data);
@@ -57,7 +72,7 @@ class CartController {
       return res.status(200).json({ id: _id, ...rest });
     } catch (err) {
       console.log(err);
-      return res.status(500).json({ error: 'Internal Server Error' });
+      return res.status(500).json({ error: "Internal Server Error" });
     }
   }
 
@@ -67,7 +82,7 @@ class CartController {
       return res.status(200).send(newCarts);
     } catch (err) {
       console.log(err);
-      return res.status(500).json({ error: 'Internal Server Error' });
+      return res.status(500).json({ error: "Internal Server Error" });
     }
   }
 
@@ -81,14 +96,14 @@ class CartController {
       });
 
       if (!cart) {
-        return res.status(401).send({ error: 'Not found' });
+        return res.status(401).send({ error: "Not found" });
       }
 
       await Cart.findByIdAndDelete(cart._id);
       return res.status(200).send({ message: "Deleted successfully" });
     } catch (err) {
       console.log(err);
-      return res.status(500).json({ error: 'Internal Server Error' });
+      return res.status(500).json({ error: "Internal Server Error" });
     }
   }
 
@@ -97,7 +112,7 @@ class CartController {
       const newCarts = await getAllCart(req, res);
       const result = {
         messages: [],
-        errors: []
+        errors: [],
       };
 
       await Promise.all(
@@ -120,14 +135,37 @@ class CartController {
             await Cart.findByIdAndDelete(c.id);
             result.errors.push(`Not found`);
           }
-        }));
+        })
+      );
 
       return res.status(200).json(result);
     } catch (err) {
       console.log(err);
-      return res.status(500).json({ error: 'Internal Server Error' });
+      return res.status(500).json({ error: "Internal Server Error" });
     }
   }
+
+  static getCartsByUserId = async (req, res) => {
+    try {
+      const userId = req.userId;
+      const page = parseInt(req.query.page) || 1; // Default to page 1 if no page query parameter is provided
+      const limit = 10; // Number of carts to display per page
+      const skip = (page - 1) * limit; // Calculate the number of documents to skip
+
+      const carts = await Cart.find({ userId }).skip(skip).limit(limit);
+      const totalCartsCount = await Cart.countDocuments({ userId });
+      const totalPages = Math.ceil(totalCartsCount / limit);
+
+      res.status(200).json({
+        carts,
+        currentPage: page,
+        totalPages,
+      });
+    } catch (err) {
+      console.log(err);
+      return res.status(500).json({ error: err.message });
+    }
+  };
 }
 
 export default CartController;
