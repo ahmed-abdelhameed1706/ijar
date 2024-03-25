@@ -2,15 +2,13 @@ import { Link } from "react-router-dom";
 import { Rate } from "antd";
 
 const Card = ({ cars }) => {
-	const id = 1;
-
 	return (
 		<>
 			{cars &&
 				cars.map((car) => (
 					<Link
 						key={car.id}
-						to={`/cars/${id}`}
+						to={`/cars/${car.id}`}
 						className="block rounded-xl border border-gray-800 p-8 shadow-xl transition hover:border-pink-500/10 hover:shadow-pink-500/10"
 					>
 						<img

@@ -5,7 +5,7 @@ const Home = () => {
 	return (
 		<div className="">
 			<ImagesSliderComponent />
-			<PopularCars />
+			<PopularCars isHome={true} />
 		</div>
 	);
 };
