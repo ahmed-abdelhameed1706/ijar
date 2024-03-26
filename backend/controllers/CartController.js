@@ -55,11 +55,13 @@ class CartController {
   static async addToCart(req, res) {
     try {
       const data = {
-        userId: req.body.userId,
+        userId: req.userId,
         carId: req.body.carId,
         rentalTerm: req.body.rentalTerm || 1,
         totalCost: req.body.totalCost,
       };
+
+      const car = await Car.findOne({ _id: data.carId });
 
       const date = new Date();
       date.setHours(date.getHours() + data.rentalTerm * 24);
@@ -135,12 +137,11 @@ class CartController {
             await Cart.findByIdAndDelete(c.id);
             result.errors.push(`Not found`);
           }
-        })
+        }),
       );
 
       return res.status(200).json(result);
     } catch (err) {
-      console.log(err);
       return res.status(500).json({ error: "Internal Server Error" });
     }
   }

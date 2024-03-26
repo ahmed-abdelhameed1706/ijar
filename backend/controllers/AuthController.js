@@ -22,6 +22,16 @@ import path from "path";
 let lastEmailSentTimestamp = 0;
 
 export default class AuthController {
+  static checkAuthentication = async (req, res) => {
+    const token = req.cookies?.jwt;
+    console.log("Cookies: ", token);
+    const user = validateToken(token);
+    return {
+      user: user,
+      jwt: token,
+    };
+  };
+
   static signUp = async (req, res) => {
     try {
       const {
@@ -32,6 +42,7 @@ export default class AuthController {
         phoneNumber,
         address,
         role,
+        brithDate,
       } = req.body;
 
       if (
@@ -41,7 +52,8 @@ export default class AuthController {
         !confirmPassword ||
         !phoneNumber ||
         !address ||
-        !role
+        !role ||
+        !brithDate
       ) {
         return res.status(400).json({ message: "Invalid request data" });
       }
@@ -83,6 +95,7 @@ export default class AuthController {
         address,
         role,
         verificationToken,
+        brithDate,
       });
 
       await newUser.save();
@@ -101,7 +114,7 @@ export default class AuthController {
         .status(201)
         .json({ message: "Your account has been successfully created." });
     } catch (error) {
-      res.status(500).json({ error: error.message });
+      res.status(500).json({ message: error.message });
     }
   };
 
@@ -128,6 +141,13 @@ export default class AuthController {
 
       const refreshToken = generateRefreshToken(user);
 
+      res.cookie("jwt", accessToken, {
+        httpOnly: true, // The cookie cannot be accessed by client-side scripts
+        secure: true, // The cookie will only be sent over HTTPS
+        sameSite: "none", // The cookie will be sent on requests from other websites
+        maxAge: 7 * 24 * 60 * 60 * 1000, // The cookie will expire after 7 days
+      });
+
       res.status(200).json({
         userId: user.id,
         fullName: user.fullName,
@@ -136,12 +156,21 @@ export default class AuthController {
         address: user.address,
         phoneNumber: user.phoneNumber,
         accessToken,
-        refreshToken,
+        brithDate: user.brithDate,
       });
     } catch (error) {
       console.log(error);
       res.status(500).json({ message: error.message });
     }
+  };
+
+  static logout = async (req, res) => {
+    res.clearCookie("jwt", {
+      httpOnly: true, // The cookie cannot be accessed by client-side scripts
+      secure: true, // The cookie will only be sent over HTTPS
+      sameSite: "none", // The cookie will be sent on requests from other websites
+    });
+    res.status(200).json({ message: "Logged out" });
   };
 
   static verifyEmail = async (req, res) => {

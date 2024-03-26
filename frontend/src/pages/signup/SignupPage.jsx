@@ -38,6 +38,8 @@ import { toast } from "react-toastify";
 
 const SignupPage = () => {
 	const [showPassword, setShowPassword] = useState(false);
+	const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
 
 	const formSchema = z
 		.object({
@@ -274,13 +276,13 @@ const SignupPage = () => {
 												</FormLabel>
 												<FormControl>
 													<div className="relative">
-														{showPassword ? (
+														{showConfirmPassword ? (
 															<Label
 																className="absolute cursor-pointer inset-y-0 end-1 flex justify-center items-center px-2.5 "
 																htmlFor="password"
 																onClick={() =>
-																	setShowPassword(
-																		!showPassword
+																	setShowConfirmPassword(
+																		!showConfirmPassword
 																	)
 																}
 															>
@@ -298,8 +300,8 @@ const SignupPage = () => {
 																className="absolute  cursor-pointer  inset-y-0 end-1 flex justify-center items-center px-2.5 "
 																htmlFor="password"
 																onClick={() =>
-																	setShowPassword(
-																		!showPassword
+																	setShowConfirmPassword(
+																		!showConfirmPassword
 																	)
 																}
 															>
@@ -317,7 +319,7 @@ const SignupPage = () => {
 															placeholder="Confirm Password"
 															{...field}
 															type={
-																showPassword
+																showConfirmPassword
 																	? "text"
 																	: "password"
 															}

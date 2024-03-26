@@ -8,7 +8,8 @@ import About from "@/pages/about/about";
 import DashboardLayout from "@/pages/dashboard/DashboardLayout";
 import Settings from "@/pages/settings/Settings";
 import Cars from "@/pages/cars/cars";
-
+import AddCar from "@/pages/addCar/AddCar";
+import Car from "@/pages/car/Car";
 import BookingList from "@/pages/dashboard/bookingList/BookingList";
 import Chat from "@/pages/dashboard/chat/Chat";
 import DashboardPage from "@/pages/dashboard/DashboardPage";
@@ -37,6 +38,8 @@ const Routes = () => {
 					</ProtectedRoute>
 				}
 			/>
+			<Route path="/addcar" element={<AddCar />} />
+			<Route path="/car" element={<Car />} />
 			<Route path="/cars" element={<Cars />} />
 			<Route path="*" element={<NotFound />} />
 			<Route

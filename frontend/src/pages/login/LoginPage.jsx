@@ -43,6 +43,7 @@ const formSchema = z.object({
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
+
   const signIn = useSignIn();
 
   const navigate = useNavigate();
@@ -78,6 +79,7 @@ const LoginPage = () => {
           phoneNumber: response.data.phoneNumber,
           email: response.data.email,
           role: response.data.role,
+          brithDate: response.data.brithDate,
           address: response.data.address,
         },
       });
@@ -107,7 +109,6 @@ const LoginPage = () => {
           alt="car"
           className="w-[350px] rounded-lg max-[800px]:hidden"
         />
-
         <Card className="w-full border-none shadow-none">
           <CardHeader className="text-center">
             <CardTitle>Sign in in to your account</CardTitle>
