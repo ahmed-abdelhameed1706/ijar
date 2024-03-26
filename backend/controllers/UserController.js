@@ -80,7 +80,6 @@ export default class UserController {
       await user.save();
       return res.json({ message: "Password updated successfully." });
     } catch (e) {
-      console.log(e);
       return res.status(500).json({
         error: "Internal Server Error",
         message: e.message,

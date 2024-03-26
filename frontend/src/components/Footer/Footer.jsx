@@ -5,7 +5,7 @@ import { navData } from "@/data";
 
 const Footer = () => {
 	return (
-		<div className="absolute -bottom-20 w-full">
+		<div className="absolute -bottom-20 w-full z-20">
 			<footer className="bg-gray-600 relative py-4 px-7">
 				<div className="absolute end-4 top-4 lg:-top-3/4">
 					<NavLink
@@ -14,7 +14,6 @@ const Footer = () => {
 						onClick={handleScrollToTop}
 					>
 						<span className="sr-only">Back to top</span>
-
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
 							className="h-5 w-5"
