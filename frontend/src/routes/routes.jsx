@@ -13,56 +13,70 @@ import Car from "@/pages/car/Car";
 import BookingList from "@/pages/dashboard/bookingList/BookingList";
 import Chat from "@/pages/dashboard/chat/Chat";
 import DashboardPage from "@/pages/dashboard/DashboardPage";
-import ProtectedRoute from "@/components/ProtectedRoute/ProtectedRoute";
+import RequireAuth from "@auth-kit/react-router/RequireAuth";
 
 const Routes = () => {
-	return (
-		<ReactRouterRoutes>
-			<Route path="/" element={<Home />} />
-			<Route path="/login" element={<LoginPage />} />
-			<Route path="/signup" element={<SignupPage />} />
-			<Route
-				path="/reset-password"
-				element={
-					<ProtectedRoute>
-						<ResetPassword />
-					</ProtectedRoute>
-				}
-			/>
-			<Route path="/about" element={<About />} />
-			<Route
-				path="/settings/*"
-				element={
-					<ProtectedRoute>
-						<Settings />
-					</ProtectedRoute>
-				}
-			/>
-			<Route path="/addcar" element={<AddCar />} />
-			<Route path="/car" element={<Car />} />
-			<Route path="/cars" element={<Cars />} />
-			<Route path="*" element={<NotFound />} />
-			<Route
-				path="/dashboard"
-				element={
-					<ProtectedRoute>
-						<DashboardLayout />
-					</ProtectedRoute>
-				}
-			>
-				<Route path="booking" element={<BookingList />} />
-				<Route
-					path="chat"
-					element={
-						<ProtectedRoute>
-							<Chat />
-						</ProtectedRoute>
-					}
-				/>
-				<Route path="" element={<DashboardPage />} />
-			</Route>
-		</ReactRouterRoutes>
-	);
+  return (
+    <ReactRouterRoutes>
+      <Route path="/" element={<Home />} />
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/signup" element={<SignupPage />} />
+      <Route path="/reset-password" element={<ResetPassword />} />
+      <Route path="/about" element={<About />} />
+      <Route
+        path="/settings/*"
+        element={
+          <RequireAuth fallbackPath="/login">
+            <Settings />
+          </RequireAuth>
+        }
+      />
+      <Route path="/addcar" element={<AddCar />} />
+      <Route
+        path="/car"
+        element={
+          <RequireAuth fallbackPath="/login">
+            <Car />
+          </RequireAuth>
+        }
+      />
+      <Route path="/cars" element={<Cars />} />
+      <Route path="*" element={<NotFound />} />
+      <Route
+        path="/dashboard"
+        element={
+          <RequireAuth fallbackPath="/login">
+            <DashboardLayout />
+          </RequireAuth>
+        }
+      >
+        <Route
+          path="booking"
+          element={
+            <RequireAuth fallbackPath="/login">
+              <BookingList />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="chat"
+          element={
+            <RequireAuth fallbackPath="/login">
+              <Chat />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path=""
+          element={
+            <RequireAuth fallbackPath="/login">
+              <DashboardPage />
+            </RequireAuth>
+          }
+        />
+      </Route>
+    </ReactRouterRoutes>
+  );
 };
 
 export default Routes;

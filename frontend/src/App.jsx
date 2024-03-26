@@ -10,7 +10,7 @@ const App = () => {
       <NavBar />
       <Routes />
       <Footer />
-      <ToastContainer pauseOnFocusLoss={false}  />
+      <ToastContainer pauseOnFocusLoss={false} />
     </div>
   );
 };

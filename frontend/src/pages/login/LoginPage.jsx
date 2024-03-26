@@ -81,6 +81,7 @@ const LoginPage = () => {
           role: response.data.role,
           brithDate: response.data.brithDate,
           address: response.data.address,
+          imageUrl: response.data.imageUrl,
         },
       });
 

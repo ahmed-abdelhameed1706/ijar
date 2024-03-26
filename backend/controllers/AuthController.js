@@ -157,6 +157,7 @@ export default class AuthController {
         phoneNumber: user.phoneNumber,
         accessToken,
         brithDate: user.brithDate,
+        imageUrl: user.imageUrl,
       });
     } catch (error) {
       console.log(error);
