@@ -32,8 +32,7 @@ const AdminUsers = () => {
           Authorization: token,
         },
       });
-      console.log(response.data.users);
-      setData(response.data.users);
+      setDataTable(response.data.users);
     } catch (error) {
       console.log(error);
     }
@@ -41,11 +40,11 @@ const AdminUsers = () => {
 
   useEffect(() => {
     getAllUsers();
-  }, []);
+  }, [dataTable]);
 
-  useEffect(() => {
-    setDataTable(data); // Set dataTable after data has been updated
-  }, [data]);
+  // useEffect(() => {
+  //   setDataTable(data); // Set dataTable after data has been updated
+  // }, [data]);
 
   return (
     <div>

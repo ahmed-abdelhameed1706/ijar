@@ -72,6 +72,7 @@ export function DataTable({ columns, data }) {
   };
 
   const onDelete = async (user) => {
+    console.log(user);
     await axios.delete(`/api/admin/users/${user._id}`, {
       headers: {
         Authorization: token,
