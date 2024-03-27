@@ -34,7 +34,7 @@ const AdminUsers = () => {
       });
       setDataTable(response.data.users);
     } catch (error) {
-      console.log(error);
+      console.log(error.message);
     }
   };
 
