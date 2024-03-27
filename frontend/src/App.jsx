@@ -6,9 +6,11 @@ import Routes from "./routes/routes";
 
 const App = () => {
   return (
-    <div className="min-h-full relative bg-gray-50">
+    <div className="flex flex-col min-h-screen">
       <NavBar />
-      <Routes />
+      <main className="flex-grow">
+        <Routes />
+      </main>
       <Footer />
       <ToastContainer pauseOnFocusLoss={false} />
     </div>

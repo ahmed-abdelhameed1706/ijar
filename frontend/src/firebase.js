@@ -10,8 +10,6 @@ const firebaseConfig = {
   measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 };
 
-console.log(import.meta.env);
-
 const app = initializeApp(firebaseConfig);
 
 const storage = getStorage(app);

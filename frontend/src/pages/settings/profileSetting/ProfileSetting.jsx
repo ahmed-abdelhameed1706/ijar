@@ -62,15 +62,21 @@ const ProfileSetting = ({ setOpenBar }) => {
         address: user.address,
       },
     });
-    
+
     async function onSubmit(values) {
-      if (image) {
-        const url = await uploadImage(image);
-        setImageUrl(url)
-        console.log(imageUrl);
-      }
       if ((user.fullName === values.fullName && user.email === values.email && user.phoneNumber === values.phoneNumber && user.address === values.address && !image)) {
         toast.info("Modify the information you want to update before submitting.");
+        return;
+      }
+
+      if (image) {
+        await uploadImage(
+          image,
+          values,
+          setImageUrl,
+          token,
+          signIn,
+        );
         return;
       }
       try {
@@ -132,7 +138,7 @@ const ProfileSetting = ({ setOpenBar }) => {
               <div className="flex items-center justify-center pb-4 relative">
                 <img
                   className="h-[130px] w-[130px] rounded-full object-cover mr-4 outline-none"
-                  src={imageUrl ? imageUrl : "https://firebasestorage.googleapis.com/v0/b/ijarapp-11.appspot.com/o/cars%2F98a33308-44eb-4409-93fb-2ae2662f38b3?alt=media&token=12ef59dd-dfdf-4d1c-9e35-c9b7944a1df1"}
+                  src={imageUrl && imageUrl}
                   alt="Profile photo"
                 />
                 <label className="absolute bottom-2 mr-20

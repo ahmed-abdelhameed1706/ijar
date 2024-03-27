@@ -57,21 +57,29 @@ class CartController {
       const data = {
         userId: req.userId,
         carId: req.body.carId,
-        rentalTerm: req.body.rentalTerm || 1,
+        rentalTerm: req.body.rentalTerm,
         totalCost: req.body.totalCost,
+        endDate: req.body.endDate,
+        startDate: req.body.startDate,
       };
 
       const car = await Car.findOne({ _id: data.carId });
 
-      const date = new Date();
-      date.setHours(date.getHours() + data.rentalTerm * 24);
+      if (!car) {
+        return res.status(404).json({ error: "Not found" });
+      }
 
-      data.endDate = date;
-      data.totalCost = data.rentalTerm * data.totalCost;
-      const cart = new Cart(data);
-      await cart.save();
-      const { _id, ...rest } = cart._doc;
-      return res.status(200).json({ id: _id, ...rest });
+      if (car.available) {
+        car.available = false;
+        car.customerId = data.userId;
+        await car.save();
+        const cart = new Cart(data);
+        await cart.save();
+        const { _id, ...rest } = cart._doc;
+        return res.status(200).json({ id: _id, ...rest });
+      } else {
+        res.status(404).json(`${car.brandName} is not available`);
+      }
     } catch (err) {
       console.log(err);
       return res.status(500).json({ error: "Internal Server Error" });

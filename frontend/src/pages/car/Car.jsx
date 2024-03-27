@@ -5,18 +5,19 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { useParams } from "react-router-dom";
+import axios from "@/api/axios";
 
 const Car = () => {
   const { carId } = useParams();
   const [pickUp, setPickUp] = useState();
   const [dropOff, setDropOff] = useState();
-  const [hoursDifference, setHoursDifference] = useState(null);
+  const [daysDifference, setDaysDifference] = useState(null);
 
   const handleBook = async () => {
     try {
       const response = await axios.post(
-        "/api/cars",
-        JSON.stringify({ ...values, images: imagesUrl }),
+        "/api/cart",
+        JSON.stringify({ carId, rentalTerm: daysDifference, totalCost: daysDifference * 20 }),
         {
           headers: {
             "Content-Type": "application/json",
@@ -39,11 +40,11 @@ const Car = () => {
     const timeDifferenceInMs =
       dropOff && pickUp && dropOff.getTime() - pickUp.getTime();
     const hoursDiff = Math.floor(timeDifferenceInMs / (1000 * 60 * 60));
-    setHoursDifference(hoursDiff);
+    setDaysDifference(hoursDiff / 24);
   }, [pickUp, dropOff]);
 
   return (
-    <div className="flex max-w-full justify-center items-center 2xl:max-w-[1500px] h-full max-[1020px]:pb-[100px] ">
+    <div className="flex max-w-full justify-center items-center 2xl:max-w-[1500px]">
       <div className="flex flex-col max-w-full lg:flex-row space-y-6 p-10">
         <div className="flex flex-col space-y-10 justify-center items-center px-4 w-full max-w-full p-1">
           <Images />
@@ -86,7 +87,7 @@ const Car = () => {
                 <p className="text-lg font-normal	">Black</p>
               </div>
               <div className="w-full flex items-center">
-                <p className="text-lg font-medium	 pr-2">Price per hour:</p>
+                <p className="text-lg font-medium	 pr-2">Price per day:</p>
                 <p className="text-lg font-normal	">$20</p>
               </div>
             </div>
@@ -187,8 +188,8 @@ const Car = () => {
             <hr />
             <div className="w-full flex justify-between items-center pt-4 pb-8">
               <p className="text-xl font-medium	 pr-2">Total Amount</p>
-              {hoursDifference ? (
-                <p className="text-2xl font-medium	">${hoursDifference * 20}</p>
+              {daysDifference ? (
+                <p className="text-2xl font-medium	">${daysDifference * 20}</p>
               ) : (
                 <Skeleton className="h-8 w-[60px]" />
               )}

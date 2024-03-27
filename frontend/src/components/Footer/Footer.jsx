@@ -5,7 +5,6 @@ import { navData } from "@/data";
 
 const Footer = () => {
 	return (
-		<div className="absolute -bottom-20 w-full z-20">
 			<footer className="bg-gray-600 relative py-4 px-7">
 				<div className="absolute end-4 top-4 lg:-top-3/4">
 					<NavLink
@@ -61,7 +60,6 @@ const Footer = () => {
 					</ul>
 				</div>
 			</footer>
-		</div>
 	);
 };
 
