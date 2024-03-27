@@ -33,7 +33,7 @@ jobs:
       - name: Build Frontend
         run: |
           cd frontend
-          npm run build
+          NODE_OPTIONS=--max-old-space-size=4096 npm run build
 
       - name: Manage PM2 and Nginx
         run: |
