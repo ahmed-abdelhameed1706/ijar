@@ -14,6 +14,7 @@ import BookingList from "@/pages/dashboard/bookingList/BookingList";
 import Chat from "@/pages/dashboard/chat/Chat";
 import DashboardPage from "@/pages/dashboard/DashboardPage";
 import RequireAuth from "@auth-kit/react-router/RequireAuth";
+import CarsDashboardPage from "@/pages/dashboard/carsDashboard/CarsDashboardPage";
 
 const Routes = () => {
   return (
@@ -55,6 +56,14 @@ const Routes = () => {
           element={
             <RequireAuth fallbackPath="/login">
               <BookingList />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="mycars"
+          element={
+            <RequireAuth fallbackPath="/login">
+              <CarsDashboardPage />
             </RequireAuth>
           }
         />

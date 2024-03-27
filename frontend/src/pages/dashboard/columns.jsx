@@ -19,7 +19,7 @@ export const columns = [
       const booking = row.original;
 
       return (
-        <Avatar>
+        <Avatar className=" justify-center">
           <AvatarImage src="https://images.pexels.com/photos/1592384/pexels-photo-1592384.jpeg?" />
 
           <AvatarFallback>BMW</AvatarFallback>

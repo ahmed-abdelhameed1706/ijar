@@ -27,29 +27,6 @@ const DashboardPage = () => {
     },
   ];
 
-  // const data = [
-  //   {
-  //     status: "Pending",
-  //     email: "",
-  //     amount: "",
-  //   },
-  //   {
-  //     status: "Pending",
-  //     email: "",
-  //     amount: "",
-  //   },
-  //   {
-  //     status: "Pending",
-  //     email: "",
-  //     amount: "",
-  //   },
-  //   {
-  //     status: "Pending",
-  //     email: "",
-  //     amount: "",
-  //   },
-  // ];
-
   return (
     <div>
       <h1 className="text-xl font-bold mb-4">Dashboard</h1>
@@ -74,7 +51,6 @@ const DashboardPage = () => {
             <ChevronsRight size={18} />
           </p>
         </Link>
-        {/* <DataTable columns={columns} data={data} /> */}
       </div>
     </div>
   );

@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import {
+  CarFront,
   LayoutDashboardIcon,
   MessageCircle,
   PersonStanding,
@@ -15,7 +16,7 @@ const DashboardLayout = () => {
       name: "Dashboard",
       icon: <LayoutDashboardIcon />,
       path: "/dashboard",
-      role: "",
+      role: "both",
     },
     {
       name: "Booking List",
@@ -24,16 +25,22 @@ const DashboardLayout = () => {
       role: "both",
     },
     {
+      name: "My Cars",
+      icon: <CarFront />,
+      path: "mycars",
+      role: "owner",
+    },
+    {
       name: "Chat",
       icon: <MessageCircle />,
       path: "chat",
-      role: "user",
+      role: "both",
     },
     {
       name: "Settings",
       icon: <SettingsIcon />,
       path: "/settings",
-      role: "user",
+      role: "both",
     },
   ];
   return (
