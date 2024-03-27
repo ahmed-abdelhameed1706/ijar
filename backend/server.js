@@ -8,7 +8,7 @@ import cors from "cors";
 import swaggerSpec from "./utils/swagger";
 import swaggerUi from "swagger-ui-express";
 import cartRouter from "./routes/cartRoutes";
-import ownerDashboardRouter from "./routes/ownerDashboardRoutes";
+import adminRouter from "./routes/adminRouter";
 import userRouter from "./routes/userRouters";
 import filterRouter from "./routes/filterRouter";
 import ticketRouter from "./routes/ticketRoutes";
@@ -28,7 +28,7 @@ app.use((req, res, next) => {
   res.setHeader(
     "Access-Control-Allow-Origin",
     "http://localhost:3000",
-    "http://localhost:3001",
+    "http://localhost:3001"
   );
   res.setHeader("Access-Control-Allow-Credentials", "true");
   next();
@@ -70,7 +70,7 @@ app.use("/api", carRouter);
 app.use("/api", commentRouter);
 app.use("/api", cartRouter);
 app.use("/auth", authRouter);
-app.use("/api/owner-dashboard", ownerDashboardRouter);
+app.use("/api/admin", adminRouter);
 app.use("/api", userRouter);
 app.use("/search", filterRouter);
 app.use("/api", ticketRouter);

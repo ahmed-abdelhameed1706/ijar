@@ -14,7 +14,7 @@ const logger = createLogger({
         format.timestamp(),
         format.printf(({ timestamp, level, message }) => {
           return `${timestamp} ${level}: ${message}`;
-        }),
+        })
       ),
     }),
   ],
@@ -55,7 +55,7 @@ export const verifyToken = (req, res, next) => {
   if (!token) {
     return res.status(403).send({ message: "No token provided!" });
   }
-  jwt.verify(token, process.env.SECRET || "hsghs6", (err, decoded) => {
+  jwt.verify(token, process.env.SECRET, (err, decoded) => {
     if (err) {
       return res.status(401).send({ message: "Unauthorized!" });
     }
@@ -73,13 +73,9 @@ export const validateToken = (token) => {
 };
 
 export const generateAccessToken = (user) => {
-  return jwt.sign(
-    { email: user.email, id: user._id },
-    process.env.SECRET || "hsghs6",
-    {
-      expiresIn: "14d",
-    },
-  );
+  return jwt.sign({ email: user.email, id: user._id }, process.env.SECRET, {
+    expiresIn: "14d",
+  });
 };
 
 export const generateRefreshToken = (user) => {
@@ -96,32 +92,52 @@ export const generateVerificationToken = (email) => {
 
 export const isOwner = async (req, res, next) => {
   try {
-    const user = await User.findById(req.userId);
+    const token = req.headers.authorization;
+
+    if (!token) {
+      return res.status(403).json({ message: "No token provided" });
+    }
+
+    const decoded = jwt.verify(token, process.env.SECRET);
+
+    const user = await User.findById(decoded.id);
+
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    if (user.role === "owner") {
+
+    if (user.role === "Owner") {
       next();
     } else {
       res.status(403).json({ message: "Unauthorized" });
     }
   } catch (error) {
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({ message: error.message });
   }
 };
 
 export const isAdmin = async (req, res, next) => {
   try {
-    const user = await User.findById(req.userId);
+    const token = req.headers.authorization;
+
+    if (!token) {
+      return res.status(403).json({ message: "No token provided" });
+    }
+
+    const decoded = jwt.verify(token, process.env.SECRET);
+
+    const user = await User.findById(decoded.id);
+
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    if (user.role === "admin") {
+
+    if (user.role === "Admin") {
       next();
     } else {
       res.status(403).json({ message: "Unauthorized" });
     }
   } catch (error) {
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({ message: error.message });
   }
 };

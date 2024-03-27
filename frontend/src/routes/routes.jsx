@@ -15,6 +15,12 @@ import Chat from "@/pages/dashboard/chat/Chat";
 import DashboardPage from "@/pages/dashboard/DashboardPage";
 import RequireAuth from "@auth-kit/react-router/RequireAuth";
 import CarsDashboardPage from "@/pages/dashboard/carsDashboard/CarsDashboardPage";
+import ProtectedRoute from "@/components/ProtectedRoute/ProtectedRoute";
+import Admin from "@/pages/admin/Admin";
+import AdminCars from "@/pages/admin/cars/AdminCars";
+import AdminCarts from "@/pages/admin/carts/AdminCarts";
+import AdminUsers from "@/pages/admin/users/AdminUsers";
+import AdminTickets from "@/pages/admin/tickets/AdminTickets";
 
 const Routes = () => {
   return (
@@ -41,6 +47,48 @@ const Routes = () => {
           </RequireAuth>
         }
       />
+      <Route
+        path="/admin"
+        element={
+          <ProtectedRoute>
+            {" "}
+            <Admin />
+          </ProtectedRoute>
+        }
+      >
+        <Route
+          path="cars"
+          element={
+            <ProtectedRoute>
+              <AdminCars />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="carts"
+          element={
+            <ProtectedRoute>
+              <AdminCarts />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="users"
+          element={
+            <ProtectedRoute>
+              <AdminUsers />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="tickets"
+          element={
+            <ProtectedRoute>
+              <AdminTickets />
+            </ProtectedRoute>
+          }
+        />
+      </Route>
       <Route path="/cars" element={<Cars />} />
       <Route path="*" element={<NotFound />} />
       <Route
