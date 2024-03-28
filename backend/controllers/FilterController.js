@@ -12,7 +12,8 @@ export default class FilterController {
         minYear,
         maxYear,
         model,
-        averageRate,
+        location,
+        fuel,
       } = req.query;
 
       const filter = {};
@@ -20,7 +21,8 @@ export default class FilterController {
       if (type) filter.type = type;
       if (color) filter.color = color;
       if (model) filter.model = model;
-      if (averageRate) filter.averageRate = averageRate;
+      if (location) filter.location = location;
+      if (fuel) filter.fuel = fuel;
       if (minPrice && maxPrice)
         filter.price = { $gte: minPrice, $lte: maxPrice };
       else if (minPrice) filter.price = { $gte: minPrice };
@@ -30,8 +32,11 @@ export default class FilterController {
       else if (maxYear) filter.year = { $lte: maxYear };
 
       const cars = await Car.find(filter);
-
-      return res.json(cars);
+      const newCars = cars.map((car) => {
+        const { _id, ...rest } = car._doc;
+        return { id: _id, ...rest };
+      });
+      return res.json(newCars);
     } catch (error) {
       return res
         .status(500)

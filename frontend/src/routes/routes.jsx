@@ -21,11 +21,36 @@ import AdminCars from "@/pages/admin/cars/AdminCars";
 import AdminCarts from "@/pages/admin/carts/AdminCarts";
 import AdminUsers from "@/pages/admin/users/AdminUsers";
 import AdminTickets from "@/pages/admin/tickets/AdminTickets";
+import { useState, useEffect, useRef } from "react";
+import axios from "@/api/axios";
 
 const Routes = () => {
+  const [cars, setCars] = useState([]);
+  const fetchRef = useRef(false)
+
+
+  useEffect(() => {
+    if (fetchRef.current) {
+      const getCars = async () =>  {
+        try {
+              const response = await axios.get("/api/cars", {
+                params: { limit: 10 },
+                headers: {"Content-Type": "application/json"},
+            });
+              setCars(response.data)
+              console.log(response.data)
+          } catch (e) {
+              console.log(e.message);
+          }
+      }
+        getCars();
+      }
+      if (!fetchRef.current) fetchRef.current = true;
+  }, []);
+
   return (
     <ReactRouterRoutes>
-      <Route path="/" element={<Home />} />
+      <Route path="/" element={<Home setCars={setCars} cars={cars} />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/signup" element={<SignupPage />} />
       <Route path="/reset-password" element={<ResetPassword />} />
@@ -38,12 +63,12 @@ const Routes = () => {
           </RequireAuth>
         }
       />
-      <Route path="/addcar" element={<AddCar />} />
+      <Route path="/addcar" element={<AddCar setCars={setCars} cars={cars}/>} />
       <Route
-        path="/car"
+        path="/car/:id"
         element={
           <RequireAuth fallbackPath="/login">
-            <Car />
+            <Car setCars={setCars} cars={cars}/>
           </RequireAuth>
         }
       />
@@ -89,7 +114,7 @@ const Routes = () => {
           }
         />
       </Route>
-      <Route path="/cars" element={<Cars />} />
+      <Route path="/cars" element={<Cars cars={cars} setCars={setCars}/>} />
       <Route path="*" element={<NotFound />} />
       <Route
         path="/dashboard"

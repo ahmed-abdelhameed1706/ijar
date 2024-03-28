@@ -54,6 +54,7 @@ class CarController {
   static async getCars(req, res) {
     const page = req.query.page || 0;
     const ownerId = req.query.ownerId;
+    const limit = Number(req.query.limit) || 10;
     const filter = {};
 
     if (ownerId) filter.ownerId = ownerId;
@@ -67,7 +68,10 @@ class CarController {
           $skip: page * 20,
         },
         {
-          $limit: 20,
+          $sort: { averageRate: -1 },
+        },
+        {
+          $limit: limit || 20,
         },
       ]);
       const newCars = cars.map((car) => {
@@ -76,6 +80,7 @@ class CarController {
       });
       return res.json(newCars);
     } catch (e) {
+      console.log(e);
       return res.status(500).json({
         error: "Internal Server Error",
         message: e.message,
@@ -170,7 +175,7 @@ class CarController {
           .json({ error: "End date cannot be before start date!" });
       }
       const rentalDays = Math.ceil(
-        (parsedEndDate - parsedStartDate) / (1000 * 60 * 60 * 24)
+        (parsedEndDate - parsedStartDate) / (1000 * 60 * 60 * 24),
       );
       const totalCost = car.price * rentalDays;
 

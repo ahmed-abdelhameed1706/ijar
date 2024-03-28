@@ -1,23 +1,32 @@
+/* eslint-disable react/prop-types */
 import { Card } from "@/components/ui/card";
 import DateDialog from "./DateDialog";
-import Images from "./Images";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { useParams } from "react-router-dom";
 import axios from "@/api/axios";
+import useAuthHeader from 'react-auth-kit/hooks/useAuthHeader';
+import { toast } from "react-toastify";
+import Images from "./Images";
 
-const Car = () => {
-  const { carId } = useParams();
+const Car = ({ setCars, cars }) => {
+
+  const { id } = useParams();
   const [pickUp, setPickUp] = useState();
   const [dropOff, setDropOff] = useState();
+  // const [car, setCar] = useState();
   const [daysDifference, setDaysDifference] = useState(null);
+  const auth = useAuthHeader()
+  const token = auth.split(" ")[1]
+
+  const car = cars.find((car) => car.id === id)
 
   const handleBook = async () => {
     try {
       const response = await axios.post(
         "/api/cart",
-        JSON.stringify({ carId, rentalTerm: daysDifference, totalCost: daysDifference * 20 }),
+        JSON.stringify({ carId: car.id, rentalTerm: daysDifference, totalCost: daysDifference * 20, endDate: dropOff, startDate: pickUp }),
         {
           headers: {
             "Content-Type": "application/json",
@@ -25,14 +34,10 @@ const Car = () => {
           },
         }
       );
-      toast.success("Your Car Added successfully.");
+      console.log(response.data)
+      toast.success("You book the Car successfully.");
     } catch (e) {
       toast.error(e.response.data.message);
-      if (e.response.data.message1) {
-        setTimeout(() => {
-          toast.info(e.response.data.message1);
-        }, 6002);
-      }
     }
   };
 
@@ -43,15 +48,19 @@ const Car = () => {
     setDaysDifference(hoursDiff / 24);
   }, [pickUp, dropOff]);
 
+  if (cars.length === 0) {
+    return (<h1 className="text-center pt-10">Loading...</h1>);
+  }
+
   return (
     <div className="flex max-w-full justify-center items-center 2xl:max-w-[1500px]">
-      <div className="flex flex-col max-w-full lg:flex-row space-y-6 p-10">
+      <div className="flex flex-col w-[90%] max-w-full lg:flex-row space-y-6 p-10">
         <div className="flex flex-col space-y-10 justify-center items-center px-4 w-full max-w-full p-1">
-          <Images />
-          <Card className="max-w-[900px] border-none shadow-lg p-6 rounded-lg space-y-5">
-            <div className="w-full flex justify-between items-center pb-3 border-b">
-              <h1 className="text-2xl font-medium pl-1">2022 - Toyota Camry</h1>
-              {false ? (
+          <Images images={car.images}/>
+          <Card className="w-full max-w-[900px] border-none shadow-lg p-6 rounded-lg space-y-5">
+            <div className="w-full flex justify-between items-center pb-3 border-b flex-grow w-full">
+              <h1 className="text-2xl font-medium pl-1">{car.year} - {car.brandName} {car.model}</h1>
+              {car.available ? (
                 <p className="p-2 mr-2 text-green-600 text-xs bg-green-600/20 rounded-3xl">
                   Available
                 </p>
@@ -61,46 +70,41 @@ const Car = () => {
                 </p>
               )}
             </div>
-            <div className="flex flex-col sm:flex-row space-y-6 sm:space-y-0 pl-1">
+            <div className="flex flex-col sm:flex-row space-y-6 sm:space-y-0 pl-1 flex-grow">
               <div className="w-full flex items-center">
                 <p className="text-lg font-medium	  pr-2">Brand Name:</p>
-                <p className="text-lg font-normal	">Toyota</p>
+                <p className="text-lg font-normal	">{car.brandName}</p>
               </div>
               <div className="w-full flex items-center">
                 <p className="text-lg font-medium	  pr-2">Model:</p>
-                <p className="text-lg font-normal	  ">Camry</p>
+                <p className="text-lg font-normal	  ">{car.model}</p>
               </div>
             </div>
             <div className="flex flex-col justify-evenly sm:flex-row space-y-6 sm:space-y-0 pl-1">
               <div className="w-full flex items-center">
                 <p className="text-lg font-medium pr-2">Year:</p>
-                <p className="text-lg font-normal	">2022</p>
+                <p className="text-lg font-normal	">{car.year}</p>
               </div>
               <div className="w-full flex items-center">
                 <p className="text-lg font-medium	 pr-2">Type:</p>
-                <p className="text-lg font-normal	">Sedan</p>
+                <p className="text-lg font-normal	">{car.type}</p>
               </div>
             </div>
             <div className="flex flex-col justify-evenly sm:flex-row space-y-6 sm:space-y-0 pl-1">
               <div className="w-full flex items-center">
                 <p className="text-lg font-medium pr-2">Color:</p>
-                <p className="text-lg font-normal	">Black</p>
+                <p className="text-lg font-normal	">{car.color}</p>
               </div>
               <div className="w-full flex items-center">
                 <p className="text-lg font-medium	 pr-2">Price per day:</p>
-                <p className="text-lg font-normal	">$20</p>
+                <p className="text-lg font-normal	">${car.price}</p>
               </div>
             </div>
             <hr />
             <div className="pl-2">
               <p className="text-xl font-medium pb-2">Description</p>
               <p className="text-lg text-left font-normal	">
-                Own the road with the stunning [Year] [Car Make] [Car Model].
-                This well-maintained beauty offers a thrilling drive with its
-                [engine specification] and [mention a comfort or handling
-                feature]. Immerse yourself in a luxurious cabin featuring
-                [mention interior material] and [mention technology feature].
-                Perfect for adventures, it provides ample space and comfort.
+                {car.description}
               </p>
             </div>
             <hr />
@@ -127,14 +131,14 @@ const Car = () => {
                 <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
               </svg>
               <p className="ms-2 text-sm font-bold text-gray-900 dark:text-white">
-                4.95
+                {car.averageRate}
               </p>
               <span className="w-1 h-1 mx-1.5 bg-gray-500 rounded-full dark:bg-gray-400"></span>
               <a
                 href="#"
                 className="text-sm font-medium text-gray-900 underline hover:no-underline dark:text-white"
               >
-                73 reviews
+                0 reviews
               </a>
             </div>
           </Card>
