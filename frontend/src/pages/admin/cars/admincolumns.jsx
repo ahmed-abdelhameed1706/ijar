@@ -13,20 +13,10 @@ import { Ellipsis } from "lucide-react";
 
 export const AdminColumns = [
   {
-    accessorKey: "image",
-    header: "Image",
-    cell: ({ row }) => {
-      const booking = row.original;
-      const imageSrc = booking.images?.[0];
-
-      return (
-        <Avatar className=" justify-center">
-          <AvatarImage src={imageSrc} />
-
-          <AvatarFallback>Car Image</AvatarFallback>
-        </Avatar>
-      );
-    },
+    id: "ID",
+    accessorKey: "carId",
+    accessorFn: (row) => row.id,
+    header: "Car ID",
   },
   {
     id: "Name",
