@@ -36,11 +36,11 @@ const Car = () => {
   const handleBook = async () => {
     try {
       const response = await axios.post(
-        "/api/add-to-cart",
+        "/api/cart",
         JSON.stringify({
           carId: car.id,
-          // rentalTerm: daysDifference,
-          // totalCost: daysDifference * 20,
+          rentalTerm: daysDifference,
+          totalCost: daysDifference * 20,
           endDate: dropOff,
           startDate: pickUp,
         }),
