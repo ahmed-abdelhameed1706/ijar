@@ -69,6 +69,10 @@ class CartController {
         return res.status(404).json({ error: "Not found" });
       }
 
+      if (car.ownerId.toString() === data.userId.toString()) {
+        return res.status(400).json({ error: "You can't book your own car" });
+      }
+
       if (car.available) {
         car.available = false;
         car.customerId = data.userId;
@@ -81,8 +85,8 @@ class CartController {
         res.status(404).json(`${car.brandName} is not available`);
       }
     } catch (err) {
-      console.log(err);
-      return res.status(500).json({ error: "Internal Server Error" });
+      console.log(err.message);
+      return res.status(500).json({ error: err.message });
     }
   }
 
@@ -145,7 +149,7 @@ class CartController {
             await Cart.findByIdAndDelete(c.id);
             result.errors.push(`Not found`);
           }
-        }),
+        })
       );
 
       return res.status(200).json(result);
