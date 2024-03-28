@@ -19,33 +19,32 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import axios from "axios";
+import axios from "../../api/axios";
 import { toast } from "react-toastify";
 
 const ResetPassword = () => {
+  const formSchema = z.object({
+    email: z
+      .string()
+      .min(1, { message: "Email is required" })
+      .email("Invalid email address"),
+  });
 
-    const formSchema = z.object({
-        email: z
-        .string()
-        .min(1, { message: "Email is required" })
-        .email("Invalid email address"),
-    });
+  // 1. Define your form.
+  const form = useForm({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      email: "",
+    },
+  });
 
-    // 1. Define your form.
-    const form = useForm({
-        resolver: zodResolver(formSchema),
-        defaultValues: {
-            email: "",
-        },
-    });
-
-    async function onSubmit(values) {
-      try {
-        const val = await axios.post('http://localhost:5000/api/users/reset_password', values);
-        toast.info(val.data.message)
-      } catch (e) {
-        toast.error(e.response.data.message)
-      }
+  async function onSubmit(values) {
+    try {
+      const val = await axios.post("/api/users/reset_password", values);
+      toast.info(val.data.message);
+    } catch (e) {
+      toast.error(e.response.data.message);
+    }
   }
 
   return (
@@ -59,7 +58,6 @@ const ResetPassword = () => {
             </CardDescription>
           </CardHeader>
           <CardContent>
-
             <Form {...form}>
               <form
                 onSubmit={form.handleSubmit(onSubmit)}
