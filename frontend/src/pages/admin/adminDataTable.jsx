@@ -1,6 +1,4 @@
 /* eslint-disable react/prop-types */
-"use client";
-import React, { useState } from "react";
 import {
   flexRender,
   getCoreRowModel,
@@ -24,21 +22,19 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ChevronDownIcon, Search } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import axios from "../../api/axios";
-import useAuthHeader from "react-auth-kit/hooks/useAuthHeader";
-import { useNavigate } from "react-router-dom";
+import { ChevronDownIcon } from "lucide-react";
+// import { Input } from "@/components/ui/input";
+// import { Label } from "@/components/ui/label";
+import { useState } from "react";
 
-export function DataTable({ columns, data }) {
+export function AdminDataTable({ columns, data }) {
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState();
   const [columnVisibility, setColumnVisibility] = useState({});
   const [rowSelection, setRowSelection] = useState({});
-  const authHeader = useAuthHeader();
-  const token = authHeader && authHeader.split(" ")[1];
-  const navigate = useNavigate();
+  // const authHeader = useAuthHeader();
+  // const token = authHeader && authHeader.split(" ")[1];
+  // const navigate = useNavigate();
 
   const table = useReactTable({
     data,
@@ -57,32 +53,19 @@ export function DataTable({ columns, data }) {
       columnVisibility,
       rowSelection,
     },
-    initialState: {
-      filters: [
-        {
-          id: "fullName", // Assuming the first column is for full name
-          value: "",
-        },
-      ],
-    },
+    // initialState: {
+    //   filters: [
+    //     {
+    //       id: "carName", // Assuming the first column is for full name
+    //       value: "",
+    //     },
+    //   ],
+    // },
   });
 
-  const onChangeFilter = (id, value) => {
-    table.getColumn(id)?.setFilterValue(value);
-  };
-
-  const onDelete = async (user) => {
-    console.log(user);
-    await axios.delete(`/api/admin/users/${user._id}`, {
-      headers: {
-        Authorization: token,
-      },
-    });
-
-    console.log("Deleting user:", user._id);
-    // After deleting, navigate to the next page
-    navigate("/admin/users");
-  };
+  // const onChangeFilter = (id, value) => {
+  //   table.getColumn(id)?.setFilterValue(value);
+  // };
 
   const goToPreviousPage = () => {
     if (table.getCanPreviousPage()) {
@@ -100,17 +83,17 @@ export function DataTable({ columns, data }) {
   return (
     <div>
       <div className="flex items-center py-4">
-        <Label className="flex justify-center items-center border border-gray-300 rounded-lg w-[300px] h-11">
+        {/* <Label className="flex justify-center items-center border border-gray-300 rounded-lg w-[300px] h-11">
           <Input
             className="border-none rounded-lg w-full outline-none ring-0 p-2 placeholder:text-base"
-            value={table.getColumn("fullName")?.getFilterValue() ?? ""}
+            value={table.getColumn("carName")?.getFilterValue() ?? ""}
             placeholder="Search"
-            onChange={(e) => onChangeFilter("fullName", e.target.value)}
+            onChange={(e) => onChangeFilter("carName", e.target.value)}
           />
           <div className="p-2">
             <Search strokeWidth={2.25} className="text-gray-300" />
           </div>
-        </Label>
+        </Label> */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
@@ -165,14 +148,14 @@ export function DataTable({ columns, data }) {
                       )}
                     </TableCell>
                   ))}
-                  <TableCell className="text-center">
+                  {/* <TableCell className="text-center">
                     <Button
                       variant="danger"
                       onClick={() => onDelete(row.original)}
                     >
                       Delete
                     </Button>
-                  </TableCell>
+                  </TableCell> */}
                 </TableRow>
               ))
             ) : (

@@ -1,29 +1,29 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "../../../api/axios";
 import useAuthHeader from "react-auth-kit/hooks/useAuthHeader";
-import { DataTable } from "../adminDataTable";
+import { AdminDataTable } from "../adminDataTable";
 import { columns } from "../userColumns";
 
 const AdminUsers = () => {
-  const [activeTab, setActiveTab] = useState("all");
-  const [data, setData] = useState([]);
+  // const [activeTab, setActiveTab] = useState("all");
+  // const [data, setData] = useState([]);
   const [dataTable, setDataTable] = useState([]);
   const auth = useAuthHeader();
   const token = auth && auth.split(" ")[1];
 
-  const handleFilter = (status) => {
-    const filteredData = data.filter((item) => item.status === status);
-    setDataTable(filteredData);
-  };
+  // const handleFilter = (status) => {
+  //   const filteredData = data.filter((item) => item.status === status);
+  //   setDataTable(filteredData);
+  // };
 
-  const handleStatus = (status) => {
-    setActiveTab(status);
-    if (status === "all") {
-      setDataTable(data);
-    } else {
-      handleFilter(status);
-    }
-  };
+  // const handleStatus = (status) => {
+  //   setActiveTab(status);
+  //   if (status === "all") {
+  //     setDataTable(data);
+  //   } else {
+  //     handleFilter(status);
+  //   }
+  // };
 
   const getAllUsers = async () => {
     try {
@@ -34,7 +34,7 @@ const AdminUsers = () => {
       });
       setDataTable(response.data.users);
     } catch (error) {
-      console.log(error);
+      console.log(error.message);
     }
   };
 
@@ -54,7 +54,7 @@ const AdminUsers = () => {
           <h2 className="text-lg font-bold my-2">All Users</h2>
         </div>
         <div className="p-4">
-          <DataTable columns={columns} data={dataTable} />
+          <AdminDataTable columns={columns} data={dataTable} />
         </div>
       </div>
     </div>
