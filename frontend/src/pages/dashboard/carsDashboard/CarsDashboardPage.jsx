@@ -106,7 +106,7 @@ const CarsDashboardPage = () => {
 
   useEffect(() => {
     getAllCars();
-  }, [cars]);
+  }, []);
 
   console.log(car);
   return (
