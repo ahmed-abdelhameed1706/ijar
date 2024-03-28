@@ -2,7 +2,7 @@
 import { Card } from "@/components/ui/card";
 import DateDialog from "./DateDialog";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { useParams } from "react-router-dom";
 import axios from "@/api/axios";
@@ -10,16 +10,33 @@ import useAuthHeader from "react-auth-kit/hooks/useAuthHeader";
 import { toast } from "react-toastify";
 import Images from "./Images";
 
-const Car = ({ setCars, cars }) => {
+const Car = () => {
   const { id } = useParams();
   const [pickUp, setPickUp] = useState();
   const [dropOff, setDropOff] = useState();
-  // const [car, setCar] = useState();
   const [daysDifference, setDaysDifference] = useState(null);
   const auth = useAuthHeader();
   const token = auth.split(" ")[1];
+  const [car, setCar] = useState(null)
 
-  const car = cars.find((car) => car.id === id);
+  const fetchRef = useRef(false);
+
+	useEffect(() => {
+		if (fetchRef.current) {
+			const getCar = async () => {
+			try {
+				const response = await axios.get(`/api/cars/${id}`, {
+          headers: { "Content-Type": "application/json" },
+				});
+				setCar(response.data);
+			} catch (e) {
+				console.log(e.message);
+			}
+			};
+			getCar();
+		}
+		if (!fetchRef.current) fetchRef.current = true;
+	}, [id]);
 
   const handleBook = async () => {
     try {
@@ -53,8 +70,8 @@ const Car = ({ setCars, cars }) => {
     setDaysDifference(hoursDiff / 24);
   }, [pickUp, dropOff]);
 
-  if (cars.length === 0) {
-    return <h1 className="text-center pt-10">Loading...</h1>;
+  if (!car) {
+    return <h2 className="flex-grow text-center pt-10">Loading...</h2>;
   }
 
   return (

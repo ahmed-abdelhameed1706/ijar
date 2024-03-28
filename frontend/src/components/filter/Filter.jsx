@@ -1,6 +1,4 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+/* eslint-disable react/prop-types */
 import { Button } from "@/components/ui/button";
 import {
 	Card,
@@ -29,40 +27,10 @@ import axios from "../../api/axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
-const AddCar = ({ setCars }) => {
+const Filter = ({ setCars, form }) => {
     const types = ["Sedan", "Sports", "Coupe", "Minivan", "Pickup", "Station Wagon"];
     const fuels = ["Gas", "Diesel", "Electric"];
 	const navgate = useNavigate()
-
-	const formSchema = z
-		.object({
-			brandName: z.string(),
-			model: z.string(),
-			minYear: z.string(),
-			maxYear: z.string(),
-			type: z.string(),
-			color: z.string(),
-			minPrice: z.string(),
-			maxPrice: z.string(),
-			location: z.string(),
-			fuel: z.string(),
-		})
-
-	const form = useForm({
-		resolver: zodResolver(formSchema),
-		defaultValues: {
-			brandName: "",
-			model: "",
-			minYear: "",
-			maxYear: "",
-			type: "",
-			color: "",
-			minPrice: '',
-			maxPrice: "",
-			location: "",
-			fuel: "",
-		},
-	});
 
 	async function onSubmit(values) {
 		try {
@@ -75,9 +43,7 @@ const AddCar = ({ setCars }) => {
 					params: {...values},
 				}
 			);
-			console.log(response.data);
 			setCars(response.data);
-			toast.success("Your Car Added successfully.");
 			navgate('/cars');
 		} catch (e) {
 			toast.error(e.response.data.message);
@@ -139,7 +105,7 @@ const AddCar = ({ setCars }) => {
 								</div>
                                 <div className="flex flex-wrap gap-4 flex-grow">                                    <FormField
 										control={form.control}
-										name="year"
+										name="minYear"
 										render={({ field }) => (
 											<FormItem className="flex-grow">
 												<FormLabel>Min Year</FormLabel>
@@ -156,7 +122,7 @@ const AddCar = ({ setCars }) => {
 									/>
                                      <FormField
 										control={form.control}
-										name="year"
+										name="maxYear"
 										render={({ field }) => (
 											<FormItem className="flex-grow">
 												<FormLabel>Max Year</FormLabel>
@@ -235,7 +201,7 @@ const AddCar = ({ setCars }) => {
 								<div className="flex flex-wrap gap-4 flex-grow">
 									<FormField
 										control={form.control}
-										name="price"
+										name="minPrice"
 										render={({ field }) => (
 											<FormItem className="flex-grow">
 												<FormLabel>
@@ -260,7 +226,7 @@ const AddCar = ({ setCars }) => {
 									/>
                                     <FormField
 										control={form.control}
-										name="price"
+										name="maxPrice"
 										render={({ field }) => (
 											<FormItem className="flex-grow flex-grow">
 												<FormLabel>
@@ -334,4 +300,4 @@ const AddCar = ({ setCars }) => {
     );
 };
 
-export default AddCar;
+export default Filter;

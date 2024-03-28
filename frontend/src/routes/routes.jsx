@@ -21,34 +21,47 @@ import AdminCars from "@/pages/admin/cars/AdminCars";
 import AdminCarts from "@/pages/admin/carts/AdminCarts";
 import AdminUsers from "@/pages/admin/users/AdminUsers";
 import AdminTickets from "@/pages/admin/tickets/AdminTickets";
-import { useState, useEffect, useRef } from "react";
-import axios from "@/api/axios";
+import { useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
 const Routes = () => {
   const [cars, setCars] = useState([]);
-  const fetchRef = useRef(false);
 
-  useEffect(() => {
-    if (fetchRef.current) {
-      const getCars = async () => {
-        try {
-          const response = await axios.get("/api/cars", {
-            params: { limit: 10 },
-            headers: { "Content-Type": "application/json" },
-          });
-          setCars(response.data);
-        } catch (e) {
-          console.log(e.message);
-        }
-      };
-      getCars();
-    }
-    if (!fetchRef.current) fetchRef.current = true;
-  }, []);
+  const formSchema = z
+		.object({
+			brandName: z.string(),
+			model: z.string(),
+			minYear: z.string(),
+			maxYear: z.string(),
+			type: z.string(),
+			color: z.string(),
+			minPrice: z.string(),
+			maxPrice: z.string(),
+			location: z.string(),
+			fuel: z.string(),
+		})
+
+	const form = useForm({
+		resolver: zodResolver(formSchema),
+		defaultValues: {
+			brandName: "",
+			model: "",
+			minYear: "",
+			maxYear: "",
+			type: "",
+			color: "",
+			minPrice: '',
+			maxPrice: "",
+			location: "",
+			fuel: "",
+		},
+	});
 
   return (
     <ReactRouterRoutes>
-      <Route path="/" element={<Home setCars={setCars} cars={cars} />} />
+      <Route path="/" element={<Home setCars={setCars} cars={cars} form={form} />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/signup" element={<SignupPage />} />
       <Route path="/reset-password" element={<ResetPassword />} />
@@ -115,7 +128,7 @@ const Routes = () => {
           }
         />
       </Route>
-      <Route path="/cars" element={<Cars cars={cars} setCars={setCars} />} />
+      <Route path="/cars" element={<Cars cars={cars} setCars={setCars} form={form} />} />
       <Route path="*" element={<NotFound />} />
       <Route
         path="/dashboard"
