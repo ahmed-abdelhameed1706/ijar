@@ -6,6 +6,7 @@ import { sendEmail } from "../utils/utility";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import bcrypt from "bcryptjs";
+import { error } from "console";
 
 const path = require("path");
 
@@ -164,8 +165,7 @@ export default class UserController {
       });
     } catch (e) {
       return res.status(500).json({
-        error: "Internal Server Error",
-        message: e.message,
+        error: error.message,
       });
     }
   }

@@ -76,7 +76,7 @@ export const AdminColumns = [
   {
     id: "Owner",
     accessorKey: "carOwner",
-    accessorFn: (row) => row.ownerId,
+    accessorFn: (row) => row.ownerId.fullName,
     header: "Car Owner",
   },
 

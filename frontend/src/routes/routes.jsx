@@ -26,26 +26,24 @@ import axios from "@/api/axios";
 
 const Routes = () => {
   const [cars, setCars] = useState([]);
-  const fetchRef = useRef(false)
-
+  const fetchRef = useRef(false);
 
   useEffect(() => {
     if (fetchRef.current) {
-      const getCars = async () =>  {
+      const getCars = async () => {
         try {
-              const response = await axios.get("/api/cars", {
-                params: { limit: 10 },
-                headers: {"Content-Type": "application/json"},
-            });
-              setCars(response.data)
-              console.log(response.data)
-          } catch (e) {
-              console.log(e.message);
-          }
-      }
-        getCars();
-      }
-      if (!fetchRef.current) fetchRef.current = true;
+          const response = await axios.get("/api/cars", {
+            params: { limit: 10 },
+            headers: { "Content-Type": "application/json" },
+          });
+          setCars(response.data);
+        } catch (e) {
+          console.log(e.message);
+        }
+      };
+      getCars();
+    }
+    if (!fetchRef.current) fetchRef.current = true;
   }, []);
 
   return (
@@ -63,12 +61,15 @@ const Routes = () => {
           </RequireAuth>
         }
       />
-      <Route path="/addcar" element={<AddCar setCars={setCars} cars={cars}/>} />
+      <Route
+        path="/addcar"
+        element={<AddCar setCars={setCars} cars={cars} />}
+      />
       <Route
         path="/car/:id"
         element={
           <RequireAuth fallbackPath="/login">
-            <Car setCars={setCars} cars={cars}/>
+            <Car setCars={setCars} cars={cars} />
           </RequireAuth>
         }
       />
@@ -114,7 +115,7 @@ const Routes = () => {
           }
         />
       </Route>
-      <Route path="/cars" element={<Cars cars={cars} setCars={setCars}/>} />
+      <Route path="/cars" element={<Cars cars={cars} setCars={setCars} />} />
       <Route path="*" element={<NotFound />} />
       <Route
         path="/dashboard"

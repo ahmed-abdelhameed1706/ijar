@@ -60,12 +60,12 @@ const CarSchema = new Schema({
     type: Array,
   },
   ownerId: {
-    type: Schema.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: "User",
     required: true,
   },
   customerId: {
-    type: Schema.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: "User",
   },
   engineId: {

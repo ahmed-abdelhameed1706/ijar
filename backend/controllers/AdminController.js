@@ -51,7 +51,10 @@ export default class AdminController {
       const totalPages = Math.ceil(count / limit);
       const offset = (page - 1) * limit;
 
-      const cars = await Car.find().skip(offset).limit(limit);
+      const cars = await Car.find()
+        .skip(offset)
+        .limit(limit)
+        .populate("ownerId", "fullName");
 
       res.status(200).json({
         cars,

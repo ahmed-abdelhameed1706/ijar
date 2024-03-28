@@ -6,27 +6,32 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { useParams } from "react-router-dom";
 import axios from "@/api/axios";
-import useAuthHeader from 'react-auth-kit/hooks/useAuthHeader';
+import useAuthHeader from "react-auth-kit/hooks/useAuthHeader";
 import { toast } from "react-toastify";
 import Images from "./Images";
 
 const Car = ({ setCars, cars }) => {
-
   const { id } = useParams();
   const [pickUp, setPickUp] = useState();
   const [dropOff, setDropOff] = useState();
   // const [car, setCar] = useState();
   const [daysDifference, setDaysDifference] = useState(null);
-  const auth = useAuthHeader()
-  const token = auth.split(" ")[1]
+  const auth = useAuthHeader();
+  const token = auth.split(" ")[1];
 
-  const car = cars.find((car) => car.id === id)
+  const car = cars.find((car) => car.id === id);
 
   const handleBook = async () => {
     try {
       const response = await axios.post(
-        "/api/cart",
-        JSON.stringify({ carId: car.id, rentalTerm: daysDifference, totalCost: daysDifference * 20, endDate: dropOff, startDate: pickUp }),
+        "/api/add-to-cart",
+        JSON.stringify({
+          carId: car.id,
+          // rentalTerm: daysDifference,
+          // totalCost: daysDifference * 20,
+          endDate: dropOff,
+          startDate: pickUp,
+        }),
         {
           headers: {
             "Content-Type": "application/json",
@@ -34,7 +39,7 @@ const Car = ({ setCars, cars }) => {
           },
         }
       );
-      console.log(response.data)
+      console.log(response.data);
       toast.success("You book the Car successfully.");
     } catch (e) {
       toast.error(e.response.data.message);
@@ -49,17 +54,19 @@ const Car = ({ setCars, cars }) => {
   }, [pickUp, dropOff]);
 
   if (cars.length === 0) {
-    return (<h1 className="text-center pt-10">Loading...</h1>);
+    return <h1 className="text-center pt-10">Loading...</h1>;
   }
 
   return (
     <div className="flex max-w-full justify-center items-center 2xl:max-w-[1500px]">
       <div className="flex flex-col w-[90%] max-w-full lg:flex-row space-y-6 p-10">
         <div className="flex flex-col space-y-10 justify-center items-center px-4 w-full max-w-full p-1">
-          <Images images={car.images}/>
+          <Images images={car.images} />
           <Card className="w-full max-w-[900px] border-none shadow-lg p-6 rounded-lg space-y-5">
-            <div className="w-full flex justify-between items-center pb-3 border-b flex-grow w-full">
-              <h1 className="text-2xl font-medium pl-1">{car.year} - {car.brandName} {car.model}</h1>
+            <div className="flex justify-between items-center pb-3 border-b flex-grow w-full">
+              <h1 className="text-2xl font-medium pl-1">
+                {car.year} - {car.brandName} {car.model}
+              </h1>
               {car.available ? (
                 <p className="p-2 mr-2 text-green-600 text-xs bg-green-600/20 rounded-3xl">
                   Available
@@ -103,9 +110,7 @@ const Car = ({ setCars, cars }) => {
             <hr />
             <div className="pl-2">
               <p className="text-xl font-medium pb-2">Description</p>
-              <p className="text-lg text-left font-normal	">
-                {car.description}
-              </p>
+              <p className="text-lg text-left font-normal	">{car.description}</p>
             </div>
             <hr />
             <div className="pl-2">
