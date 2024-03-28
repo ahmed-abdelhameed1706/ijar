@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -34,7 +35,7 @@ import { useState } from "react";
 import useAuthHeader from "react-auth-kit/hooks/useAuthHeader";
 import uploadImages from "./uploadImages";
 
-const AddCar = () => {
+const AddCar = ({ setOpen }) => {
   const [images, setImages] = useState([]);
   const types = [
     "Sedan",
@@ -90,6 +91,7 @@ const AddCar = () => {
           },
         }
       );
+      setOpen(false);
       console.log(response.data);
       toast.success("Your Car Added successfully.");
     } catch (e) {
