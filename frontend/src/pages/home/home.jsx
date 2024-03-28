@@ -8,18 +8,18 @@ import axios from "@/api/axios";
 const Home = ({setCars, cars, form }) => {
 
 	useEffect(() => {
-			const getCars = async () => {
-			try {
-				const response = await axios.get("/api/cars", {
-				params: { limit: 10 },
-				headers: { "Content-Type": "application/json" },
-				});
-				setCars(response.data);
-			} catch (e) {
-				console.log(e.message);
-			}
-			};
-			getCars();
+		const getCars = async () => {
+		try {
+			const response = await axios.get("/api/cars", {
+			params: { limit: 10 },
+			headers: { "Content-Type": "application/json" },
+			});
+			setCars(response.data);
+		} catch (e) {
+			console.log(e.message);
+		}
+		};
+		getCars();
 	}, []);
 
 	return (

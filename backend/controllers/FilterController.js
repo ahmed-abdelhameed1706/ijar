@@ -31,11 +31,12 @@ export default class FilterController {
       else if (minYear) filter.year = { $gte: minYear };
       else if (maxYear) filter.year = { $lte: maxYear };
 
-      const cars = await Car.find(filter);
+      const cars = await Car.find(filter).sort({ averageRate: -1 });
       const newCars = cars.map((car) => {
         const { _id, ...rest } = car._doc;
         return { id: _id, ...rest };
       });
+
       return res.json(newCars);
     } catch (error) {
       return res

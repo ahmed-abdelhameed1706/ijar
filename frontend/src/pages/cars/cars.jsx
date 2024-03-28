@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import axios from "@/api/axios";
 import CarCard from "@/components/Card/CarCard";
 import Filter from "@/components/filter/Filter";
+import { toast } from "react-toastify";
 
 const Cars = ({ setCars, cars, form }) => {
 
@@ -20,11 +21,28 @@ const Cars = ({ setCars, cars, form }) => {
 			);
 			setCars(response.data);
 		} catch (e) {
-			console.log(e.message);
+			toast.error(e.response.data.message);
 		}
 		};
 		getCars();
 	}, []);
+
+	async function handleSubmit(values) {
+		try {
+				const response = await axios.get(
+					"/search",
+					{
+						headers: {
+							"Content-Type": "application/json",
+						},
+						params: {...values},
+					}
+				);
+				setCars(response.data);
+			} catch (e) {
+				toast.error(e.response.data.message);
+			}
+		}
 
 	return (
 		<section className="flex flex-col gap-10 justify-evenly">
@@ -37,7 +55,7 @@ const Cars = ({ setCars, cars, form }) => {
 				</p>
 			</div>
 		<div className="bg-gray-100 border-y">
-			<Filter setCars={setCars} form={form} />
+			<Filter setCars={setCars} form={form} handleSubmit={handleSubmit}/>
 		</div>
 		<div className="mx-auto max-w-lg text-center">
 			<h2 className="text-2xl font-bold sm:text-3xl">
@@ -48,7 +66,7 @@ const Cars = ({ setCars, cars, form }) => {
 			</p>
 		</div>
 		<div className="flex flex-wrap gap-10 justify-evenly flex-grow py-6">
-			{ cars.map(car => (
+			{cars.map(car => (
 				<CarCard key={car.id} car={car} />
 			))}
 		</div>
