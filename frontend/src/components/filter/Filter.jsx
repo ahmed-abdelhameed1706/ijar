@@ -49,11 +49,6 @@ const Filter = ({ setCars, form }) => {
 				setCars(response.data);
 			} catch (e) {
 				toast.error(e.response.data.message);
-				if (e.response.data.message1) {
-					setTimeout(() => {
-						toast.info(e.response.data.message1);
-					}, 6002);
-				}
 			}
 		} else {
 			navgate('/cars');

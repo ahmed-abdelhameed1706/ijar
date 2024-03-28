@@ -1,7 +1,8 @@
 /* eslint-disable react/prop-types */
-import PopularCars from "@/components/Home/PopularCars";
 import { useEffect } from "react";
 import axios from "@/api/axios";
+import CarCard from "@/components/Card/CarCard";
+import Filter from "@/components/filter/Filter";
 
 const Cars = ({ setCars, cars, form }) => {
 
@@ -25,7 +26,34 @@ const Cars = ({ setCars, cars, form }) => {
 		getCars();
 	}, []);
 
-	return <PopularCars setCars={setCars} cars={cars} form={form} />;
+	return (
+		<section className="flex flex-col gap-10 justify-evenly">
+			<div className="mx-auto max-w-lg text-center pt-10">
+				<h2 className="text-3xl font-bold sm:text-4xl">
+					Find Your Perfect Car
+				</h2>
+				<p className="mt-4">
+				Narrow down your search and find the car that&apos;s perfect for you!  Use our convenient filters to specify your desired features, location, and rental price range ... 
+				</p>
+			</div>
+		<div className="bg-gray-100 border-y">
+			<Filter setCars={setCars} form={form} />
+		</div>
+		<div className="mx-auto max-w-lg text-center">
+			<h2 className="text-2xl font-bold sm:text-3xl">
+				Explore Most Popular Cars
+			</h2>
+			<p className="mt-4">
+			Find the perfect ride for you and discover the most in-demand cars on the road today, from fuel-efficient commuters to spacious family haulers.
+			</p>
+		</div>
+		<div className="flex flex-wrap gap-10 justify-evenly flex-grow py-6">
+			{ cars.map(car => (
+				<CarCard key={car.id} car={car} />
+			))}
+		</div>
+		</section>
+	);
 };
 
 export default Cars;
