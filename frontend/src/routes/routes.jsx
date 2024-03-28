@@ -79,7 +79,7 @@ const Routes = () => {
         element={<AddCar setCars={setCars} cars={cars} />}
       />
       <Route
-        path="/car/:id"
+        path="/cars/:id"
         element={
           <RequireAuth fallbackPath="/login">
             <Car setCars={setCars} cars={cars} />

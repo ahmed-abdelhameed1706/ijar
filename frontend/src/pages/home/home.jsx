@@ -2,14 +2,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import ImagesSliderComponent from "@/components/Home/ImagesSlider";
 import PopularCars from "@/components/Home/PopularCars";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import axios from "@/api/axios";
 
 const Home = ({setCars, cars, form }) => {
-	const fetchRef = useRef(false);
 
 	useEffect(() => {
-		if (fetchRef.current) {
 			const getCars = async () => {
 			try {
 				const response = await axios.get("/api/cars", {
@@ -22,8 +20,6 @@ const Home = ({setCars, cars, form }) => {
 			}
 			};
 			getCars();
-		}
-		if (!fetchRef.current) fetchRef.current = true;
 	}, []);
 
 	return (

@@ -50,7 +50,6 @@ const CarCard = ({ car }) => {
         </div>
         <div>
           <div className="flex justify-center items-center rounded-lg p-2 bg-teal-100">
-            <Map className="text-teal-800" />
           </div>
           <span className="text-sm font-bold text-gray-600">Map</span>
         </div>

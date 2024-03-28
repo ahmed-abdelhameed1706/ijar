@@ -2,7 +2,7 @@
 import { Card } from "@/components/ui/card";
 import DateDialog from "./DateDialog";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { useParams } from "react-router-dom";
 import axios from "@/api/axios";
@@ -19,10 +19,7 @@ const Car = () => {
   const token = auth.split(" ")[1];
   const [car, setCar] = useState(null)
 
-  const fetchRef = useRef(false);
-
 	useEffect(() => {
-		if (fetchRef.current) {
 			const getCar = async () => {
 			try {
 				const response = await axios.get(`/api/cars/${id}`, {
@@ -34,9 +31,7 @@ const Car = () => {
 			}
 			};
 			getCar();
-		}
-		if (!fetchRef.current) fetchRef.current = true;
-	}, [id]);
+	}, []);
 
   const handleBook = async () => {
     try {

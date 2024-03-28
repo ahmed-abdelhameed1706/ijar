@@ -1,33 +1,28 @@
 /* eslint-disable react/prop-types */
 import PopularCars from "@/components/Home/PopularCars";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import axios from "@/api/axios";
 
 const Cars = ({ setCars, cars, form }) => {
 
-	const fetchRef = useRef(false);
-
 	useEffect(() => {
-		if (fetchRef.current) {
-			const getCars = async () => {
-			try {
-				const response = await axios.get(
-					"/search",
-					{
-						headers: {
-							"Content-Type": "application/json",
-						},
-						params: form.getValues(),
-					}
-				);
-				setCars(response.data);
-			} catch (e) {
-				console.log(e.message);
-			}
-			};
-			getCars();
+		const getCars = async () => {
+		try {
+			const response = await axios.get(
+				"/search",
+				{
+					headers: {
+						"Content-Type": "application/json",
+					},
+					params: form.getValues(),
+				}
+			);
+			setCars(response.data);
+		} catch (e) {
+			console.log(e.message);
 		}
-		if (!fetchRef.current) fetchRef.current = true;
+		};
+		getCars();
 	}, []);
 
 	return <PopularCars setCars={setCars} cars={cars} form={form} />;
