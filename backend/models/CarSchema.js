@@ -23,6 +23,18 @@ const CarSchema = new Schema({
     type: String,
     required: true,
   },
+  location: {
+    type: String,
+    required: true,
+  },
+  fuel: {
+    type: String,
+    required: true,
+  },
+  maxSpeed: {
+    type: Number,
+    required: true,
+  },
   price: {
     type: Number,
     required: true,
