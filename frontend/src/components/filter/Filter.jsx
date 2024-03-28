@@ -23,11 +23,9 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import "react-phone-input-2/lib/style.css";
-import axios from "../../api/axios";
-import { toast } from "react-toastify";
 import { useNavigate, useLocation } from "react-router-dom";
 
-const Filter = ({ setCars, form }) => {
+const Filter = ({ handleSubmit, form }) => {
     const types = ["Sedan", "Sports", "Coupe", "Minivan", "Pickup", "Station Wagon"];
     const fuels = ["Gas", "Diesel", "Electric"];
 	const navgate = useNavigate()
@@ -36,25 +34,7 @@ const Filter = ({ setCars, form }) => {
 	async function onSubmit(values) {
 		if (location.pathname === '/cars')
 		{
-			try {
-				const response = await axios.get(
-					"/search",
-					{
-						headers: {
-							"Content-Type": "application/json",
-						},
-						params: {...values},
-					}
-				);
-				setCars(response.data);
-			} catch (e) {
-				toast.error(e.response.data.message);
-				if (e.response.data.message1) {
-					setTimeout(() => {
-						toast.info(e.response.data.message1);
-					}, 6002);
-				}
-			}
+			handleSubmit(values);
 		} else {
 			navgate('/cars');
 		}

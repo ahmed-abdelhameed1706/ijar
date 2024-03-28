@@ -12,7 +12,7 @@ import { Link } from "react-router-dom"
 
 const CarCard = ({ car }) => {
   return (
-    <Link to={`/car/${car.id}`}>
+    <Link to={`/car/${car.id || car._id}`}>
     <Card className="w-[280px] rounded-3xl cursor-pointer">
       <CardHeader className="flex-row justify-between p-4">
         <CardTitle className="text-lg">
@@ -50,6 +50,7 @@ const CarCard = ({ car }) => {
         </div>
         <div>
           <div className="flex justify-center items-center rounded-lg p-2 bg-teal-100">
+            <Map className="text-teal-800" />
           </div>
           <span className="text-sm font-bold text-gray-600">Map</span>
         </div>

@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import loginImg from "../../assets/images/login-img.jpg";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
