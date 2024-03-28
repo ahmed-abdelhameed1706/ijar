@@ -8,7 +8,7 @@ const ProtectedRoute = ({ children }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (user.role !== "Admin") {
+    if (!user || user.role !== "Admin") {
       navigate("/", { replace: true });
       toast.error("You are not authorized to access this page.");
     }

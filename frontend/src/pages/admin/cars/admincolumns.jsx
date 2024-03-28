@@ -17,74 +17,69 @@ export const AdminColumns = [
     header: "Image",
     cell: ({ row }) => {
       const booking = row.original;
+      const imageSrc = booking.images?.[0];
 
       return (
         <Avatar className=" justify-center">
-          <AvatarImage src="https://images.pexels.com/photos/1592384/pexels-photo-1592384.jpeg?" />
+          <AvatarImage src={imageSrc} />
 
-          <AvatarFallback>BMW</AvatarFallback>
+          <AvatarFallback>Car Image</AvatarFallback>
         </Avatar>
       );
     },
   },
   {
-    id: "carName",
+    id: "Name",
     accessorKey: "carName",
-    accessorFn: (row) => row.carName,
+    accessorFn: (row) => row.brandName,
     header: "Car Name",
   },
   {
-    id: "carModel",
+    id: "Model",
     accessorKey: "carModel",
-    accessorFn: (row) => row.carModel,
+    accessorFn: (row) => row.model,
     header: "Car Model",
   },
   {
-    accessorKey: "deliverylocation",
-    header: "Delivery Location",
+    id: "Type",
+    accessorKey: "carType",
+    accessorFn: (row) => row.type,
+    header: "Car Type",
   },
   {
-    accessorKey: "pickupLocation",
-    header: "Pickup Location",
+    id: "Year",
+    accessorKey: "carYear",
+    accessorFn: (row) => row.year,
+    header: "Car Year",
   },
-  {
-    accessorKey: "BookingDate",
-    header: "Booking Date",
-  },
-  {
-    id: "status",
-    accessorKey: "status",
-    filterFn: (row, id, value) => {
-      return value.includes(row.getValue(id));
-    },
-    accessorFn: (row) => row.status.toString(),
-    header: "Status",
-    cell: ({ row }) => {
-      const booking = row.original;
 
-      return (
-        <span
-          className={`px-2 py-1 text-xs font-semibold text-white rounded-full ${
-            booking.status === "Pending"
-              ? "bg-yellow-500"
-              : booking.status === "Completed"
-              ? "bg-green-500"
-              : booking.status === "Canceled"
-              ? "bg-red-500"
-              : booking.status === "In Progress"
-              ? "bg-blue-500"
-              : ""
-          }`}
-        >
-          {booking.status}
-        </span>
-      );
-    },
+  {
+    id: "Color",
+    accessorKey: "carColor",
+    accessorFn: (row) => row.color,
+    header: "Car Color",
+  },
+
+  {
+    id: "Price",
+    accessorKey: "carPrice",
+    accessorFn: (row) => row.price,
+    header: "Car Price",
+  },
+
+  {
+    id: "Availability",
+    accessorKey: "carAvailability",
+    accessorFn: (row) => row.available,
+    header: "Car Availability",
   },
   {
-    accessorKey: "total",
-    header: "Total",
+    id: "Owner",
+    accessorKey: "carOwner",
+    accessorFn: (row) => row.ownerId,
+    header: "Car Owner",
   },
+
   {
     id: "actions",
     enableHiding: false,

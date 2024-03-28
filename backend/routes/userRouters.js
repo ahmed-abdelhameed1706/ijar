@@ -1,6 +1,7 @@
 import express from "express";
 import UserController from "../controllers/UserController";
 import { verifyToken } from "../utils/middlewares";
+import { isAdmin } from "../utils/middlewares";
 
 const userRouter = express.Router();
 
@@ -11,8 +12,10 @@ userRouter.put("/users", verifyToken, UserController.updateUser);
 userRouter.put(
   "/users/update_password",
   verifyToken,
-  UserController.updatePassword,
+  UserController.updatePassword
 );
+
+userRouter.get("/user", isAdmin, UserController.getUserById);
 
 userRouter.delete("/users", verifyToken, UserController.deleteUser);
 

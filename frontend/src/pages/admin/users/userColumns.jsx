@@ -1,6 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import axios from "../../api/axios";
+import axios from "../../../api/axios";
 import PropTypes from "prop-types";
 
 import {
@@ -93,7 +93,7 @@ const columns = [
   {
     id: "dob",
     accessorKey: "dob",
-    accessorFn: (row) => row.dob,
+    accessorFn: (row) => row.brithDate,
     header: "User DOB",
   },
   {

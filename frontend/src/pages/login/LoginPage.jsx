@@ -119,18 +119,6 @@ const LoginPage = () => {
           </CardHeader>
           <CardContent>
             <div className="flex flex-col gap-4 items-center  mb-5">
-              <Button
-                variant="ghost"
-                size="lg"
-                className="shadow-md py-4"
-                // className="w-full max-w-xs font-bold shadow-lg rounded-lg py-5 bg-white text-gray-800 flex items-center justify-center transition-all duration-300 ease-in-out focus:outline-none hover:shadow focus:shadow-sm focus:shadow-outline"
-              >
-                {/* <div className="bg-white p-2 rounded-full"> */}
-                <img src={GoogleIcon} alt="google icon" className="w-8" />
-                {/* </div> */}
-                <span className="ml-4">Sign in with Google</span>
-              </Button>
-
               <div className="w-full mt-4 flex items-center justify-between">
                 <span className="border-b w-1/5 lg:w-1/4"></span>
                 <span className="text-xs text-center text-gray-500 uppercase">

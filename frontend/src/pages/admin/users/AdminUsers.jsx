@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "../../../api/axios";
 import useAuthHeader from "react-auth-kit/hooks/useAuthHeader";
 import { AdminDataTable } from "../adminDataTable";
-import { columns } from "../userColumns";
+import { columns } from "./userColumns";
 
 const AdminUsers = () => {
   // const [activeTab, setActiveTab] = useState("all");

@@ -29,6 +29,27 @@ export default class UserController {
     }
   }
 
+  static async getUserById(req, res) {
+    try {
+      const userId = req.body.userId;
+      const user = await User.findById(userId);
+      if (!user) {
+        return res.status(404).json({ message: "Not Found" });
+      }
+      res.json({
+        id: user._id,
+        fullName: user.fullName,
+        email: user.email,
+        phone: user.phone,
+        address: user.address,
+      });
+    } catch (error) {
+      return res.status(500).json({
+        error: error.message,
+      });
+    }
+  }
+
   static async updateUser(req, res) {
     try {
       const user = await User.findById(req.userId);

@@ -28,7 +28,6 @@ const NavBar = () => {
   useEffect(() => {
     setActiveNav(navigation, setNavigation, location);
   }, [location]);
-  console.log("user", user);
   return (
     <Disclosure
       as="nav"
