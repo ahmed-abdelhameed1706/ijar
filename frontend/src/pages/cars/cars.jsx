@@ -46,7 +46,9 @@ const Cars = ({ setCars, cars, form }) => {
 
 	return (
 		<section className="flex flex-col gap-10 justify-evenly">
-			<div className="mx-auto max-w-lg text-center pt-10">
+			<div className="mx-auto ma
+			
+			x-w-lg text-center pt-10">
 				<h2 className="text-3xl font-bold sm:text-4xl">
 					Find Your Perfect Car
 				</h2>
@@ -55,15 +57,7 @@ const Cars = ({ setCars, cars, form }) => {
 				</p>
 			</div>
 		<div className="bg-gray-100 border-y">
-			<Filter setCars={setCars} form={form} handleSubmit={handleSubmit}/>
-		</div>
-		<div className="mx-auto max-w-lg text-center">
-			<h2 className="text-2xl font-bold sm:text-3xl">
-				Explore Most Popular Cars
-			</h2>
-			<p className="mt-4">
-			Find the perfect ride for you and discover the most in-demand cars on the road today, from fuel-efficient commuters to spacious family haulers.
-			</p>
+			<Filter form={form} handleSubmit={handleSubmit}/>
 		</div>
 		<div className="flex flex-wrap gap-10 justify-evenly flex-grow py-6">
 			{cars.map(car => (
