@@ -94,11 +94,11 @@ const CarsDashboardPage = () => {
     // fetch all cars from the database
     try {
       const response = await axios.get("/api/cars", {
-        params: {
-          ownerId: user.userId,
-        },
+        params: { limit: 10, ownerId: user.userId },
+        headers: { "Content-Type": "application/json" },
       });
       setCars(response.data);
+      console.log(response.data);
     } catch (error) {
       console.error(error);
     }
@@ -106,7 +106,7 @@ const CarsDashboardPage = () => {
 
   useEffect(() => {
     getAllCars();
-  }, []);
+  }, [cars]);
 
   console.log(car);
   return (
@@ -118,7 +118,7 @@ const CarsDashboardPage = () => {
             <Button> Add Car </Button>
           </DialogTrigger>
           <DialogContent className="max-w-[900px] w-full">
-            <AddCar setOpen={setOpen} />
+            <AddCar setOpen={setOpen} setCats={setCars} cars={cars} />
           </DialogContent>
         </Dialog>
       </div>

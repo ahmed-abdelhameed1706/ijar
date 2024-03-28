@@ -60,27 +60,18 @@ class CarController {
     if (ownerId) filter.ownerId = ownerId;
 
     try {
-      const cars = await Car.aggregate([
-        {
-          $match: filter,
-        },
-        {
-          $skip: page * 20,
-        },
-        {
-          $sort: { averageRate: -1 },
-        },
-        {
-          $limit: limit || 20,
-        },
-      ]);
+      const cars = await Car.find(filter)
+        .skip(page * limit)
+        .sort({ averageRate: -1 })
+        .limit(limit);
+
       const newCars = cars.map((car) => {
-        const { _id, ...rest } = car;
+        const { _id, ...rest } = car._doc;
         return { id: _id, ...rest };
       });
+
       return res.json(newCars);
     } catch (e) {
-      console.log(e);
       return res.status(500).json({
         error: "Internal Server Error",
         message: e.message,
@@ -175,7 +166,7 @@ class CarController {
           .json({ error: "End date cannot be before start date!" });
       }
       const rentalDays = Math.ceil(
-        (parsedEndDate - parsedStartDate) / (1000 * 60 * 60 * 24),
+        (parsedEndDate - parsedStartDate) / (1000 * 60 * 60 * 24)
       );
       const totalCost = car.price * rentalDays;
 

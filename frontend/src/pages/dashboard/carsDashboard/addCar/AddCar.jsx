@@ -34,8 +34,9 @@ import Images from "./Images";
 import { useState } from "react";
 import useAuthHeader from "react-auth-kit/hooks/useAuthHeader";
 import uploadImages from "./uploadImages";
+// import { useNavigate } from "react-router-dom";
 
-const AddCar = ({ setOpen }) => {
+const AddCar = ({ setOpen, setCars, cars }) => {
   const [images, setImages] = useState([]);
   const types = [
     "Sedan",
@@ -45,8 +46,10 @@ const AddCar = ({ setOpen }) => {
     "Pickup",
     "Station Wagon",
   ];
+  const fuels = ["Gas", "Diesel", "Electric"];
   const auth = useAuthHeader();
   const token = auth && auth.split(" ")[1];
+  // const navgate = useNavigate();
 
   const formSchema = z.object({
     brandName: z.string().min(1, { message: "Brand Name is required" }),
@@ -59,6 +62,9 @@ const AddCar = ({ setOpen }) => {
       .string()
       .min(1, { message: "License Plate Number is required" }),
     engineId: z.string().min(1, { message: "Engine Id is required" }),
+    location: z.string().min(1, { message: "Location is required" }),
+    maxSpeed: z.string().min(1, { message: "Max Speed is required" }),
+    fuel: z.string().min(1, { message: "Fuel is required" }),
     description: z.string(),
   });
 
@@ -75,10 +81,18 @@ const AddCar = ({ setOpen }) => {
       licensePlateNumber: "",
       engineId: "",
       description: "",
+      location: "",
+      maxSpeed: "",
+      fuel: "",
     },
   });
 
   async function onSubmit(values) {
+    toast.promise(uploadImages(images), {
+      pending: "Adding Car...",
+      error: "Failed to add car.",
+    });
+
     const imagesUrl = await uploadImages(images);
     try {
       const response = await axios.post(
@@ -91,9 +105,11 @@ const AddCar = ({ setOpen }) => {
           },
         }
       );
-      setOpen(false);
       console.log(response.data);
       toast.success("Your Car Added successfully.");
+      setOpen(false);
+      setCars([...cars, response.data]);
+      // navgate("/cars");
     } catch (e) {
       toast.error(e.response.data.message);
       if (e.response.data.message1) {
@@ -266,6 +282,46 @@ const AddCar = ({ setOpen }) => {
               <div className="flex flex-col sm:flex-row gap-4">
                 <FormField
                   control={form.control}
+                  name="location"
+                  render={({ field }) => (
+                    <FormItem className="w-full">
+                      <FormLabel>Location</FormLabel>
+                      <FormControl>
+                        <Input placeholder="City" type="text" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="maxSpeed"
+                  render={({ field }) => (
+                    <FormItem className="w-full">
+                      <FormLabel>Max Speed</FormLabel>
+                      <FormControl className="w-full">
+                        <div className="relative">
+                          <span className="absolute text-slate-500 text-sm cursor-pointer  inset-y-0 end-6 flex justify-center items-center px-2.5 ">
+                            km
+                          </span>
+                          <Input
+                            placeholder="180"
+                            {...field}
+                            type="number"
+                            id="user_price"
+                            name="price"
+                            className="pr-2"
+                          />
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <FormField
+                  control={form.control}
                   name="licensePlateNumber"
                   render={({ field }) => (
                     <FormItem className="w-full">
@@ -291,6 +347,33 @@ const AddCar = ({ setOpen }) => {
                   )}
                 />
               </div>
+              <FormField
+                control={form.control}
+                name="fuel"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <FormLabel>Fuel</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger className="h-10">
+                          <SelectValue placeholder="Gas" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {fuels.map((type, index) => (
+                          <SelectItem key={index} value={type}>
+                            {type}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               <FormField
                 control={form.control}
                 name="description"
