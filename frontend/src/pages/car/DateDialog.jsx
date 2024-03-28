@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -9,12 +9,12 @@ import {
   DialogTitle,
   DialogTrigger,
   DialogClose,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { useState } from "react"
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useState } from "react";
 
-const DateDialog = ({setPickUp, setDropOff}) => {
+const DateDialog = ({ setPickUp, setDropOff }) => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
 
@@ -25,7 +25,7 @@ const DateDialog = ({setPickUp, setDropOff}) => {
   };
 
   const handleChangeDropOff = (event) => {
-    setEndDate(event.target.value)
+    setEndDate(event.target.value);
     const selectedDate = new Date(event.target.value);
     setDropOff(selectedDate);
   };
@@ -39,16 +39,17 @@ const DateDialog = ({setPickUp, setDropOff}) => {
         <DialogHeader>
           <DialogTitle>Select Your Rental Dates</DialogTitle>
           <DialogDescription>
-          Enter the date and exact time you&apos;d like to pick up your rental car.
+            Enter the date and exact time you&apos;d like to pick up your rental
+            car.
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="name" className="text-right">
-                Pick-up Date:
+              Pick-up Date:
             </Label>
             <Input
-              type="datetime-local"
+              type="date"
               value={startDate}
               min={new Date().toISOString().slice(0, 16)}
               onChange={handleChangePickUp}
@@ -57,12 +58,14 @@ const DateDialog = ({setPickUp, setDropOff}) => {
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="username" className="text-right">
-                Drop-off Date:
+              Drop-off Date:
             </Label>
             <Input
-              type="datetime-local"
+              type="date"
               value={endDate}
-              min={startDate ? startDate : new Date().toISOString().slice(0, 16)}
+              min={
+                startDate ? startDate : new Date().toISOString().slice(0, 16)
+              }
               onChange={handleChangeDropOff}
               className="col-span-3"
             />
@@ -70,12 +73,14 @@ const DateDialog = ({setPickUp, setDropOff}) => {
         </div>
         <DialogFooter>
           <DialogClose asChild>
-            <Button type="submit" disabled={!startDate || !endDate}>Save</Button>
+            <Button type="submit" disabled={!startDate || !endDate}>
+              Save
+            </Button>
           </DialogClose>
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  )
-}
+  );
+};
 
 export default DateDialog;

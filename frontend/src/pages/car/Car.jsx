@@ -17,21 +17,21 @@ const Car = () => {
   const [daysDifference, setDaysDifference] = useState(null);
   const auth = useAuthHeader();
   const token = auth.split(" ")[1];
-  const [car, setCar] = useState(null)
+  const [car, setCar] = useState(null);
 
-	useEffect(() => {
-			const getCar = async () => {
-			try {
-				const response = await axios.get(`/api/cars/${id}`, {
+  useEffect(() => {
+    const getCar = async () => {
+      try {
+        const response = await axios.get(`/api/cars/${id}`, {
           headers: { "Content-Type": "application/json" },
-				});
-				setCar(response.data);
-			} catch (e) {
-				console.log(e.message);
-			}
-			};
-			getCar();
-	}, []);
+        });
+        setCar(response.data);
+      } catch (e) {
+        console.log(e.message);
+      }
+    };
+    getCar();
+  }, []);
 
   const handleBook = async () => {
     try {
@@ -54,7 +54,7 @@ const Car = () => {
       console.log(response.data);
       toast.success("You book the Car successfully.");
     } catch (e) {
-      toast.error(e.response.data.message);
+      toast.error(e.response.data.error);
     }
   };
 

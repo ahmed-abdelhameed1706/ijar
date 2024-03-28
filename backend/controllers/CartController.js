@@ -82,7 +82,7 @@ class CartController {
         const { _id, ...rest } = cart._doc;
         return res.status(200).json({ id: _id, ...rest });
       } else {
-        res.status(404).json(`${car.brandName} is not available`);
+        res.status(404).json({ error: `${car.brandName} is not available` });
       }
     } catch (err) {
       console.log(err.message);
