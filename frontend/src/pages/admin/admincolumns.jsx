@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Ellipsis } from "lucide-react";
 
-export const columns = [
+export const AdminColumns = [
   {
     accessorKey: "image",
     header: "Image",

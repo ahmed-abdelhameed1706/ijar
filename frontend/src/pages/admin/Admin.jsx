@@ -1,22 +1,11 @@
-import React from "react";
 import { Button } from "@/components/ui/button";
 import {
   CarFront,
   LayoutDashboardIcon,
   MessageCircle,
   PersonStanding,
-  SettingsIcon,
 } from "lucide-react";
 import { Link, Outlet, useLocation } from "react-router-dom";
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 
 const Admin = () => {
   const location = useLocation();

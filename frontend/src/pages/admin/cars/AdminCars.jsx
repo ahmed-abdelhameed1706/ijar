@@ -1,7 +1,6 @@
-"use client";
 import { Button } from "@/components/ui/button";
-import { DataTable } from "../adminDataTable";
-import { columns } from "../admincolumns";
+import { AdminDataTable } from "../adminDataTable";
+import { AdminColumns } from "../admincolumns";
 import { useState } from "react";
 
 const data = [
@@ -100,7 +99,7 @@ const AdminCars = () => {
           <h2 className="text-lg font-bold my-2">All Booking</h2>
         </div>
         <div className="p-4">
-          <DataTable columns={columns} data={dataTable} />
+          <AdminDataTable columns={AdminColumns} data={dataTable} />
         </div>
       </div>
     </div>
