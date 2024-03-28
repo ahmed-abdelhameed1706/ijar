@@ -9,61 +9,76 @@ export default async function uploadImage(
   values,
   setImageUrl,
   token,
-  signIn,
+  signIn
 ) {
   const storageRef = ref(storage, `/users/${v4()}`);
 
-  uploadBytes(storageRef, image)
+  const uploadPromise = uploadBytes(storageRef, image);
+  toast.promise(uploadPromise, {
+    pending: "Uploading image...",
+    success: "Image uploaded successfully!",
+    error: "Error uploading image",
+  });
+
+  uploadPromise
     .then((snapshot) => {
-      getDownloadURL(snapshot.ref)
-        .then(async (url) => {
-          setImageUrl(url);
-          try {
-            const response = await axios.put(
-              "/api/users",
-              JSON.stringify({ ...values, imageUrl: url }),
-              {
-                headers: {
-                  "Content-Type": "application/json",
-                  authorization: token,
-                },
-              },
-            );
-            console.log(response.data);
+      const getDownloadURLPromise = getDownloadURL(snapshot.ref);
 
-            signIn({
-              auth: {
-                token: response.data.accessToken,
-                expiresIn: 3600,
-                tokenType: "Bearer",
-              },
-              userState: {
-                userId: response.data.userId,
-                fullName: response.data.fullName,
-                phoneNumber: response.data.phoneNumber,
-                email: response.data.email,
-                role: response.data.role,
-                brithDate: response.data.brithDate,
-                address: response.data.address,
-                imageUrl: response.data.imageUrl,
-              },
-            });
+      return getDownloadURLPromise;
+    })
+    .then((url) => {
+      setImageUrl(url);
 
-            toast.success("Account data updated successfully.");
-          } catch (e) {
-            toast.error(e.response.data.message);
-            if (e.response.data.message1) {
-              setTimeout(() => {
-                toast.info(e.response.data.message1);
-              }, 6002);
-            }
-          }
-        })
-        .catch((error) => {
-          toast.error(error.message);
-        });
+      const updateUserDataPromise = axios.put(
+        "/api/users",
+        JSON.stringify({
+          ...values,
+          imageUrl: url,
+        }),
+        {
+          headers: {
+            "Content-Type": "application/json",
+            authorization: token,
+          },
+        }
+      );
+
+      return updateUserDataPromise;
+    })
+    .then((response) => {
+      signIn({
+        auth: {
+          token: response.data.accessToken,
+          expiresIn: 3600,
+          tokenType: "Bearer",
+        },
+        userState: {
+          userId: response.data.userId,
+          fullName: response.data.fullName,
+          phoneNumber: response.data.phoneNumber,
+          email: response.data.email,
+          role: response.data.role,
+          brithDate: response.data.brithDate,
+          address: response.data.address,
+          imageUrl: response.data.imageUrl,
+        },
+      });
     })
     .catch((error) => {
-      toast.error(error.message);
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
+        toast.error(error.response.data.message);
+
+        if (error.response.data.message1) {
+          setTimeout(() => {
+            toast.info(error.response.data.message1);
+          }, 6002);
+        }
+      } else {
+        toast.error(error.message);
+      }
     });
 }
