@@ -146,7 +146,7 @@ export default class UserController {
       const user = await User.findOne({ email });
 
       if (!user) {
-        return res.status(404).json({ error: "Not Found" });
+        return res.status(404).json({ message: "Email is not found." });
       }
 
       const token = jwt.sign({ id: user._id }, process.env.RESET_TOKEN, {
