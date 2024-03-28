@@ -2,12 +2,34 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import ImagesSliderComponent from "@/components/Home/ImagesSlider";
 import PopularCars from "@/components/Home/PopularCars";
+import { useEffect, useRef } from "react";
+import axios from "@/api/axios";
 
-const Home = ({setCars, cars}) => {
+const Home = ({setCars, cars, form }) => {
+	const fetchRef = useRef(false);
+
+	useEffect(() => {
+		if (fetchRef.current) {
+			const getCars = async () => {
+			try {
+				const response = await axios.get("/api/cars", {
+				params: { limit: 10 },
+				headers: { "Content-Type": "application/json" },
+				});
+				setCars(response.data);
+			} catch (e) {
+				console.log(e.message);
+			}
+			};
+			getCars();
+		}
+		if (!fetchRef.current) fetchRef.current = true;
+	}, []);
+
 	return (
 		<div className="">
 			<ImagesSliderComponent />
-			<PopularCars isHome={true} setCars={setCars} cars={cars} />
+			<PopularCars isHome={true} setCars={setCars} cars={cars} form={form} />
 		</div>
 	);
 };

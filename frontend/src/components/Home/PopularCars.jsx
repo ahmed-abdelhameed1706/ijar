@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import CardCar from "../Card/CarCard";
 import CarFilterForm from "../filter/Filter";
 
-const PopularCars = ({ isHome, setCars, cars}) => {
+const PopularCars = ({ isHome, setCars, cars, form }) => {
 
 	return (
 		<section className="flex flex-col gap-10 justify-evenly">
@@ -24,7 +24,7 @@ const PopularCars = ({ isHome, setCars, cars}) => {
 					</p>
 				</div>)}
 				<div className="bg-gray-100 border-y">
-					<CarFilterForm setCars={setCars} />
+					<CarFilterForm setCars={setCars} form={form} />
 				</div>
 				{isHome && (<div className="mx-auto max-w-lg text-center">
 						<h2 className="text-2xl font-bold sm:text-3xl">
