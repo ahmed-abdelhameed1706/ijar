@@ -48,6 +48,12 @@ const UserSchema = new mongoose.Schema({
     default:
       "https://firebasestorage.googleapis.com/v0/b/ijarapp-11.appspot.com/o/users%2F18662e58-0635-47a7-9fdb-5fc1446768be?alt=media&token=b726ca8e-7e9f-4ee3-a122-d488d8180601",
   },
+  carts: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Cart",
+    },
+  ],
 });
 
 const User = mongoose.model("User", UserSchema);

@@ -1,4 +1,3 @@
-import mongoose from "mongoose";
 import Car from "../models/CarSchema";
 import { faker } from "@faker-js/faker";
 import { getRandomCarImages } from "./generateImages";
@@ -83,7 +82,7 @@ export const seedDatabase = async (
     // Book cars for users and create carts
     for (const user of users) {
       const car = await Car.aggregate([
-        { $match: { ownerId: { $nin: owners.map((owner) => owner._id) } } },
+        { $match: { ownerId: { $in: owners.map((owner) => owner._id) } } },
         { $sample: { size: 1 } },
       ]);
 
@@ -94,6 +93,10 @@ export const seedDatabase = async (
           endDate: faker.date.future(),
           totalCost: faker.number.int({ min: 200, max: 1000 }),
         });
+        await Car.findOneAndUpdate(
+          { _id: car[0]._id },
+          { $set: { available: false } }
+        );
       }
     }
 

@@ -1,14 +1,16 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model } from "mongoose";
 
 // Create CartSchema
 
 const CartSchema = new Schema({
   userId: {
     type: Schema.Types.ObjectId,
+    ref: "User",
     required: true,
   },
   carId: {
     type: Schema.Types.ObjectId,
+    ref: "Car",
     required: true,
   },
   startDate: {
@@ -27,7 +29,12 @@ const CartSchema = new Schema({
     type: Number,
     required: true,
   },
+  status: {
+    type: String,
+    enum: ["Cancelled", "Completed", "Pending"],
+    default: "Pending",
+  },
 });
 
-const Cart = model('Cart', CartSchema);
+const Cart = model("Cart", CartSchema);
 export default Cart;
