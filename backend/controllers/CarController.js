@@ -29,7 +29,7 @@ class CarController {
     const carId = req.params.id;
 
     try {
-      const car = await Car.findById(carId);
+      const car = await Car.findById(carId).populate("ownerId", "fullName");
       if (!car) {
         return res.status(404).json({ error: "Not found" });
       }
@@ -166,7 +166,7 @@ class CarController {
           .json({ error: "End date cannot be before start date!" });
       }
       const rentalDays = Math.ceil(
-        (parsedEndDate - parsedStartDate) / (1000 * 60 * 60 * 24),
+        (parsedEndDate - parsedStartDate) / (1000 * 60 * 60 * 24)
       );
       const totalCost = car.price * rentalDays;
 

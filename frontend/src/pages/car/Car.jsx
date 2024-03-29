@@ -133,7 +133,7 @@ const Car = () => {
                   src="https://images.unsplash.com/photo-1511367461989-f85a21fda167?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D"
                   alt="Owner photo"
                 />
-                <p className="text-lg font-medium	">Ismail Ali</p>
+                <p className="text-lg font-medium	">{car.ownerId.fullName}</p>
               </div>
             </div>
             <hr />
@@ -196,8 +196,8 @@ const Car = () => {
               Price Summary
             </h1>
             <div className="w-full flex justify-between items-center pb-1">
-              <p className="text-lg font-medium	 pr-2">Price per hour</p>
-              <p className="text-xl font-medium	">$20</p>
+              <p className="text-lg font-medium	 pr-2">Price per day</p>
+              <p className="text-xl font-medium	">${car.price}</p>
             </div>
             <p className="pb-4">
               The price is all-inclusive of service fees and taxes.
@@ -210,7 +210,9 @@ const Car = () => {
             <div className="w-full flex justify-between items-center pt-4 pb-8">
               <p className="text-xl font-medium	 pr-2">Total Amount</p>
               {daysDifference ? (
-                <p className="text-2xl font-medium	">${daysDifference * 20}</p>
+                <p className="text-2xl font-medium	">
+                  ${daysDifference * car.price}
+                </p>
               ) : (
                 <Skeleton className="h-8 w-[60px]" />
               )}
