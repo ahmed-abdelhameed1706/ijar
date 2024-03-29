@@ -23,7 +23,7 @@ export const seedDatabase = async (
       const owner = await User.create({
         fullName: faker.person.fullName(),
         email: faker.internet.email(),
-        password: "password",
+        password: "Password1",
         phoneNumber: faker.phone.number(),
         address: faker.location.streetAddress(),
         brithDate: faker.date.birthdate({
@@ -43,7 +43,7 @@ export const seedDatabase = async (
       const user = await User.create({
         fullName: faker.person.fullName(),
         email: faker.internet.email(),
-        password: "password",
+        password: "Password1",
         phoneNumber: faker.phone.number(),
         address: faker.location.streetAddress(),
         brithDate: faker.date.birthdate({
@@ -72,7 +72,7 @@ export const seedDatabase = async (
           engineId: faker.string.alphanumeric(17),
           description: faker.lorem.sentence(),
           ownerId: owner._id,
-          images: await getRandomCarImages(),
+          images: [await getRandomCarImages(), await getRandomCarImages()],
         });
 
         await newCar.save();
