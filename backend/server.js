@@ -96,7 +96,7 @@ mongoose.connection.on("connected", () => {
     app.listen(port, () => {
       console.log(`Server connected to http://localhost:${port}`);
     });
-    seedDatabase(50);
+    // seedDatabase(50);
   } catch (error) {
     console.log("Cannot connect to the server");
   }
