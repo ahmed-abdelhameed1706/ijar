@@ -38,7 +38,6 @@ export default class FilterController {
         .limit(10);
       const count = await Car.countDocuments(filter);
       const numberPages = Math.ceil(count / 10);
-      console.log(numberPages);
       const newCars = cars.map((car) => {
         const { _id, ...rest } = car._doc;
         return { id: _id, ...rest };

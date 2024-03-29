@@ -166,7 +166,7 @@ class CarController {
           .json({ error: "End date cannot be before start date!" });
       }
       const rentalDays = Math.ceil(
-        (parsedEndDate - parsedStartDate) / (1000 * 60 * 60 * 24)
+        (parsedEndDate - parsedStartDate) / (1000 * 60 * 60 * 24),
       );
       const totalCost = car.price * rentalDays;
 
