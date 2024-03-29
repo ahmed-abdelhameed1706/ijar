@@ -10,7 +10,7 @@ export async function getRandomCarImages() {
   const photoUrls = [];
 
   try {
-    for (let i = 0; i < 2; i++) {
+    if (process.env.FETCH_IMAGES === "true") {
       const response = await axios.get(baseUrl);
       const data = response.data;
       photoUrls.push(data.urls.regular); // Adjust for desired image size

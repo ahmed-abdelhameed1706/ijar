@@ -11,9 +11,12 @@ export const seedDatabase = async (
   numCarsPerOwner = 3
 ) => {
   try {
-    await Car.deleteMany({});
-    await User.deleteMany({});
-    await Cart.deleteMany({});
+    // Clear all collections
+    if (process.env.FLUSH_DB === "true") {
+      await Car.deleteMany({});
+      await User.deleteMany({});
+      await Cart.deleteMany({});
+    }
 
     // Create multiple owners
     const owners = [];
