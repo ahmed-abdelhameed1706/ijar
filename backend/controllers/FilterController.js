@@ -34,10 +34,10 @@ export default class FilterController {
 
       const cars = await Car.find(filter)
         .sort({ averageRate: -1 })
-        .skip(page * 20)
-        .limit(20);
+        .skip(page * 10)
+        .limit(10);
       const count = await Car.countDocuments(filter);
-      const numberPages = Math.ceil(count / 20);
+      const numberPages = Math.ceil(count / 10);
       console.log(numberPages);
       const newCars = cars.map((car) => {
         const { _id, ...rest } = car._doc;

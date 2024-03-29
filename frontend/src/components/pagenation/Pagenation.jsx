@@ -21,7 +21,7 @@ const Pagenation = ({ page, setPage, number }) => {
         }}
         disabled={page === 0}/>
       </PaginationItem>
-      <PaginationItem className={page === 0 ? "hidden" : ""}>
+      <PaginationItem className={page - 1 <= 0 ? "hidden" : ""}>
         <PaginationEllipsis />
       </PaginationItem>
       <>
@@ -37,7 +37,7 @@ const Pagenation = ({ page, setPage, number }) => {
       </PaginationItem>
       ))}
       </>
-      <PaginationItem className={page === number - 1 ? "hidden" : ""}>
+      <PaginationItem className={page + 2 >= number ? "hidden" : ""}>
         <PaginationEllipsis />
       </PaginationItem>
       <PaginationItem>
