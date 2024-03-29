@@ -73,8 +73,10 @@ export default class AuthController {
         return res.status(400).json({ message: "Passwords do not match" });
       }
 
+      const lowerEmail = email.toLowerCase();
+
       const existingUser = await User.findOne({
-        $or: [{ email }, { phoneNumber }],
+        $or: [{ lowerEmail }, { phoneNumber }],
       });
       if (existingUser) {
         return res.status(400).json({
@@ -89,7 +91,7 @@ export default class AuthController {
 
       const newUser = new User({
         fullName,
-        email,
+        email: lowerEmail,
         password: hashedPassword,
         phoneNumber,
         address,
@@ -123,7 +125,9 @@ export default class AuthController {
       const { email, password } = req.body;
       console.log(req.cookies);
 
-      const user = await User.findOne({ email });
+      const lowerEmail = email.toLowerCase();
+
+      const user = await User.findOne({ email: lowerEmail });
       if (!user) {
         return res.status(404).json({ message: "User not found" });
       }
