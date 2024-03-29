@@ -64,7 +64,7 @@ export const columns = [
 
       return (
         <span
-          className={`px-2 py-1 text-xs font-semibold text-white rounded-full ${
+          className={`px-2 py-1 text-xs inline-flex font-semibold text-white rounded-full ${
             booking.status === "Pending"
               ? "bg-yellow-500"
               : booking.status === "Completed"
