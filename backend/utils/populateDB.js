@@ -32,6 +32,7 @@ export const seedDatabase = async (
           mode: "age",
         }),
         role: "Owner",
+        isVerified: true,
       });
       owner.save();
       owners.push(owner);
@@ -51,6 +52,8 @@ export const seedDatabase = async (
           max: 65,
           mode: "age",
         }),
+        role: "User",
+        isVerified: true,
       });
       users.push(user);
     }
@@ -105,3 +108,5 @@ export const seedDatabase = async (
     console.error("Error populating database:", error);
   }
 };
+
+// seedDatabase(20, 10, 4);
