@@ -14,6 +14,7 @@ export default class FilterController {
         model,
         location,
         fuel,
+        page,
       } = req.query;
 
       const filter = {};
@@ -31,13 +32,19 @@ export default class FilterController {
       else if (minYear) filter.year = { $gte: minYear };
       else if (maxYear) filter.year = { $lte: maxYear };
 
-      const cars = await Car.find(filter).sort({ averageRate: -1 });
+      const cars = await Car.find(filter)
+        .sort({ averageRate: -1 })
+        .skip(page * 20)
+        .limit(20);
+      const count = await Car.countDocuments(filter);
+      const numberPages = Math.ceil(count / 20);
+      console.log(numberPages);
       const newCars = cars.map((car) => {
         const { _id, ...rest } = car._doc;
         return { id: _id, ...rest };
       });
 
-      return res.json(newCars);
+      return res.json({ cars: newCars, numberPages });
     } catch (error) {
       return res
         .status(500)
