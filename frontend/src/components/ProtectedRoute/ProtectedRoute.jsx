@@ -17,4 +17,18 @@ const ProtectedRoute = ({ children }) => {
   return children;
 };
 
-export default ProtectedRoute;
+const OwnerRoute = ({ children }) => {
+  const user = useAuthUser();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!user || user.role !== "Owner") {
+      navigate("/dashboard", { replace: true });
+      toast.error("You are not authorized to access this page.");
+    }
+  }, [user, navigate]);
+
+  return children;
+};
+
+export { ProtectedRoute, OwnerRoute };

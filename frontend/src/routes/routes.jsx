@@ -15,7 +15,10 @@ import Chat from "@/pages/dashboard/chat/Chat";
 import DashboardPage from "@/pages/dashboard/DashboardPage";
 import RequireAuth from "@auth-kit/react-router/RequireAuth";
 import CarsDashboardPage from "@/pages/dashboard/carsDashboard/CarsDashboardPage";
-import ProtectedRoute from "@/components/ProtectedRoute/ProtectedRoute";
+import {
+  ProtectedRoute,
+  OwnerRoute,
+} from "@/components/ProtectedRoute/ProtectedRoute";
 import Admin from "@/pages/admin/Admin";
 import AdminCars from "@/pages/admin/cars/AdminCars";
 import AdminCarts from "@/pages/admin/carts/AdminCarts";
@@ -29,39 +32,41 @@ import { z } from "zod";
 const Routes = () => {
   const [cars, setCars] = useState([]);
 
-  const formSchema = z
-		.object({
-			brandName: z.string(),
-			model: z.string(),
-			minYear: z.string(),
-			maxYear: z.string(),
-			type: z.string(),
-			color: z.string(),
-			minPrice: z.string(),
-			maxPrice: z.string(),
-			location: z.string(),
-			fuel: z.string(),
-		})
+  const formSchema = z.object({
+    brandName: z.string(),
+    model: z.string(),
+    minYear: z.string(),
+    maxYear: z.string(),
+    type: z.string(),
+    color: z.string(),
+    minPrice: z.string(),
+    maxPrice: z.string(),
+    location: z.string(),
+    fuel: z.string(),
+  });
 
-	const form = useForm({
-		resolver: zodResolver(formSchema),
-		defaultValues: {
-			brandName: "",
-			model: "",
-			minYear: "",
-			maxYear: "",
-			type: "",
-			color: "",
-			minPrice: '',
-			maxPrice: "",
-			location: "",
-			fuel: "",
-		},
-	});
+  const form = useForm({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      brandName: "",
+      model: "",
+      minYear: "",
+      maxYear: "",
+      type: "",
+      color: "",
+      minPrice: "",
+      maxPrice: "",
+      location: "",
+      fuel: "",
+    },
+  });
 
   return (
     <ReactRouterRoutes>
-      <Route path="/" element={<Home setCars={setCars} cars={cars} form={form} />} />
+      <Route
+        path="/"
+        element={<Home setCars={setCars} cars={cars} form={form} />}
+      />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/signup" element={<SignupPage />} />
       <Route path="/reset-password" element={<ResetPassword />} />
@@ -128,7 +133,10 @@ const Routes = () => {
           }
         />
       </Route>
-      <Route path="/cars" element={<Cars cars={cars} setCars={setCars} form={form} />} />
+      <Route
+        path="/cars"
+        element={<Cars cars={cars} setCars={setCars} form={form} />}
+      />
       <Route path="*" element={<NotFound />} />
       <Route
         path="/dashboard"
@@ -150,7 +158,9 @@ const Routes = () => {
           path="mycars"
           element={
             <RequireAuth fallbackPath="/login">
-              <CarsDashboardPage />
+              <OwnerRoute>
+                <CarsDashboardPage />
+              </OwnerRoute>
             </RequireAuth>
           }
         />
