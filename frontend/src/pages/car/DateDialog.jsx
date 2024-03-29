@@ -18,6 +18,8 @@ const DateDialog = ({ setPickUp, setDropOff }) => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
 
+  console.log(new Date().toISOString().slice(0, 10))
+
   const handleChangePickUp = (event) => {
     setStartDate(event.target.value);
     const selectedDate = new Date(event.target.value);
@@ -51,7 +53,7 @@ const DateDialog = ({ setPickUp, setDropOff }) => {
             <Input
               type="date"
               value={startDate}
-              min={new Date().toISOString().slice(0, 16)}
+              min={new Date().toISOString().slice(0, 10)}
               onChange={handleChangePickUp}
               className="col-span-3"
             />
@@ -64,7 +66,7 @@ const DateDialog = ({ setPickUp, setDropOff }) => {
               type="date"
               value={endDate}
               min={
-                startDate ? startDate : new Date().toISOString().slice(0, 16)
+                startDate ? startDate : new Date().toISOString().slice(0, 10)
               }
               onChange={handleChangeDropOff}
               className="col-span-3"

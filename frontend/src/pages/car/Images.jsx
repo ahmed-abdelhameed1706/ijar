@@ -16,7 +16,7 @@ const Images = ({ images }) => {
               src={imageUrl}
               className={
                 index === cur
-                  ? "absolute rounded-lg block max-w-full h-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
+                  ? "absolute rounded-lg block max-w-full h-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 object-cover"
                   : "hidden"
               }
               alt=""

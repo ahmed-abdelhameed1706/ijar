@@ -70,13 +70,13 @@ const Car = () => {
   }
 
   return (
-    <div className="flex max-w-full justify-center items-center 2xl:max-w-[1500px]">
-      <div className="flex flex-col w-[90%] max-w-full lg:flex-row space-y-6 p-10">
-        <div className="flex flex-col space-y-10 justify-center items-center px-4 w-full max-w-full p-1">
+    <div className="flex max-w-full justify-center items-center">
+      <div className="flex flex-col w-[90%] max-w-full lg:flex-row space-y-6 px-0 sm:px-10 py-10">
+        <div className="flex flex-col space-y-10 justify-center items-center px-0 sm:px-4 w-full max-w-full p-1">
           <Images images={car.images} />
           <Card className="w-full max-w-[900px] border-none shadow-lg p-6 rounded-lg space-y-5">
             <div className="flex justify-between items-center pb-3 border-b flex-grow w-full">
-              <h1 className="text-2xl font-medium pl-1">
+              <h1 className="text-lg sm:text-2xl font-medium pl-1">
                 {car.year} - {car.brandName} {car.model}
               </h1>
               {car.available ? (
@@ -91,49 +91,49 @@ const Car = () => {
             </div>
             <div className="flex flex-col sm:flex-row space-y-6 sm:space-y-0 pl-1 flex-grow">
               <div className="w-full flex items-center">
-                <p className="text-lg font-medium	  pr-2">Brand Name:</p>
-                <p className="text-lg font-normal	">{car.brandName}</p>
+                <p className="text-[17px] sm:text-lg font-medium pr-2">Brand Name:</p>
+                <p className="text-[17px] sm:text-lg font-normal	">{car.brandName}</p>
               </div>
               <div className="w-full flex items-center">
-                <p className="text-lg font-medium	  pr-2">Model:</p>
-                <p className="text-lg font-normal	  ">{car.model}</p>
+                <p className="text-[17px] sm:text-lg font-medium	  pr-2">Model:</p>
+                <p className="text-[17px] sm:text-lg font-normal">{car.model}</p>
               </div>
             </div>
             <div className="flex flex-col justify-evenly sm:flex-row space-y-6 sm:space-y-0 pl-1">
               <div className="w-full flex items-center">
-                <p className="text-lg font-medium pr-2">Year:</p>
-                <p className="text-lg font-normal	">{car.year}</p>
+                <p className="text-[17px] sm:text-lg font-medium pr-2">Year:</p>
+                <p className="text-[17px] sm:text-lg font-normal	">{car.year}</p>
               </div>
               <div className="w-full flex items-center">
-                <p className="text-lg font-medium	 pr-2">Type:</p>
-                <p className="text-lg font-normal	">{car.type}</p>
+                <p className="text-[17px] sm:text-lg font-medium	 pr-2">Type:</p>
+                <p className="text-[17px] sm:text-lg font-normal	">{car.type}</p>
               </div>
             </div>
             <div className="flex flex-col justify-evenly sm:flex-row space-y-6 sm:space-y-0 pl-1">
               <div className="w-full flex items-center">
-                <p className="text-lg font-medium pr-2">Color:</p>
-                <p className="text-lg font-normal	">{car.color}</p>
+                <p className="text-[17px] sm:text-lg font-medium pr-2">Color:</p>
+                <p className="text-[17px] sm:text-lg font-normal	">{car.color}</p>
               </div>
               <div className="w-full flex items-center">
-                <p className="text-lg font-medium	 pr-2">Price per day:</p>
-                <p className="text-lg font-normal	">${car.price}</p>
+                <p className="text-[17px] sm:text-lg font-medium pr-2">Price per day:</p>
+                <p className="text-[17px] sm:text-lg font-normal	">${car.price}</p>
               </div>
             </div>
             <hr />
             <div className="pl-2">
-              <p className="text-xl font-medium pb-2">Description</p>
-              <p className="text-lg text-left font-normal	">{car.description}</p>
+              <p className="text-lg sm:text-xl font-medium pb-2">Description</p>
+              <p className="text-[17px] sm:text-lg text-left font-normal	">{car.description}</p>
             </div>
             <hr />
             <div className="pl-2">
-              <p className="text-xl font-medium pb-5">Owner</p>
+              <p className="text-lg sm:text-xl font-medium pb-5">Owner</p>
               <div className="w-full flex items-center space-x-6">
                 <img
                   className="h-[60px] w-[60px] rounded-full object-cover"
                   src="https://images.unsplash.com/photo-1511367461989-f85a21fda167?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D"
                   alt="Owner photo"
                 />
-                <p className="text-lg font-medium	">{car.ownerId.fullName}</p>
+                <p className="text-[17px] sm:text-lg font-medium">{car.ownerId.fullName}</p>
               </div>
             </div>
             <hr />
@@ -160,25 +160,25 @@ const Car = () => {
             </div>
           </Card>
         </div>
-        <div className="flex flex-col px-4 w-full max-w-full space-y-10 lg:w-[40%]">
+        <div className="flex flex-col sm:px-4 w-full max-w-full space-y-10 lg:w-[50%]">
           <Card className="max-w-full flex flex-col space-y-4 border-none shadow-lg p-6 rounded-lg">
             <div className="flex items-center space-x-3">
               <span className="w-2 h-2 block rounded-full bg-blue-900/40"></span>
               <h1 className="text-xl font-medium text-blue-900">Pick-up</h1>
             </div>
             {pickUp ? (
-              <p className="pl-6 text-sm font-normal	">
+              <p className="pl-6 text-sm font-normal">
                 {pickUp.toLocaleString()}
               </p>
             ) : (
-              <Skeleton className="h-5 w-[200px]" />
+              <Skeleton className="h-5 w-[200px]"/>
             )}
             <div className="flex items-center space-x-3">
               <span className="w-2 h-2 block rounded-full bg-blue-900/40"></span>
               <h1 className="text-xl font-medium text-blue-900">Drop-off</h1>
             </div>
             {dropOff ? (
-              <p className="text-sm font-normal pl-6	">
+              <p className="text-sm font-normal pl-6">
                 {dropOff.toLocaleString()}
               </p>
             ) : (
@@ -197,7 +197,7 @@ const Car = () => {
             </h1>
             <div className="w-full flex justify-between items-center pb-1">
               <p className="text-lg font-medium	 pr-2">Price per day</p>
-              <p className="text-xl font-medium	">${car.price}</p>
+              <p className="text-xl font-medium">${car.price}</p>
             </div>
             <p className="pb-4">
               The price is all-inclusive of service fees and taxes.
