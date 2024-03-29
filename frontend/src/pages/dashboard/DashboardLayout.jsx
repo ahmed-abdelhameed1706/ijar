@@ -7,9 +7,11 @@ import {
   SettingsIcon,
 } from "lucide-react";
 import { Link, Outlet, useLocation } from "react-router-dom";
+import useAuthUser from "react-auth-kit/hooks/useAuthUser";
 
 const DashboardLayout = () => {
   const location = useLocation();
+  const user = useAuthUser();
 
   const dashNav = [
     {
@@ -24,7 +26,7 @@ const DashboardLayout = () => {
       path: "booking",
       role: "both",
     },
-    {
+    user?.role === "Owner" && {
       name: "My Cars",
       icon: <CarFront />,
       path: "mycars",
@@ -42,7 +44,7 @@ const DashboardLayout = () => {
       path: "/settings",
       role: "both",
     },
-  ];
+  ].filter(Boolean);
   return (
     <div className="h-full bg-white">
       <nav className="px-4 py-6">
