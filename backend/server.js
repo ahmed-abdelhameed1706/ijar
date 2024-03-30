@@ -60,9 +60,9 @@ mongoose.connection.on("connected", () => {
     app.listen(port, () => {
       console.log(`Server connected to http://localhost:${port}`);
     });
-    if (process.env.SEED_DATA === "true") {
-      seedDatabase(5, 10, 4);
-    }
+    // if (process.env.SEED_DATA === "true") {
+    //   seedDatabase(5, 10, 4);
+    // }
   } catch (error) {
     console.log("Cannot connect to the server");
   }
