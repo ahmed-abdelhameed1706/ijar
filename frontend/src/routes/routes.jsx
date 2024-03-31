@@ -101,6 +101,15 @@ const Routes = () => {
         }
       >
         <Route
+          path=""
+          element={
+            <ProtectedRoute>
+              <AdminUsers />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
           path="cars"
           element={
             <ProtectedRoute>

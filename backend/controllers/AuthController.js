@@ -123,7 +123,6 @@ export default class AuthController {
   static login = async (req, res) => {
     try {
       const { email, password } = req.body;
-      console.log(req.cookies);
 
       const lowerEmail = email.toLowerCase();
 
@@ -139,6 +138,12 @@ export default class AuthController {
 
       if (!user.isVerified) {
         return res.status(401).json({ message: "Email not verified" });
+      }
+
+      if (!user.active) {
+        return res
+          .status(401)
+          .json({ message: "Account is disabled Please Contact Admins." });
       }
 
       const accessToken = generateAccessToken(user);

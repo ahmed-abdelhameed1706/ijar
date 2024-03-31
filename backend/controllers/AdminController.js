@@ -18,7 +18,7 @@ export default class AdminController {
 
       res.status(200).json({
         users,
-        currentPage: page,
+        page,
         totalPages,
       });
     } catch (err) {
@@ -29,12 +29,36 @@ export default class AdminController {
 
   static deleteUser = async (req, res) => {
     try {
-      const user = await User.findById(req.params.id);
+      const userId = req.params.id;
+      const user = await User.findById(userId);
       if (!user) {
         return res.status(404).json({ error: "User not found" });
       }
-      await User.findByIdAndDelete(user._id);
+      await User.findByIdAndDelete(userId);
+
+      await Ticket.deleteMany({ createdBy: userId });
+
+      await Cart.deleteMany({ userId: userId });
+
+      await Car.deleteMany({ ownerId: userId });
+
       res.status(200).json({ message: "User deleted successfully" });
+    } catch (err) {
+      console.log(err);
+      return res.status(500).json({ error: err.message });
+    }
+  };
+
+  static updateUser = async (req, res) => {
+    try {
+      const userId = req.params.id;
+      const user = await User.findByIdAndUpdate(userId, req.body, {
+        new: true,
+      });
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
+      }
+      res.status(200).json({ message: "User updated successfully" });
     } catch (err) {
       console.log(err);
       return res.status(500).json({ error: err.message });
@@ -69,11 +93,15 @@ export default class AdminController {
 
   static deleteCar = async (req, res) => {
     try {
-      const car = await Car.findById(req.params.id);
+      const carId = req.params.id;
+      const car = await Car.findById(carId);
       if (!car) {
         return res.status(404).json({ error: "Car not found" });
       }
-      await Car.findByIdAndDelete(car._id);
+      await Car.findByIdAndDelete(carId);
+
+      await Cart.deleteMany({ carId });
+
       res.status(200).json({ message: "Car deleted successfully" });
     } catch (err) {
       console.log(err);
@@ -90,7 +118,10 @@ export default class AdminController {
       const totalPages = Math.ceil(count / limit);
       const offset = (page - 1) * limit;
 
-      const tickets = await Ticket.find().skip(offset).limit(limit);
+      const tickets = await Ticket.find()
+        .skip(offset)
+        .limit(limit)
+        .populate("createdBy", "email");
 
       res.status(200).json({
         tickets,
@@ -117,6 +148,23 @@ export default class AdminController {
     }
   };
 
+  static updateTicket = async (req, res) => {
+    try {
+      const ticket = await Ticket.findByIdAndUpdate(
+        req.params.id,
+        { status: req.body.status },
+        { new: true }
+      );
+      if (!ticket) {
+        return res.status(404).json({ error: "Ticket not found" });
+      }
+      res.status(200).json({ message: "Ticket updated successfully" });
+    } catch (err) {
+      console.log(err);
+      return res.status(500).json({ error: err.message });
+    }
+  };
+
   // CARTS MANAGEMENT
   static getAllCarts = async (req, res) => {
     const page = parseInt(req.query.page) || 1; // Default to page 1 if not specified
@@ -126,7 +174,11 @@ export default class AdminController {
       const totalPages = Math.ceil(count / limit);
       const offset = (page - 1) * limit;
 
-      const carts = await Cart.find().skip(offset).limit(limit);
+      const carts = await Cart.find()
+        .skip(offset)
+        .limit(limit)
+        .populate("carId", "brandName model")
+        .populate("userId", "fullName");
 
       res.status(200).json({
         carts,

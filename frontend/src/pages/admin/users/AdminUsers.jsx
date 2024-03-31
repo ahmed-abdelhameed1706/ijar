@@ -3,6 +3,9 @@ import axios from "../../../api/axios";
 import useAuthHeader from "react-auth-kit/hooks/useAuthHeader";
 import { AdminDataTable } from "../adminDataTable";
 import { columns } from "./userColumns";
+import Pagenation from "@/components/pagenation/Pagenation";
+import { set } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 
 const AdminUsers = () => {
   // const [activeTab, setActiveTab] = useState("all");
@@ -10,20 +13,9 @@ const AdminUsers = () => {
   const [dataTable, setDataTable] = useState([]);
   const auth = useAuthHeader();
   const token = auth && auth.split(" ")[1];
-
-  // const handleFilter = (status) => {
-  //   const filteredData = data.filter((item) => item.status === status);
-  //   setDataTable(filteredData);
-  // };
-
-  // const handleStatus = (status) => {
-  //   setActiveTab(status);
-  //   if (status === "all") {
-  //     setDataTable(data);
-  //   } else {
-  //     handleFilter(status);
-  //   }
-  // };
+  const [page, setPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const navigate = useNavigate();
 
   const getAllUsers = async () => {
     try {
@@ -31,16 +23,22 @@ const AdminUsers = () => {
         headers: {
           Authorization: token,
         },
+        params: { page },
       });
       setDataTable(response.data.users);
+      setTotalPages(response.data.totalPages);
     } catch (error) {
       console.log(error.message);
     }
   };
 
   useEffect(() => {
+    navigate("/admin/users");
+  }, []);
+
+  useEffect(() => {
     getAllUsers();
-  }, [dataTable]);
+  }, [dataTable, page]);
 
   // useEffect(() => {
   //   setDataTable(data); // Set dataTable after data has been updated
@@ -56,6 +54,7 @@ const AdminUsers = () => {
         <div className="p-4">
           <AdminDataTable columns={columns} data={dataTable} />
         </div>
+        <Pagenation page={page} setPage={setPage} number={totalPages} />
       </div>
     </div>
   );

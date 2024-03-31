@@ -10,12 +10,61 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Ellipsis } from "lucide-react";
+import PropTypes from "prop-types";
+import axios from "../../../api/axios";
+import useAuthHeader from "react-auth-kit/hooks/useAuthHeader";
+import { useNavigate } from "react-router-dom";
 
-export const AdminColumns = [
+const MenuButton = ({ car }) => {
+  const authHeader = useAuthHeader();
+  const token = authHeader && authHeader.split(" ")[1];
+  const navigate = useNavigate();
+
+  const onDelete = async (car) => {
+    try {
+      await axios.delete(`/api/admin/cars/${car._id}`, {
+        headers: {
+          Authorization: token,
+        },
+      });
+
+      // After deleting, navigate to the next page
+      navigate("/admin/cars");
+    } catch (error) {
+      console.error("Error deleting car:", error);
+    }
+  };
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" className="h-8 w-8 p-0">
+          <span className="sr-only">Open menu</span>
+          <Ellipsis className="h-4 w-4" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuLabel>Actions</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onClick={() => onDelete(car)}>
+          Delete Car
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+};
+
+MenuButton.propTypes = {
+  car: PropTypes.shape({
+    _id: PropTypes.string.isRequired,
+  }).isRequired,
+};
+
+const AdminColumns = [
   {
     id: "ID",
     accessorKey: "carId",
-    accessorFn: (row) => row.id,
+    accessorFn: (row) => row._id,
     header: "Car ID",
   },
   {
@@ -74,28 +123,10 @@ export const AdminColumns = [
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const booking = row.original;
-
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <Ellipsis className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            {/* <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
-            >
-              Copy payment ID
-            </DropdownMenuItem> */}
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>View booking details</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
+      const car = row.original;
+      return <MenuButton car={car} />;
     },
   },
 ];
+
+export { AdminColumns, MenuButton };

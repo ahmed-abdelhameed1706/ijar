@@ -31,7 +31,7 @@ const AdminCarts = () => {
           Authorization: token,
         },
       });
-      setDataTable(response.data.cars);
+      setDataTable(response.data.carts);
     } catch (error) {
       console.log(error.message);
     }

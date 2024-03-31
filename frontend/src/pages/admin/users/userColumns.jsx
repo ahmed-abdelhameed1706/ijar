@@ -22,7 +22,6 @@ const MenuButton = ({ user }) => {
   const navigate = useNavigate();
 
   const onDelete = async (user) => {
-    console.log(user);
     await axios.delete(`/api/admin/users/${user._id}`, {
       headers: {
         Authorization: token,
@@ -32,6 +31,18 @@ const MenuButton = ({ user }) => {
     console.log("Deleting user:", user._id);
     // After deleting, navigate to the next page
     navigate("/admin/users");
+  };
+
+  const changeActivity = async (user) => {
+    await axios.put(
+      `/api/admin/users/${user._id}`,
+      { active: !user.active },
+      {
+        headers: {
+          Authorization: token,
+        },
+      }
+    );
   };
   return (
     <DropdownMenu>
@@ -46,6 +57,9 @@ const MenuButton = ({ user }) => {
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={() => onDelete(user)}>
           Delete User
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => changeActivity(user)}>
+          {user.active ? "Deactivate User" : "Activate User"}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -66,7 +80,7 @@ const columns = [
 
       return (
         <Avatar className=" justify-center">
-          <AvatarImage src={user.image} />
+          <AvatarImage src={user.imageUrl} />
           <AvatarFallback>{user.fullName}</AvatarFallback>
         </Avatar>
       );
@@ -85,6 +99,12 @@ const columns = [
     header: "User Email",
   },
   {
+    id: "phoneNumber",
+    accessorKey: "phoneNumber",
+    accessorFn: (row) => row.phoneNumber,
+    header: "User Phone",
+  },
+  {
     id: "role",
     accessorKey: "role",
     accessorFn: (row) => row.role,
@@ -95,6 +115,13 @@ const columns = [
     accessorKey: "dob",
     accessorFn: (row) => row.brithDate,
     header: "User DOB",
+  },
+
+  {
+    id: "Account Active",
+    accessorKey: "active",
+    accessorFn: (row) => (row.active ? "Active" : "Inactive"),
+    header: "Account Active",
   },
   {
     id: "actions",
