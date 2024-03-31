@@ -13,44 +13,52 @@ import { Ellipsis } from "lucide-react";
 
 export const columns = [
   {
-    accessorKey: "image",
-    header: "Image",
-    cell: ({ row }) => {
-      const booking = row.original;
-
-      return (
-        <Avatar className=" justify-center">
-          <AvatarImage src="https://images.pexels.com/photos/1592384/pexels-photo-1592384.jpeg?" />
-
-          <AvatarFallback>BMW</AvatarFallback>
-        </Avatar>
-      );
-    },
+    id: "ID",
+    accessorKey: "cartId",
+    accessorFn: (row) => row._id,
+    header: "cart ID",
   },
   {
     id: "carName",
     accessorKey: "carName",
-    accessorFn: (row) => row.carName,
-    header: "Car Name",
+    accessorFn: (row) => (row.carId ? row.carId.brandName : "N/A"),
+    header: "Car BrandName",
   },
   {
-    id: "carModel",
+    id: "Model",
     accessorKey: "carModel",
-    accessorFn: (row) => row.carModel,
+    accessorFn: (row) => (row.carId ? row.carId.model : "N/A"),
     header: "Car Model",
   },
+
   {
-    accessorKey: "deliverylocation",
-    header: "Delivery Location",
+    id: "Price",
+    accessorKey: "carPrice",
+    accessorFn: (row) => row.totalCost,
+    header: "Total Cost",
   },
+
   {
-    accessorKey: "pickupLocation",
-    header: "Pickup Location",
+    id: "Start Date",
+    accessorKey: "startDate",
+    accessorFn: (row) => row.startDate,
+    header: "Start Date",
   },
+
   {
-    accessorKey: "BookingDate",
-    header: "Booking Date",
+    id: "End Date",
+    accessorKey: "endDate",
+    accessorFn: (row) => row.endDate,
+    header: "End Date",
   },
+
+  {
+    id: "Rental Term",
+    accessorKey: "rentalTerm",
+    accessorFn: (row) => row.rentalTerm,
+    header: "Rental Term",
+  },
+
   {
     id: "status",
     accessorKey: "status",
@@ -81,10 +89,7 @@ export const columns = [
       );
     },
   },
-  {
-    accessorKey: "total",
-    header: "Total",
-  },
+
   {
     id: "actions",
     enableHiding: false,

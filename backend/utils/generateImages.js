@@ -5,7 +5,7 @@ const baseUrl = "https://api.unsplash.com";
 
 export async function getRandomCarImages() {
   const baseUrl =
-    "https://api.unsplash.com/photos/random/?client_id=ICHoP9uSGRHQytjYEeK8VxXqTZY1gaIqRTsrrRM_9r0&query=car";
+    "https://api.unsplash.com/photos/random/?client_id=ICHoP9uSGRHQytjYEeK8VxXqTZY1gaIqRTsrrRM_9r0&query=car&orientation=landscape";
 
   try {
     if (process.env.FETCH_IMAGES === "true") {

@@ -17,7 +17,7 @@ export default class FilterController {
         page,
       } = req.query;
 
-      const filter = {};
+      const filter = { available: true };
       if (brandName)
         filter.brandName = {
           $regex: new RegExp(`[${brandName}]{${brandName.length},}`, "i"),

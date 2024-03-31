@@ -9,12 +9,20 @@ const slideImages = [
   // "https://images.unsplash.com/photo-1485433592409-9018e83a1f0d?q=80&w=1814&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   // "https://images.unsplash.com/photo-1483982258113-b72862e6cff6?q=80&w=3456&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   // "https://images.unsplash.com/photo-1482189349482-3defd547e0e9?q=80&w=2848&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  "https://dreamsrent-wp.dreamstechnologies.com/wp-content/uploads/2023/12/car-right.png",
-  "https://dreamsrent-wp.dreamstechnologies.com/wp-content/uploads/2020/03/car-01.jpg",
-  "https://dreamsrent-wp.dreamstechnologies.com/wp-content/uploads/2023/12/car-09.jpg",
-  "https://dreamsrent-wp.dreamstechnologies.com/wp-content/uploads/2023/12/car-04.jpg",
-  "https://th.bing.com/th/id/R.9da1a043a0aaf7e3c33b94ebd04d451c?rik=jLbFzjp5PfDjYw&riu=http%3a%2f%2f4.bp.blogspot.com%2f-AwIUu9q1ddo%2fTuulhP1vIeI%2fAAAAAAAAqWA%2fYJTnf4Ef0Ec%2fs1600%2fSperanza-A516_LS_2011_650x300_wallpaper_01.jpg&ehk=rBOwXI8zPUpohrc5DIYfNDuXVbUHvA6g20Le16XZI5Y%3d&risl=&pid=ImgRaw&r=0",
-  "https://www.cars-directory.net/pics/chery/chery/2007/chery_chery_a1212780020b1795143_orig.jpg",
+  // "https://dreamsrent-wp.dreamstechnologies.com/wp-content/uploads/2023/12/car-right.png",
+  "https://images.unsplash.com/photo-1555215695-3004980ad54e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1ODQ3MTJ8MHwxfHJhbmRvbXx8fHx8fHx8fDE3MTE4OTgwNDR8&ixlib=rb-4.0.3&q=80&w=1080",
+  "https://images.unsplash.com/photo-1575833885699-bae73b593ca2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1ODQ3MTJ8MHwxfHJhbmRvbXx8fHx8fHx8fDE3MTE4OTgwNDR8&ixlib=rb-4.0.3&q=80&w=1080",
+  "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1ODQ3MTJ8MHwxfHJhbmRvbXx8fHx8fHx8fDE3MTE4OTgwNDN8&ixlib=rb-4.0.3&q=80&w=1080",
+  "https://images.unsplash.com/photo-1542362567-b07e54358753?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1ODQ3MTJ8MHwxfHJhbmRvbXx8fHx8fHx8fDE3MTE4OTgwNDJ8&ixlib=rb-4.0.3&q=80&w=1080",
+  "https://images.unsplash.com/photo-1532974297617-c0f05fe48bff?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1ODQ3MTJ8MHwxfHJhbmRvbXx8fHx8fHx8fDE3MTE4MDUzMDJ8&ixlib=rb-4.0.3&q=80&w=1080",
+  "https://images.unsplash.com/photo-1614905218621-99262ff8f8e1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1ODQ3MTJ8MHwxfHJhbmRvbXx8fHx8fHx8fDE3MTE4MDUzMDJ8&ixlib=rb-4.0.3&q=80&w=1080",
+  "https://images.unsplash.com/photo-1590362891991-f776e747a588?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1ODQ3MTJ8MHwxfHJhbmRvbXx8fHx8fHx8fDE3MTE4OTgwNDJ8&ixlib=rb-4.0.3&q=80&w=1080",
+
+  // "https://dreamsrent-wp.dreamstechnologies.com/wp-content/uploads/2020/03/car-01.jpg",
+  // "https://dreamsrent-wp.dreamstechnologies.com/wp-content/uploads/2023/12/car-09.jpg",
+  // "https://dreamsrent-wp.dreamstechnologies.com/wp-content/uploads/2023/12/car-04.jpg",
+  // "https://th.bing.com/th/id/R.9da1a043a0aaf7e3c33b94ebd04d451c?rik=jLbFzjp5PfDjYw&riu=http%3a%2f%2f4.bp.blogspot.com%2f-AwIUu9q1ddo%2fTuulhP1vIeI%2fAAAAAAAAqWA%2fYJTnf4Ef0Ec%2fs1600%2fSperanza-A516_LS_2011_650x300_wallpaper_01.jpg&ehk=rBOwXI8zPUpohrc5DIYfNDuXVbUHvA6g20Le16XZI5Y%3d&risl=&pid=ImgRaw&r=0",
+  // "https://www.cars-directory.net/pics/chery/chery/2007/chery_chery_a1212780020b1795143_orig.jpg",
 ];
 
 const people = [

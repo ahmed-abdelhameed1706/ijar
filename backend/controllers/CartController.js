@@ -165,7 +165,10 @@ class CartController {
       const limit = 10; // Number of carts to display per page
       const skip = (page - 1) * limit; // Calculate the number of documents to skip
 
-      const carts = await Cart.find({ userId }).skip(skip).limit(limit);
+      const carts = await Cart.find({ userId })
+        .skip(skip)
+        .limit(limit)
+        .populate("carId", "brandName model");
       const totalCartsCount = await Cart.countDocuments({ userId });
       const totalPages = Math.ceil(totalCartsCount / limit);
 

@@ -40,7 +40,7 @@ const Car = () => {
         JSON.stringify({
           carId: car.id,
           rentalTerm: daysDifference,
-          totalCost: daysDifference * 20,
+          totalCost: daysDifference * car.price,
           endDate: dropOff,
           startDate: pickUp,
         }),
@@ -51,7 +51,6 @@ const Car = () => {
           },
         }
       );
-      console.log(response.data);
       toast.success("You book the Car successfully.");
     } catch (e) {
       toast.error(e.response.data.error);
@@ -91,12 +90,20 @@ const Car = () => {
             </div>
             <div className="flex flex-col sm:flex-row space-y-6 sm:space-y-0 pl-1 flex-grow">
               <div className="w-full flex items-center">
-                <p className="text-[17px] sm:text-lg font-medium pr-2">Brand Name:</p>
-                <p className="text-[17px] sm:text-lg font-normal	">{car.brandName}</p>
+                <p className="text-[17px] sm:text-lg font-medium pr-2">
+                  Brand Name:
+                </p>
+                <p className="text-[17px] sm:text-lg font-normal	">
+                  {car.brandName}
+                </p>
               </div>
               <div className="w-full flex items-center">
-                <p className="text-[17px] sm:text-lg font-medium	  pr-2">Model:</p>
-                <p className="text-[17px] sm:text-lg font-normal">{car.model}</p>
+                <p className="text-[17px] sm:text-lg font-medium	  pr-2">
+                  Model:
+                </p>
+                <p className="text-[17px] sm:text-lg font-normal">
+                  {car.model}
+                </p>
               </div>
             </div>
             <div className="flex flex-col justify-evenly sm:flex-row space-y-6 sm:space-y-0 pl-1">
@@ -111,18 +118,28 @@ const Car = () => {
             </div>
             <div className="flex flex-col justify-evenly sm:flex-row space-y-6 sm:space-y-0 pl-1">
               <div className="w-full flex items-center">
-                <p className="text-[17px] sm:text-lg font-medium pr-2">Color:</p>
-                <p className="text-[17px] sm:text-lg font-normal	">{car.color}</p>
+                <p className="text-[17px] sm:text-lg font-medium pr-2">
+                  Color:
+                </p>
+                <p className="text-[17px] sm:text-lg font-normal	">
+                  {car.color}
+                </p>
               </div>
               <div className="w-full flex items-center">
-                <p className="text-[17px] sm:text-lg font-medium pr-2">Price per day:</p>
-                <p className="text-[17px] sm:text-lg font-normal	">${car.price}</p>
+                <p className="text-[17px] sm:text-lg font-medium pr-2">
+                  Price per day:
+                </p>
+                <p className="text-[17px] sm:text-lg font-normal	">
+                  ${car.price}
+                </p>
               </div>
             </div>
             <hr />
             <div className="pl-2">
               <p className="text-lg sm:text-xl font-medium pb-2">Description</p>
-              <p className="text-[17px] sm:text-lg text-left font-normal	">{car.description}</p>
+              <p className="text-[17px] sm:text-lg text-left font-normal	">
+                {car.description}
+              </p>
             </div>
             <hr />
             <div className="pl-2">
@@ -133,7 +150,9 @@ const Car = () => {
                   src="https://images.unsplash.com/photo-1511367461989-f85a21fda167?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D"
                   alt="Owner photo"
                 />
-                <p className="text-[17px] sm:text-lg font-medium">{car.ownerId.fullName}</p>
+                <p className="text-[17px] sm:text-lg font-medium">
+                  {car.ownerId.fullName}
+                </p>
               </div>
             </div>
             <hr />
@@ -171,7 +190,7 @@ const Car = () => {
                 {pickUp.toLocaleString()}
               </p>
             ) : (
-              <Skeleton className="h-5 w-[200px]"/>
+              <Skeleton className="h-5 w-[200px]" />
             )}
             <div className="flex items-center space-x-3">
               <span className="w-2 h-2 block rounded-full bg-blue-900/40"></span>
