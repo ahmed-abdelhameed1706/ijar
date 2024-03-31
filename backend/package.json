@@ -12,8 +12,6 @@
     "express": "^4.18.3",
     "express-rate-limit": "^7.2.0",
     "faker": "^6.6.6",
-    "fuse": "^0.12.1",
-    "fuse.js": "^7.0.0",
     "har-validator": "^5.1.5",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.5.0",
