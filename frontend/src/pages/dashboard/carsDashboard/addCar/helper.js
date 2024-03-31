@@ -21,6 +21,15 @@ const fileTypes = [
   "image/x-icon",
 ];
 
+// const isValidUrl = (urlString) => {
+//   var a = document.createElement("a");
+//   a.href = urlString;
+//   return a.host && a.host != window.location.host;
+// };
+
 export const validFileType = (file) => {
+  // if (isValidUrl(file)) {
+  //   return true;
+  // }
   return fileTypes.includes(file.type);
 };

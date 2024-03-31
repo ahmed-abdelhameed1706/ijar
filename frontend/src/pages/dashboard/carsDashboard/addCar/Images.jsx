@@ -18,9 +18,30 @@ export default function Images({ images, setImages }) {
   return (
     <ScrollArea className="w-96 whitespace-nowrap rounded-md border">
       <div className="flex w-max space-x-4 p-4">
-        {images.map((image) =>
-          validFileType(image) ? (
-            <figure key={image} className="shrink-0 relative">
+        {images.map((image, i) =>
+          typeof image === "string" ? (
+            <figure key={image + "-" + i} className="shrink-0 relative">
+              <div
+                className="p-1 cursor-pointer absolute top-2 right-2"
+                onClick={() => handleRemoveImage(image)}
+              >
+                <X size={24} />
+              </div>
+              <div className="overflow-hidden rounded-md shadow-md">
+                <img
+                  src={image}
+                  alt={`Photo ${image}`}
+                  className="aspect-[3/4] h-40 w-fit object-cover"
+                  width={100}
+                  height={200}
+                />
+              </div>
+              <figcaption className="pt-2 text-xs text-muted-foreground w-[100px] overflow-x-auto">
+                {`URL: ${image}`}
+              </figcaption>
+            </figure>
+          ) : validFileType(image) ? (
+            <figure key={image + "-" + i} className="shrink-0 relative">
               <div
                 className="p-1 cursor-pointer absolute top-2 right-2"
                 onClick={() => handleRemoveImage(image)}

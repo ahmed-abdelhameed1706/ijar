@@ -2,7 +2,6 @@
 import { useState } from "react";
 
 const Images = ({ images }) => {
-
   const [next, setNext] = useState(1);
   const [prev, setPrev] = useState(images.length - 1);
   const [cur, setCur] = useState(0);

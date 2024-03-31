@@ -3,6 +3,10 @@ import { v4 } from "uuid";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 async function uploadImage(image) {
+  if (typeof image === "string") {
+    return image;
+  }
+
   const storageRef = ref(storage, `/cars/${v4()}`);
 
   const response = await uploadBytes(storageRef, image);

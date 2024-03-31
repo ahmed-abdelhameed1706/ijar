@@ -36,8 +36,8 @@ import useAuthHeader from "react-auth-kit/hooks/useAuthHeader";
 import uploadImages from "./uploadImages";
 // import { useNavigate } from "react-router-dom";
 
-const AddCar = ({ setOpen, setCars, cars }) => {
-  const [images, setImages] = useState([]);
+const AddCar = ({ setOpen, setCars, cars, car, isUpdate = false }) => {
+  const [images, setImages] = useState(car?.images || []);
   const types = [
     "Sedan",
     "Sports",
@@ -72,29 +72,45 @@ const AddCar = ({ setOpen, setCars, cars }) => {
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      brandName: "",
-      model: "",
-      year: "",
-      type: "",
-      color: "",
-      price: "",
-      licensePlateNumber: "",
-      engineId: "",
-      description: "",
-      location: "",
-      maxSpeed: "",
-      fuel: "",
+      brandName: car?.brandName || "",
+      model: car?.model || "",
+      year: car?.year || "",
+      type: car?.type || "",
+      color: car?.color || "",
+      price: car?.price.toString() || "",
+      licensePlateNumber: car?.licensePlateNumber || "",
+      engineId: car?.engineId || "",
+      description: car?.description || "",
+      location: car?.location || "",
+      maxSpeed: car?.maxSpeed.toString() || "",
+      fuel: car?.fuel || "",
     },
   });
 
   async function onSubmit(values) {
     toast.promise(uploadImages(images), {
-      pending: "Adding Car...",
-      error: "Failed to add car.",
+      pending: isUpdate ? "Updating Car..." : "Adding Car...",
+      error: isUpdate ? "Failed to update car." : "Failed to add car.",
     });
 
     const imagesUrl = await uploadImages(images);
     try {
+      if (isUpdate) {
+        const response = await axios.put(
+          `/api/cars/${car.id}`,
+          JSON.stringify({ ...values, images: imagesUrl }),
+          {
+            headers: {
+              "Content-Type": "application/json",
+              authorization: token,
+            },
+          }
+        );
+        toast.success("Your Car Updated successfully.");
+        setOpen(false);
+        setCars(cars.map((c) => (c._id === car._id ? response.data : c)));
+        return;
+      }
       const response = await axios.post(
         "/api/cars",
         JSON.stringify({ ...values, images: imagesUrl }),
@@ -105,10 +121,15 @@ const AddCar = ({ setOpen, setCars, cars }) => {
           },
         }
       );
-      console.log(response.data);
-      toast.success("Your Car Added successfully.");
+      // console.log(response.data);
+      toast.success(
+        isUpdate
+          ? "Your Car Updated successfully."
+          : "Your Car Added successfully."
+      );
       setOpen(false);
       setCars([...cars, response.data]);
+
       // navgate("/cars");
     } catch (e) {
       toast.error(e.response.data.message);
@@ -123,14 +144,14 @@ const AddCar = ({ setOpen, setCars, cars }) => {
   return (
     // <div className="flex min-[650px]:py-3 min-[650px]:px-2 justify-center items-center w-full h-full">
     //   <div className=" flex max-w-full bg-white gap-6 p-5 min-[650px]:rounded-lg  min-[650px]:shadow-lg">
-    <Card className="w-full border-none shadow-none space-y-2">
+    <Card className="w-full  border-none shadow-none space-y-2 h-[80vh] overflow-y-auto no-scrollbar">
       <CardHeader className="text-center">
         <CardTitle>Add your rental car</CardTitle>
         <CardDescription>
           Enter your car details to list it for rent.
         </CardDescription>
       </CardHeader>
-      <CardContent className=" flex justify-around items-center">
+      <CardContent className=" flex flex-col justify-around items-center ">
         <div>
           <h1 className="text-lg font-medium border-b">
             Upload Photos{" "}
@@ -163,13 +184,13 @@ const AddCar = ({ setOpen, setCars, cars }) => {
             </label>
           </div>
         </div>
-        <div>
+        <div className="w-full">
           <h1 className="text-lg font-medium border-b">
             Basic Characteristics
           </h1>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
-              <div className="flex flex-col sm:flex-row gap-4">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2 ">
+              <div className="flex flex-col sm:flex-row  gap-4">
                 <FormField
                   control={form.control}
                   name="brandName"
@@ -196,8 +217,6 @@ const AddCar = ({ setOpen, setCars, cars }) => {
                     </FormItem>
                   )}
                 />
-              </div>
-              <div className="flex flex-col sm:flex-row gap-4">
                 <FormField
                   control={form.control}
                   name="year"
@@ -211,6 +230,9 @@ const AddCar = ({ setOpen, setCars, cars }) => {
                     </FormItem>
                   )}
                 />
+              </div>
+              <div className="flex flex-col sm:flex-row gap-4"></div>
+              <div className="flex flex-col sm:flex-row gap-4">
                 <FormField
                   control={form.control}
                   name="type"
@@ -238,8 +260,33 @@ const AddCar = ({ setOpen, setCars, cars }) => {
                     </FormItem>
                   )}
                 />
-              </div>
-              <div className="flex flex-col sm:flex-row gap-4">
+                <FormField
+                  control={form.control}
+                  name="fuel"
+                  render={({ field }) => (
+                    <FormItem className="w-full">
+                      <FormLabel>Fuel</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger className="h-10">
+                            <SelectValue placeholder="Gas" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {fuels.map((type, index) => (
+                            <SelectItem key={index} value={type}>
+                              {type}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
                 <FormField
                   control={form.control}
                   name="color"
@@ -248,31 +295,6 @@ const AddCar = ({ setOpen, setCars, cars }) => {
                       <FormLabel>Color</FormLabel>
                       <FormControl>
                         <Input placeholder="Black" type="text" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="price"
-                  render={({ field }) => (
-                    <FormItem className="w-full">
-                      <FormLabel>Price per hour</FormLabel>
-                      <FormControl className="w-full">
-                        <div className="relative">
-                          <span className="absolute text-slate-500 text-sm cursor-pointer  inset-y-0 end-6 flex justify-center items-center px-2.5 ">
-                            $
-                          </span>
-                          <Input
-                            placeholder="20"
-                            {...field}
-                            type="number"
-                            id="user_price"
-                            name="price"
-                            className="pr-2"
-                          />
-                        </div>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -318,6 +340,31 @@ const AddCar = ({ setOpen, setCars, cars }) => {
                     </FormItem>
                   )}
                 />
+                <FormField
+                  control={form.control}
+                  name="price"
+                  render={({ field }) => (
+                    <FormItem className="w-full">
+                      <FormLabel>Price per day</FormLabel>
+                      <FormControl className="w-full">
+                        <div className="relative">
+                          <span className="absolute text-slate-500 text-sm cursor-pointer  inset-y-0 end-6 flex justify-center items-center px-2.5 ">
+                            $
+                          </span>
+                          <Input
+                            placeholder="20"
+                            {...field}
+                            type="number"
+                            id="user_price"
+                            name="price"
+                            className="pr-2"
+                          />
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </div>
               <div className="flex flex-col sm:flex-row gap-4">
                 <FormField
@@ -347,33 +394,7 @@ const AddCar = ({ setOpen, setCars, cars }) => {
                   )}
                 />
               </div>
-              <FormField
-                control={form.control}
-                name="fuel"
-                render={({ field }) => (
-                  <FormItem className="w-full">
-                    <FormLabel>Fuel</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger className="h-10">
-                          <SelectValue placeholder="Gas" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {fuels.map((type, index) => (
-                          <SelectItem key={index} value={type}>
-                            {type}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+
               <FormField
                 control={form.control}
                 name="description"
@@ -395,7 +416,7 @@ const AddCar = ({ setOpen, setCars, cars }) => {
                 )}
               />
               <Button className="w-full" type="submit">
-                Add
+                {isUpdate ? "Update Car" : "Add Car"}
               </Button>
             </form>
           </Form>

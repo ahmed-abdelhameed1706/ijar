@@ -66,7 +66,7 @@ export function DataTable({ columns, data }) {
   };
   return (
     <div>
-      <div className="flex items-center py-4">
+      <div className="flex items-center flex-col justify-center sm:flex-row gap-3 py-4">
         <Label className="flex justify-center  items-center border border-gray-300 rounded-lg w-[300px] h-11">
           <Input
             className="border-none rounded-lg w-full outline-none ring-0 p-2 placeholder:text-base"
@@ -80,7 +80,7 @@ export function DataTable({ columns, data }) {
         </Label>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto">
+            <Button variant="outline" className="sm:ml-auto">
               Columns <ChevronDownIcon className="ml-2 h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
@@ -154,24 +154,6 @@ export function DataTable({ columns, data }) {
             )}
           </TableBody>
         </Table>
-      </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          Previous
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          Next
-        </Button>
       </div>
     </div>
   );

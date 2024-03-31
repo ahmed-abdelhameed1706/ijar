@@ -1,9 +1,9 @@
 import { Button } from "@/components/ui/button";
 import {
+  BookText,
   CarFront,
   LayoutDashboardIcon,
   MessageCircle,
-  PersonStanding,
   SettingsIcon,
 } from "lucide-react";
 import { Link, Outlet, useLocation } from "react-router-dom";
@@ -30,7 +30,7 @@ const DashboardLayout = () => {
     },
     {
       name: "Booking List",
-      icon: <PersonStanding />,
+      icon: <BookText />,
       path: "booking",
       role: "both",
     },

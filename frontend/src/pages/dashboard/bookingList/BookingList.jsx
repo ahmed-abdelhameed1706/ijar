@@ -14,11 +14,14 @@ import {
 import useScreenSize from "@/utils/useScreenSize";
 import useAuthHeader from "react-auth-kit/hooks/useAuthHeader";
 import axios from "@/api/axios";
+import Pagenation from "@/components/pagenation/Pagenation";
 
 const BookingList = () => {
   const [activeTab, setActiveTab] = useState("all");
   const [dataTable, setDataTable] = useState([]);
   const [filteredDataTable, setFilteredDataTable] = useState([]);
+  const [page, setPage] = useState(1);
+  const [numberPages, setNumberPages] = useState(0);
 
   const auth = useAuthHeader();
   const token = auth.split(" ")[1];
@@ -43,16 +46,17 @@ const BookingList = () => {
         headers: {
           Authorization: token,
         },
+        params: {
+          page,
+        },
       });
       setDataTable(response.data.carts);
       setFilteredDataTable(response.data.carts);
-      console.log(response.data.carts);
+      setNumberPages(response.data.totalPages);
     } catch (error) {
       console.log(error.message);
     }
   };
-  console.log(dataTable);
-  console.log(filteredDataTable);
 
   useEffect(() => {
     getBooking();
@@ -70,8 +74,8 @@ const BookingList = () => {
             All Booking
           </Button>
           <Button
-            onClick={() => handleStatus("Upcoming")}
-            variant={activeTab === "Upcoming" ? "secondary" : "outline"}
+            onClick={() => handleStatus("Canceled")}
+            variant={activeTab === "Canceled" ? "secondary" : "outline"}
           >
             Upcoming
           </Button>
@@ -85,7 +89,7 @@ const BookingList = () => {
             variant={activeTab === "Pending" ? "secondary" : "outline"}
             onClick={() => handleStatus("Pending")}
           >
-            Canceled
+            Pending
           </Button>
           <Button
             variant={activeTab === "In Progress" ? "secondary" : "outline"}
@@ -108,8 +112,8 @@ const BookingList = () => {
               <DropdownMenuRadioItem value="all">
                 All Booking
               </DropdownMenuRadioItem>
-              <DropdownMenuRadioItem value="Upcoming">
-                Upcoming
+              <DropdownMenuRadioItem value="Pending">
+                Pending
               </DropdownMenuRadioItem>
               <DropdownMenuRadioItem value="Completed">
                 Completed
@@ -162,6 +166,24 @@ const BookingList = () => {
         </div>
         <div className="p-4">
           <DataTable columns={columns} data={filteredDataTable} />
+          <Pagenation setPage={setPage} page={page} number={numberPages} />
+
+          {/* <div className="flex items-center justify-end space-x-2 py-4">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={}
+            >
+              Previous
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => table.nextPage()}
+            >
+              Next
+            </Button>
+          </div> */}
         </div>
       </div>
     </div>
