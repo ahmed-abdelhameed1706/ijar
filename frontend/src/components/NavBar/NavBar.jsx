@@ -31,7 +31,7 @@ const NavBar = () => {
   return (
     <Disclosure
       as="nav"
-      className="bg-white sticky top-0 left-0 z-20 shadow-lg"
+      className="bg-white sticky top-0 left-0 z-20 shadow-lg mmd:absolute mmd:w-full"
     >
       {({ open }) => (
         <>
@@ -172,7 +172,7 @@ const NavBar = () => {
                               onClick={() => signOut()}
                               className={classNames(
                                 active ? "bg-gray-100" : "",
-                                "block px-4 py-2 text-sm text-gray-700"
+                                "block px-4 py-2 text-sm text-red-700 "
                               )}
                             >
                               Sign out
@@ -231,7 +231,7 @@ const NavBar = () => {
                     item.current
                       ? "text-primary border-b-2 border-primary"
                       : "text-gray-700 hover:text-primary",
-                    "block rounded-md px-3 py-2 text-base font-medium"
+                    "block px-3 py-2 text-base font-medium"
                   )}
                   aria-current={item.current ? "page" : undefined}
                 >

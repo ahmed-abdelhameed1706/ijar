@@ -76,6 +76,31 @@ module.exports = {
           "linear-gradient(9deg, #464646 -17%, rgb(4 4 4 / 87%) 50%), url(/src/assets/images/mapgps.jpg)",
       },
     },
+    screens: {
+      sm: "640px",
+      // => @media (min-width: 640px) { ... }
+
+      md: "767px",
+      // => @media (min-width: 767px) { ... }
+
+      lg: "1024px",
+      // => @media (min-width: 1024px) { ... }
+
+      xl: "1280px",
+      // => @media (min-width: 1280px) { ... }
+
+      mxl: { max: "1280px" },
+      // => @media (max-width: 1280px) { ... }
+
+      mlg: { max: "1024px" },
+      // => @media (max-width: 1024px) { ... }
+
+      mmd: { max: "767px" },
+      // => @media (max-width: 767px) { ... }
+
+      msm: { max: "640px" },
+      // => @media (max-width: 639px) { ... }
+    },
   },
   plugins: [require("tailwindcss-animate")],
 };
