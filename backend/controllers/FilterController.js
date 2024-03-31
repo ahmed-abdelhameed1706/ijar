@@ -44,14 +44,24 @@ export default class FilterController {
       else if (minYear) filter.year = { $gte: minYear };
       else if (maxYear) filter.year = { $lte: maxYear };
 
-      const cars = await Car.find(filter)
-        .sort({ averageRate: -1 })
-        .skip(page * 10)
-        .limit(10);
+      const cars = await Car.aggregate([
+        {
+          $match: filter,
+        },
+        {
+          $skip: page * 10,
+        },
+        {
+          $limit: 10,
+        },
+        {
+          $sort: { averageRate: -1 },
+        },
+      ]);
       const count = await Car.countDocuments(filter);
       const numberPages = Math.ceil(count / 10);
       const newCars = cars.map((car) => {
-        const { _id, ...rest } = car._doc;
+        const { _id, ...rest } = car;
         return { id: _id, ...rest };
       });
 
