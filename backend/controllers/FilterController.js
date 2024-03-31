@@ -20,7 +20,10 @@ export default class FilterController {
       const filter = { available: true };
       if (brandName)
         filter.brandName = {
-          $regex: new RegExp(`[${brandName}]{${brandName.length},}`, "i"),
+          $regex: new RegExp(
+            `[${brandName}]{${Math.ceil(brandName.length * 0.8)},}`,
+            "i",
+          ),
         };
       if (type) filter.type = type;
       if (color)
