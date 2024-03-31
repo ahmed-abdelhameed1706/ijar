@@ -8,7 +8,7 @@ const App = () => {
   return (
     <div className="flex flex-col min-h-screen">
       <NavBar />
-      <main className="flex-grow mmd:mt-14">
+      <main className="flex-grow max-[768px]:mt-14">
         <Routes />
       </main>
       <Footer />
