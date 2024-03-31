@@ -25,7 +25,10 @@ export default class FilterController {
       if (type) filter.type = type;
       if (color)
         filter.color = {
-          $regex: new RegExp(`[${color}]{${color.length},}`, "i"),
+          $regex: new RegExp(
+            `[${color}]{${Math.floor(color.length * 0.9)},}`,
+            "i",
+          ),
         };
       if (model)
         filter.model = {
@@ -49,7 +52,7 @@ export default class FilterController {
           $match: filter,
         },
         {
-          $skip: page * 10,
+          $skip: (page || 0) * 10,
         },
         {
           $limit: 10,

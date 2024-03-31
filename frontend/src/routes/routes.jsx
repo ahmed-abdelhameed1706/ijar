@@ -43,6 +43,12 @@ const Routes = () => {
     maxPrice: z.string(),
     location: z.string(),
     fuel: z.string(),
+  }).refine((data) => data.maxYear >= data.minYear, {
+    path: ["maxYear"],
+    message: "Max year must be greater than or equal to min year.",
+  }).refine((data) => data.maxPrice >= data.minPrice, {
+    path: ["maxPrice"],
+    message: "Max price must be greater than or equal to min price.",
   });
 
   const form = useForm({
