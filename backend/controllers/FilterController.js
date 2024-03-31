@@ -20,20 +20,20 @@ export default class FilterController {
       const filter = {};
       if (brandName)
         filter.brandName = {
-          $regex: new RegExp(brandName.split("").join("[a-z]*"), "i"),
+          $regex: new RegExp(`[${brandName}]{${brandName.length},}`, "i"),
         };
       if (type) filter.type = type;
       if (color)
         filter.color = {
-          $regex: new RegExp(color.split("").join("[a-z]*"), "i"),
+          $regex: new RegExp(`[${color}]{${color.length},}`, "i"),
         };
       if (model)
         filter.model = {
-          $regex: new RegExp(model.split("").join("[a-z]*"), "i"),
+          $regex: new RegExp(`[${model}]{${model.length},}`, "i"),
         };
       if (location)
         filter.location = {
-          $regex: new RegExp(location.split("").join("[a-z]*"), "i"),
+          $regex: new RegExp(`[${location}]{${location.length},}`, "i"),
         };
       if (fuel) filter.fuel = fuel;
       if (minPrice && maxPrice)
