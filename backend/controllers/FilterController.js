@@ -18,11 +18,23 @@ export default class FilterController {
       } = req.query;
 
       const filter = {};
-      if (brandName) filter.brandName = brandName;
+      if (brandName)
+        filter.brandName = {
+          $regex: new RegExp(brandName.split("").join("[a-z]*"), "i"),
+        };
       if (type) filter.type = type;
-      if (color) filter.color = color;
-      if (model) filter.model = model;
-      if (location) filter.location = location;
+      if (color)
+        filter.color = {
+          $regex: new RegExp(color.split("").join("[a-z]*"), "i"),
+        };
+      if (model)
+        filter.model = {
+          $regex: new RegExp(model.split("").join("[a-z]*"), "i"),
+        };
+      if (location)
+        filter.location = {
+          $regex: new RegExp(location.split("").join("[a-z]*"), "i"),
+        };
       if (fuel) filter.fuel = fuel;
       if (minPrice && maxPrice)
         filter.price = { $gte: minPrice, $lte: maxPrice };
