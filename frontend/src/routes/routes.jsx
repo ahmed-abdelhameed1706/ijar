@@ -33,6 +33,8 @@ const Routes = () => {
   const [cars, setCars] = useState([]);
 
   const formSchema = z.object({
+    brandName: z.string(),
+    model: z.string(),
     minYear: z.string(),
     maxYear: z.string(),
     type: z.string(),

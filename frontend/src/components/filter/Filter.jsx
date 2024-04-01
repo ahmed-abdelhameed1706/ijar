@@ -24,7 +24,7 @@ const Filter = ({ handleSubmit, form }) => {
   const [brandOther, setBrandOther] = useState(true)
   const [modelOther, setModelOther] = useState(true)
 
-  async function onSubmit(values) {
+  function onSubmit(values) {
     if (location.pathname === "/cars") {
       handleSubmit(values);
     } else {
@@ -62,7 +62,7 @@ const Filter = ({ handleSubmit, form }) => {
         <CardTitle className="text-left">Filter</CardTitle>
         <p
           className="text-primary select-none text-base cursor-pointer text-right"
-          onClick={form.reset()}
+          onClick={() => form.reset()}
         >
           Reset
         </p>
