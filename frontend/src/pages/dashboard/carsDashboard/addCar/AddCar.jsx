@@ -137,6 +137,30 @@ const AddCar = ({ setOpen, setCars, cars, car, isUpdate = false }) => {
     }
   }
 
+  const handleBrandClick = () => {
+    form.setValue('model', '')
+    form.setValue('brandName', '')
+    setBrandOther(false)
+  }
+
+  const handleModelClick = () => {
+    form.setValue('model', '')
+    setModelOther(false)
+  }
+
+
+  const handleBrandOnBlure = () => {
+    if (!form.getValues().brandName) {
+      setBrandOther(true)
+    }
+  }
+
+  const handleModelOnBlure = () => {
+    if (brandOther && !form.getValues().model) {
+      setModelOther(true)
+    }
+  }
+
   return (
     // <div className="flex min-[650px]:py-3 min-[650px]:px-2 justify-center items-center w-full h-full">
     //   <div className=" flex max-w-full bg-white gap-6 p-5 min-[650px]:rounded-lg  min-[650px]:shadow-lg">
@@ -199,7 +223,7 @@ const AddCar = ({ setOpen, setCars, cars, car, isUpdate = false }) => {
                             field.onChange(val)
                             setBrand(val)
                           }}
-                          setInput={setBrandOther}
+                          handleClick={handleBrandClick}
                           defaultValue={field.value}
                           className="flex-grow max-h-8"
                           placeholder="Toyota"
@@ -207,7 +231,10 @@ const AddCar = ({ setOpen, setCars, cars, car, isUpdate = false }) => {
                       />
                       </div>
                       : <FormControl>
-                      <Input placeholder="Toyota" type="text" {...field} autoFocus={!brandOther}/>
+                      <Input placeholder="Toyota" type="text" {...field}
+                        autoFocus={!brandOther}
+                        onBlur={handleBrandOnBlure}
+                      />
                     </FormControl>}
                       <FormMessage className="text-xs font-light" />
                     </FormItem>
@@ -221,7 +248,7 @@ const AddCar = ({ setOpen, setCars, cars, car, isUpdate = false }) => {
                       <FormLabel>Model</FormLabel>
                       {modelOther && brandOther ? <div className="flex-grow"> <Selector 
                           onValueChange={field.onChange}
-                          setInput={setModelOther}
+                          handleClick={handleModelClick}
                           defaultValue={field.value}
                           className="flex-grow max-h-8"
                           placeholder={carModels[brand][0]}
@@ -230,7 +257,10 @@ const AddCar = ({ setOpen, setCars, cars, car, isUpdate = false }) => {
                       </div>
                       :
                       <FormControl>
-                        <Input placeholder={brandOther ? carModels[brand][0] : "Camry"} type="text" {...field} />
+                        <Input placeholder={brandOther ? carModels[brand][0] : "Camry"} type="text" {...field} 
+                          autoFocus={!modelOther}
+                          onBlur={handleModelOnBlure}
+                        />
                       </FormControl>}
                       <FormMessage />
                     </FormItem>

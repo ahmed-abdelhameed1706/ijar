@@ -3,7 +3,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
-import GoogleIcon from "../../assets/icons/google-icon.png";
 import {
   Card,
   CardContent,
@@ -32,13 +31,14 @@ import "react-phone-input-2/lib/style.css";
 import { useState } from "react";
 import { Label } from "@/components/ui/label";
 import { Eye, EyeOff } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "../../api/axios";
 import { toast } from "react-toastify";
 
 const SignupPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const navigate = useNavigate();
 
   const formSchema = z
     .object({
@@ -93,6 +93,7 @@ const SignupPage = () => {
           },
         }
       );
+      navigate("/login", { replace: true });
       console.log(response);
       toast.success(response.data.message);
       setTimeout(() => {

@@ -20,15 +20,39 @@ const Filter = ({ handleSubmit, form }) => {
   
   const navgate = useNavigate();
   const location = useLocation();
-  const [brandOther, setBrandOther] = useState(true)
   const [brand, setBrand] = useState('Toyota')
+  const [brandOther, setBrandOther] = useState(true)
   const [modelOther, setModelOther] = useState(true)
 
-  async function onSubmit(values) {
+  function onSubmit(values) {
     if (location.pathname === "/cars") {
       handleSubmit(values);
     } else {
       navgate("/cars");
+    }
+  }
+
+  const handleBrandClick = () => {
+    form.setValue('model', '')
+    form.setValue('brandName', '')
+    setBrandOther(false)
+  }
+
+  const handleModelClick = () => {
+    form.setValue('model', '')
+    setModelOther(false)
+  }
+
+
+  const handleBrandOnBlure = () => {
+    if (!form.getValues().brandName) {
+      setBrandOther(true)
+    }
+  }
+
+  const handleModelOnBlure = () => {
+    if (brandOther && !form.getValues().model) {
+      setModelOther(true)
     }
   }
 
@@ -37,7 +61,7 @@ const Filter = ({ handleSubmit, form }) => {
       <CardHeader className="flex flex-row justify-between">
         <CardTitle className="text-left">Filter</CardTitle>
         <p
-          className="text-primary text-base cursor-pointer text-right"
+          className="text-primary select-none text-base cursor-pointer text-right"
           onClick={() => form.reset()}
         >
           Reset
@@ -50,55 +74,61 @@ const Filter = ({ handleSubmit, form }) => {
             className="gap-4 flex flex-wrap"
           >
             <div className="flex flex-wrap gap-4 flex-grow sm:min-w-[40%]">
-              <FormField
-                control={form.control}
-                name="brandName"
-                render={({ field }) => (
-                  <FormItem className="flex-grow min-w-[50%] max-[550px]:w-full">
-                    <FormLabel>Brand Name</FormLabel>
-                    
-                    {brandOther ? <div className="flex-grow"> <Selector 
-                        onValueChange={val => {
-                          field.onChange(val)
-                          setBrand(val)
-                        }}
-                        setInput={setBrandOther}
-                        defaultValue={field.value}
-                        className="flex-grow max-h-8"
-                        placeholder="Toyota"
-                        data={carBrands}
-                    />
-                    </div>
-                    : <FormControl>
-                    <Input placeholder="Toyota" type="text" {...field} autoFocus={!brandOther}/>
-                  </FormControl>}
-                    <FormMessage className="text-xs font-light" />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="model"
-                render={({ field }) => (
-                  <FormItem className="flex-grow">
-                    <FormLabel>Model</FormLabel>
-                    {modelOther && brandOther ? <div className="flex-grow"> <Selector 
-                        onValueChange={field.onChange}
-                        setInput={setModelOther}
-                        defaultValue={field.value}
-                        className="flex-grow max-h-8"
-                        placeholder={carModels[brand][0]}
-                        data={carModels[brand]}
-                    />
-                    </div>
-                    :
-                    <FormControl>
-                      <Input placeholder={brandOther ? carModels[brand][0] : "Camry"} type="text" {...field} />
+            <FormField
+                  control={form.control}
+                  name="brandName"
+                  render={({ field }) => (
+                    <FormItem className="flex-grow min-w-[50%] max-[550px]:w-full">
+                      <FormLabel>Brand Name</FormLabel>
+                      
+                      {brandOther ? <div className="flex-grow"> <Selector 
+                          onValueChange={val => {
+                            field.onChange(val)
+                            setBrand(val)
+                          }}
+                          handleClick={handleBrandClick}
+                          defaultValue={field.value}
+                          className="flex-grow max-h-8"
+                          placeholder="Toyota"
+                          data={carBrands}
+                      />
+                      </div>
+                      : <FormControl>
+                      <Input placeholder="Toyota" type="text" {...field}
+                        autoFocus={!brandOther}
+                        onBlur={handleBrandOnBlure}
+                      />
                     </FormControl>}
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                      <FormMessage className="text-xs font-light" />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="model"
+                  render={({ field }) => (
+                    <FormItem className="flex-grow">
+                      <FormLabel>Model</FormLabel>
+                      {modelOther && brandOther ? <div className="flex-grow"> <Selector 
+                          onValueChange={field.onChange}
+                          handleClick={handleModelClick}
+                          defaultValue={field.value}
+                          className="flex-grow max-h-8"
+                          placeholder={carModels[brand][0]}
+                          data={carModels[brand]}
+                      />
+                      </div>
+                      :
+                      <FormControl>
+                        <Input placeholder={brandOther ? carModels[brand][0] : "Camry"} type="text" {...field} 
+                          autoFocus={!modelOther}
+                          onBlur={handleModelOnBlure}
+                        />
+                      </FormControl>}
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
             </div>
             <div className="flex flex-wrap gap-4 flex-grow">
               {" "}
