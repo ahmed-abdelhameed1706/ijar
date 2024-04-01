@@ -9,11 +9,12 @@ import axios from "@/api/axios";
 import useAuthHeader from "react-auth-kit/hooks/useAuthHeader";
 import { toast } from "react-toastify";
 import Images from "./Images";
+import Checkout from "@/components/checkout/Checkout";
 
 const Car = () => {
   const { id } = useParams();
-  const [pickUp, setPickUp] = useState();
-  const [dropOff, setDropOff] = useState();
+  const [pickUp, setPickUp] = useState(null);
+  const [dropOff, setDropOff] = useState(null);
   const [daysDifference, setDaysDifference] = useState(null);
   const auth = useAuthHeader();
   const token = auth.split(" ")[1];
@@ -236,13 +237,19 @@ const Car = () => {
                 <Skeleton className="h-8 w-[60px]" />
               )}
             </div>
-            <Button
+            {/* <Button
               className="text-lg w-full"
               disabled={!pickUp || !dropOff}
               onClick={handleBook}
             >
               Book Now
-            </Button>
+            </Button> */}
+            <Checkout
+              car={car}
+              daysDifference={daysDifference}
+              pickUp={pickUp}
+              dropOff={dropOff}
+            />
           </Card>
         </div>
       </div>

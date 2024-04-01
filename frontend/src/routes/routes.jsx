@@ -27,6 +27,7 @@ import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import Checkout from "@/components/checkout/Checkout";
 
 const Routes = () => {
   const [cars, setCars] = useState([]);
@@ -194,6 +195,14 @@ const Routes = () => {
           }
         />
       </Route>
+      <Route
+        path="/checkout"
+        element={
+          <RequireAuth fallbackPath="/login">
+            <Checkout />
+          </RequireAuth>
+        }
+      />
     </ReactRouterRoutes>
   );
 };
