@@ -8,7 +8,6 @@ import About from "@/pages/about/about";
 import DashboardLayout from "@/pages/dashboard/DashboardLayout";
 import Settings from "@/pages/settings/Settings";
 import Cars from "@/pages/cars/cars";
-import AddCar from "@/pages/addCar/AddCar";
 import Car from "@/pages/car/Car";
 import BookingList from "@/pages/dashboard/bookingList/BookingList";
 import Chat from "@/pages/dashboard/chat/Chat";
@@ -32,24 +31,27 @@ import { z } from "zod";
 const Routes = () => {
   const [cars, setCars] = useState([]);
 
-  const formSchema = z.object({
-    brandName: z.string(),
-    model: z.string(),
-    minYear: z.string(),
-    maxYear: z.string(),
-    type: z.string(),
-    color: z.string(),
-    minPrice: z.string(),
-    maxPrice: z.string(),
-    location: z.string(),
-    fuel: z.string(),
-  }).refine((data) => data.maxYear >= data.minYear, {
-    path: ["maxYear"],
-    message: "Max year must be greater than or equal to min year.",
-  }).refine((data) => data.maxPrice >= data.minPrice, {
-    path: ["maxPrice"],
-    message: "Max price must be greater than or equal to min price.",
-  });
+  const formSchema = z
+    .object({
+      brandName: z.string(),
+      model: z.string(),
+      minYear: z.string(),
+      maxYear: z.string(),
+      type: z.string(),
+      color: z.string(),
+      minPrice: z.string(),
+      maxPrice: z.string(),
+      location: z.string(),
+      fuel: z.string(),
+    })
+    .refine((data) => data.maxYear >= data.minYear, {
+      path: ["maxYear"],
+      message: "Max year must be greater than or equal to min year.",
+    })
+    .refine((data) => data.maxPrice >= data.minPrice, {
+      path: ["maxPrice"],
+      message: "Max price must be greater than or equal to min price.",
+    });
 
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -73,6 +75,10 @@ const Routes = () => {
         path="/"
         element={<Home setCars={setCars} cars={cars} form={form} />}
       />
+      <Route
+        path="/cars"
+        element={<Cars cars={cars} setCars={setCars} form={form} />}
+      />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/signup" element={<SignupPage />} />
       <Route path="/reset-password" element={<ResetPassword />} />
@@ -84,10 +90,6 @@ const Routes = () => {
             <Settings />
           </RequireAuth>
         }
-      />
-      <Route
-        path="/addcar"
-        element={<AddCar setCars={setCars} cars={cars} />}
       />
       <Route
         path="/car/:id"
@@ -148,10 +150,6 @@ const Routes = () => {
           }
         />
       </Route>
-      <Route
-        path="/cars"
-        element={<Cars cars={cars} setCars={setCars} form={form} />}
-      />
       <Route path="*" element={<NotFound />} />
       <Route
         path="/dashboard"
