@@ -34,19 +34,15 @@ import Images from "./Images";
 import { useState } from "react";
 import useAuthHeader from "react-auth-kit/hooks/useAuthHeader";
 import uploadImages from "./uploadImages";
+import { carBrands, carModels, types, fuels } from "@/components/filter/carsData";
+import Selector from "@/components/filter/Selector";
 // import { useNavigate } from "react-router-dom";
 
 const AddCar = ({ setOpen, setCars, cars, car, isUpdate = false }) => {
   const [images, setImages] = useState(car?.images || []);
-  const types = [
-    "Sedan",
-    "Sports",
-    "Coupe",
-    "Minivan",
-    "Pickup",
-    "Station Wagon",
-  ];
-  const fuels = ["Gas", "Diesel", "Electric"];
+  const [brandOther, setBrandOther] = useState(true)
+  const [brand, setBrand] = useState('Toyota')
+  const [modelOther, setModelOther] = useState(true)
   const auth = useAuthHeader();
   const token = auth && auth.split(" ")[1];
   // const navgate = useNavigate();
@@ -141,6 +137,30 @@ const AddCar = ({ setOpen, setCars, cars, car, isUpdate = false }) => {
     }
   }
 
+  const handleBrandClick = () => {
+    form.setValue('model', '')
+    form.setValue('brandName', '')
+    setBrandOther(false)
+  }
+
+  const handleModelClick = () => {
+    form.setValue('model', '')
+    setModelOther(false)
+  }
+
+
+  const handleBrandOnBlure = () => {
+    if (!form.getValues().brandName) {
+      setBrandOther(true)
+    }
+  }
+
+  const handleModelOnBlure = () => {
+    if (brandOther && !form.getValues().model) {
+      setModelOther(true)
+    }
+  }
+
   return (
     // <div className="flex min-[650px]:py-3 min-[650px]:px-2 justify-center items-center w-full h-full">
     //   <div className=" flex max-w-full bg-white gap-6 p-5 min-[650px]:rounded-lg  min-[650px]:shadow-lg">
@@ -190,16 +210,32 @@ const AddCar = ({ setOpen, setCars, cars, car, isUpdate = false }) => {
           </h1>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2 ">
-              <div className="flex flex-col sm:flex-row  gap-4">
+              <div className="flex flex-wrap gap-4 flex-grow">
                 <FormField
                   control={form.control}
                   name="brandName"
                   render={({ field }) => (
-                    <FormItem className="w-full">
+                    <FormItem className="flex-grow min-w-[50%] max-[550px]:w-full">
                       <FormLabel>Brand Name</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Toyota" type="text" {...field} />
-                      </FormControl>
+                      
+                      {brandOther ? <div className="flex-grow"> <Selector 
+                          onValueChange={val => {
+                            field.onChange(val)
+                            setBrand(val)
+                          }}
+                          handleClick={handleBrandClick}
+                          defaultValue={field.value}
+                          className="flex-grow max-h-8"
+                          placeholder="Toyota"
+                          data={carBrands}
+                      />
+                      </div>
+                      : <FormControl>
+                      <Input placeholder="Toyota" type="text" {...field}
+                        autoFocus={!brandOther}
+                        onBlur={handleBrandOnBlure}
+                      />
+                    </FormControl>}
                       <FormMessage className="text-xs font-light" />
                     </FormItem>
                   )}
@@ -208,24 +244,24 @@ const AddCar = ({ setOpen, setCars, cars, car, isUpdate = false }) => {
                   control={form.control}
                   name="model"
                   render={({ field }) => (
-                    <FormItem className="w-full">
+                    <FormItem className="flex-grow">
                       <FormLabel>Model</FormLabel>
+                      {modelOther && brandOther ? <div className="flex-grow"> <Selector 
+                          onValueChange={field.onChange}
+                          handleClick={handleModelClick}
+                          defaultValue={field.value}
+                          className="flex-grow max-h-8"
+                          placeholder={carModels[brand][0]}
+                          data={carModels[brand]}
+                      />
+                      </div>
+                      :
                       <FormControl>
-                        <Input placeholder="Camry" type="text" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="year"
-                  render={({ field }) => (
-                    <FormItem className="w-full">
-                      <FormLabel>Year</FormLabel>
-                      <FormControl>
-                        <Input placeholder="2023" type="text" {...field} />
-                      </FormControl>
+                        <Input placeholder={brandOther ? carModels[brand][0] : "Camry"} type="text" {...field} 
+                          autoFocus={!modelOther}
+                          onBlur={handleModelOnBlure}
+                        />
+                      </FormControl>}
                       <FormMessage />
                     </FormItem>
                   )}

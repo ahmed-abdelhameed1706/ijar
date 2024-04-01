@@ -30,16 +30,16 @@ const Cars = ({ setCars, cars, form }) => {
   }, [page]);
 
   async function handleSubmit(values) {
+    setPage(0);
     try {
       const response = await axios.get("/search", {
         headers: {
           "Content-Type": "application/json",
         },
-        params: { ...values },
+        params: { ...values, page },
       });
       setCars(response.data.cars);
       setNumberPage(response.data.numberPages);
-      setPage(0);
     } catch (e) {
       toast.error(e.response.data.message);
     }

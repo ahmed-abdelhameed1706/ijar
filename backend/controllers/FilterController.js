@@ -20,12 +20,18 @@ export default class FilterController {
       const filter = { available: true };
       if (brandName)
         filter.brandName = {
-          $regex: new RegExp(`[${brandName}]{${brandName.length},}`, "i"),
+          $regex: new RegExp(
+            `[${brandName}]{${Math.ceil(brandName.length * 0.8)},}`,
+            "i",
+          ),
         };
       if (type) filter.type = type;
       if (color)
         filter.color = {
-          $regex: new RegExp(`[${color}]{${color.length},}`, "i"),
+          $regex: new RegExp(
+            `[${color}]{${Math.floor(color.length * 0.9)},}`,
+            "i",
+          ),
         };
       if (model)
         filter.model = {
@@ -44,14 +50,24 @@ export default class FilterController {
       else if (minYear) filter.year = { $gte: minYear };
       else if (maxYear) filter.year = { $lte: maxYear };
 
-      const cars = await Car.find(filter)
-        .sort({ averageRate: -1 })
-        .skip(page * 10)
-        .limit(10);
+      const cars = await Car.aggregate([
+        {
+          $match: filter,
+        },
+        {
+          $skip: (page || 0) * 10,
+        },
+        {
+          $limit: 10,
+        },
+        {
+          $sort: { averageRate: -1 },
+        },
+      ]);
       const count = await Car.countDocuments(filter);
       const numberPages = Math.ceil(count / 10);
       const newCars = cars.map((car) => {
-        const { _id, ...rest } = car._doc;
+        const { _id, ...rest } = car;
         return { id: _id, ...rest };
       });
 

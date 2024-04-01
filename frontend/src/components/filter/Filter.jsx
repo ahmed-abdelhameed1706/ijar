@@ -9,29 +9,20 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import "react-phone-input-2/lib/style.css";
 import { useNavigate, useLocation } from "react-router-dom";
+import Selector from "./Selector";
+import { carBrands, carModels, types, fuels } from "./carsData";
+import { useState } from "react";
 
 const Filter = ({ handleSubmit, form }) => {
-  const types = [
-    "Sedan",
-    "Sports",
-    "Coupe",
-    "Minivan",
-    "Pickup",
-    "Station Wagon",
-  ];
-  const fuels = ["Gas", "Diesel", "Electric"];
+  
   const navgate = useNavigate();
   const location = useLocation();
+  const [brand, setBrand] = useState('Toyota')
+  const [brandOther, setBrandOther] = useState(true)
+  const [modelOther, setModelOther] = useState(true)
 
   async function onSubmit(values) {
     if (location.pathname === "/cars") {
@@ -41,13 +32,37 @@ const Filter = ({ handleSubmit, form }) => {
     }
   }
 
+  const handleBrandClick = () => {
+    form.setValue('model', '')
+    form.setValue('brandName', '')
+    setBrandOther(false)
+  }
+
+  const handleModelClick = () => {
+    form.setValue('model', '')
+    setModelOther(false)
+  }
+
+
+  const handleBrandOnBlure = () => {
+    if (!form.getValues().brandName) {
+      setBrandOther(true)
+    }
+  }
+
+  const handleModelOnBlure = () => {
+    if (brandOther && !form.getValues().model) {
+      setModelOther(true)
+    }
+  }
+
   return (
     <Card className="border-none px-8 py-2 bg-inhert w-full rounded-none h-fit space-y-1">
       <CardHeader className="flex flex-row justify-between">
         <CardTitle className="text-left">Filter</CardTitle>
         <p
-          className="text-primary text-base cursor-pointer text-right"
-          onClick={() => form.reset()}
+          className="text-primary select-none text-base cursor-pointer text-right"
+          onClick={form.reset()}
         >
           Reset
         </p>
@@ -58,33 +73,62 @@ const Filter = ({ handleSubmit, form }) => {
             onSubmit={form.handleSubmit(onSubmit)}
             className="gap-4 flex flex-wrap"
           >
-            <div className="flex flex-wrap gap-4 flex-grow">
-              <FormField
-                control={form.control}
-                name="brandName"
-                render={({ field }) => (
-                  <FormItem className="flex-grow">
-                    <FormLabel>Brand Name</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Toyota" type="text" {...field} />
-                    </FormControl>
-                    <FormMessage className="text-xs font-light" />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="model"
-                render={({ field }) => (
-                  <FormItem className="flex-grow">
-                    <FormLabel>Model</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Camry" type="text" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+            <div className="flex flex-wrap gap-4 flex-grow sm:min-w-[40%]">
+            <FormField
+                  control={form.control}
+                  name="brandName"
+                  render={({ field }) => (
+                    <FormItem className="flex-grow min-w-[50%] max-[550px]:w-full">
+                      <FormLabel>Brand Name</FormLabel>
+                      
+                      {brandOther ? <div className="flex-grow"> <Selector 
+                          onValueChange={val => {
+                            field.onChange(val)
+                            setBrand(val)
+                          }}
+                          handleClick={handleBrandClick}
+                          defaultValue={field.value}
+                          className="flex-grow max-h-8"
+                          placeholder="Toyota"
+                          data={carBrands}
+                      />
+                      </div>
+                      : <FormControl>
+                      <Input placeholder="Toyota" type="text" {...field}
+                        autoFocus={!brandOther}
+                        onBlur={handleBrandOnBlure}
+                      />
+                    </FormControl>}
+                      <FormMessage className="text-xs font-light" />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="model"
+                  render={({ field }) => (
+                    <FormItem className="flex-grow">
+                      <FormLabel>Model</FormLabel>
+                      {modelOther && brandOther ? <div className="flex-grow"> <Selector 
+                          onValueChange={field.onChange}
+                          handleClick={handleModelClick}
+                          defaultValue={field.value}
+                          className="flex-grow max-h-8"
+                          placeholder={carModels[brand][0]}
+                          data={carModels[brand]}
+                      />
+                      </div>
+                      :
+                      <FormControl>
+                        <Input placeholder={brandOther ? carModels[brand][0] : "Camry"} type="text" {...field} 
+                          autoFocus={!modelOther}
+                          onBlur={handleModelOnBlure}
+                        />
+                      </FormControl>}
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
             </div>
             <div className="flex flex-wrap gap-4 flex-grow">
               {" "}
@@ -115,30 +159,19 @@ const Filter = ({ handleSubmit, form }) => {
                 )}
               />
             </div>
-            <div className="flex flex-wrap gap-4 flex-grow">
+            <div className="flex flex-wrap gap-4 flex-grow sm:min-w-[40%]">
               <FormField
                 control={form.control}
                 name="type"
                 render={({ field }) => (
-                  <FormItem className="flex-grow">
+                  <FormItem className="flex-grow min-w-[50%] max-[550px]:w-full">
                     <FormLabel>Type</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger className="h-10">
-                          <SelectValue placeholder="Sedan" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {types.map((type, index) => (
-                          <SelectItem key={index} value={type}>
-                            {type}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                      <Selector 
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                        placeholder="Sedan"
+                        data={types}
+                      />
                     <FormMessage />
                   </FormItem>
                 )}
@@ -149,23 +182,12 @@ const Filter = ({ handleSubmit, form }) => {
                 render={({ field }) => (
                   <FormItem className="flex-grow">
                     <FormLabel>Fuel</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger className="h-10">
-                          <SelectValue placeholder="Gas" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {fuels.map((type, index) => (
-                          <SelectItem key={index} value={type}>
-                            {type}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                      <Selector 
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                        placeholder="Gas"
+                        data={fuels}
+                      />
                     <FormMessage />
                   </FormItem>
                 )}
