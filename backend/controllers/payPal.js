@@ -1,4 +1,5 @@
 import axios from "axios";
+import e from "express";
 
 const base = "https://api-m.sandbox.paypal.com";
 
@@ -88,30 +89,58 @@ export default class PayPal {
         },
       });
 
-      return PayPal.handleResponse(response);
+      const orderData = PayPal.handleResponse(response);
+      console.log("Response from PayPal.js:", orderData);
+
+      return orderData;
     } catch (error) {
-      console.error("Failed to create order:", error.message);
-      throw new Error("Failed to create order.");
+      console.error("Failed to create order from paypal.js:", error.message);
     }
   };
 
+  static async getApprovalLink(orderID) {
+    return `https://www.sandbox.paypal.com/checkoutnow?token=${orderID}`;
+  }
+
   static captureOrder = async (orderID) => {
+    console.log("----------------");
+    console.log("--------CAPTURE ORDER SERVICE--------");
+    console.log("----------------");
     try {
       const accessToken = await PayPal.generateAccessToken();
+      console.log("Access Token from capture:", accessToken);
 
       const url = `${base}/v2/checkout/orders/${orderID}/capture`;
 
-      const response = await axios.post(url, null, {
+      console.log("url is " + url);
+
+      const response = await axios.post(url, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${accessToken}`,
         },
       });
 
-      return PayPal.handleResponse(response);
+      console.log("Response from captureOrder:", response.data);
+      console.log("HTTPResponse from captureOrder:", response.status);
+
+      const data = PayPal.handleResponse(response);
+
+      return data;
     } catch (error) {
-      console.error("Failed to capture order:", error);
-      throw new Error("Failed to capture order.");
+      if (error.response) {
+        console.error(
+          "Failed to capture order from paypal.js:",
+          error.response.data,
+          error.response.status
+        );
+      } else if (error.request) {
+        console.error("Failed to capture order from paypal.js:", error.request);
+      } else {
+        console.error("Failed to capture order from paypal.js:", error.message);
+      }
+
+      throw error;
     }
   };
 }

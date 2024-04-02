@@ -11,7 +11,8 @@ function Checkout({ car, daysDifference, onPaymentSuccess }) {
   const [message, setMessage] = useState("");
   const daysDifferenceRef = useRef(daysDifference);
   const initialOptions = {
-    "client-id": "test",
+    "client-id":
+      "AQM4fXAlk83lZM50hiUDMHFRqfmlZ01wzLKrQ-62-QxxoQZ9i2P-gcxLgqExcFd9C9Lcptgd1Il8WqLl",
     "enable-funding": "paylater,venmo,card",
     "disable-funding": "",
     "data-sdk-integration-source": "integrationbuilder_sc",
@@ -38,6 +39,8 @@ function Checkout({ car, daysDifference, onPaymentSuccess }) {
       const orderData = response.data;
 
       if (orderData.id) {
+        console.log(orderData.id);
+        console.log(orderData);
         return orderData.id;
       } else {
         const errorDetail = orderData?.details?.[0];
@@ -53,6 +56,7 @@ function Checkout({ car, daysDifference, onPaymentSuccess }) {
   };
 
   const onApprove = async (data, actions) => {
+    console.log("onApprove Order ID", data.orderID);
     try {
       const response = await axios.post(`/api/orders/${data.orderID}/capture`);
 
