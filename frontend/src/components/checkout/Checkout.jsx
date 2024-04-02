@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+/* eslint-disable react/prop-types */
+import { useState, useRef, useEffect } from "react";
 import axios from "../../api/axios";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 
@@ -6,27 +7,30 @@ function Message({ content }) {
   return <p>{content}</p>;
 }
 
-function Checkout({ car, daysDifference, pickUp, dropOff }) {
+function Checkout({ car, daysDifference, onPaymentSuccess }) {
+  const [message, setMessage] = useState("");
+  const daysDifferenceRef = useRef(daysDifference);
   const initialOptions = {
     "client-id": "test",
     "enable-funding": "paylater,venmo,card",
     "disable-funding": "",
     "data-sdk-integration-source": "integrationbuilder_sc",
   };
+  console.log("daysDifference-out", daysDifference);
 
-  const [message, setMessage] = useState("");
-
+  useEffect(() => {
+    daysDifferenceRef.current = daysDifference;
+  }, [daysDifference]);
   const createOrder = async () => {
+    const currentDaysDifference = daysDifferenceRef.current;
     console.log("Creating order for car:", car.id);
-    console.log("Days:", daysDifference);
-    console.log("Pick-up:", pickUp);
-    console.log("Drop-off:", dropOff);
+    console.log("daysDifference:", currentDaysDifference);
     try {
       const response = await axios.post("/api/orders", {
         cart: [
           {
             car: car,
-            // days: daysDifference,
+            price: car.price * currentDaysDifference,
           },
         ],
       });
@@ -67,6 +71,8 @@ function Checkout({ car, daysDifference, pickUp, dropOff }) {
           `Transaction ${transaction.status}: ${transaction.id}. See console for all available details`
         );
 
+        onPaymentSuccess && onPaymentSuccess();
+
         console.log(
           "Capture result",
           orderData,
@@ -84,7 +90,7 @@ function Checkout({ car, daysDifference, pickUp, dropOff }) {
       <PayPalScriptProvider options={initialOptions}>
         <PayPalButtons
           style={{ shape: "pill", layout: "vertical" }}
-          createOrder={createOrder}
+          createOrder={() => createOrder()}
           onApprove={onApprove}
         />
       </PayPalScriptProvider>

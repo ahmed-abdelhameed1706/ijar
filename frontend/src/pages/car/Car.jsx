@@ -3,7 +3,6 @@ import { Card } from "@/components/ui/card";
 import DateDialog from "./DateDialog";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
 import { useParams } from "react-router-dom";
 import axios from "@/api/axios";
 import useAuthHeader from "react-auth-kit/hooks/useAuthHeader";
@@ -13,12 +12,12 @@ import Checkout from "@/components/checkout/Checkout";
 
 const Car = () => {
   const { id } = useParams();
-  const [pickUp, setPickUp] = useState(null);
-  const [dropOff, setDropOff] = useState(null);
-  const [daysDifference, setDaysDifference] = useState(null);
+  const [pickUp, setPickUp] = useState("");
+  const [dropOff, setDropOff] = useState("");
   const auth = useAuthHeader();
   const token = auth.split(" ")[1];
   const [car, setCar] = useState(null);
+  const [daysDifference, setDaysDifference] = useState(0);
 
   useEffect(() => {
     const getCar = async () => {
@@ -27,6 +26,10 @@ const Car = () => {
           headers: { "Content-Type": "application/json" },
         });
         setCar(response.data);
+        const daysDiff = calculateDifference(dropOff, pickUp);
+        if (!isNaN(daysDiff)) {
+          setDaysDifference(daysDiff);
+        }
       } catch (e) {
         console.log(e.message);
       }
@@ -35,6 +38,7 @@ const Car = () => {
   }, []);
 
   const handleBook = async () => {
+    toast.success(`${daysDifference * car.price} payment successful`);
     try {
       const response = await axios.post(
         "/api/cart",
@@ -58,16 +62,27 @@ const Car = () => {
     }
   };
 
-  useEffect(() => {
+  const calculateDifference = (dropOff, pickUp) => {
     const timeDifferenceInMs =
-      dropOff && pickUp && dropOff.getTime() - pickUp.getTime();
+      new Date(dropOff).getTime() - new Date(pickUp).getTime();
     const hoursDiff = Math.floor(timeDifferenceInMs / (1000 * 60 * 60));
-    setDaysDifference(hoursDiff / 24);
+    const daysDiff = hoursDiff / 24;
+    return daysDiff;
+  };
+
+  useEffect(() => {
+    const daysDiff = calculateDifference(dropOff, pickUp);
+    if (!isNaN(daysDiff)) {
+      setDaysDifference(daysDiff);
+    }
   }, [pickUp, dropOff]);
 
   if (!car) {
     return <h2 className="flex-grow text-center pt-10">Loading...</h2>;
   }
+
+  // console.log(pickUp, dropOff);
+  console.log("car", car);
 
   return (
     <div className="flex max-w-full justify-center items-center">
@@ -229,8 +244,9 @@ const Car = () => {
             <hr />
             <div className="w-full flex justify-between items-center pt-4 pb-8">
               <p className="text-xl font-medium	 pr-2">Total Amount</p>
-              {daysDifference ? (
-                <p className="text-2xl font-medium	">
+              {typeof daysDifference === "number" &&
+              typeof car.price === "number" ? (
+                <p className="text-2xl font-medium">
                   ${daysDifference * car.price}
                 </p>
               ) : (
@@ -247,8 +263,7 @@ const Car = () => {
             <Checkout
               car={car}
               daysDifference={daysDifference}
-              pickUp={pickUp}
-              dropOff={dropOff}
+              onPaymentSuccess={handleBook}
             />
           </Card>
         </div>

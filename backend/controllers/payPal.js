@@ -75,7 +75,7 @@ export default class PayPal {
           {
             amount: {
               currency_code: "USD",
-              value: cart[0].car.price,
+              value: cart[0].price,
             },
           },
         ],
