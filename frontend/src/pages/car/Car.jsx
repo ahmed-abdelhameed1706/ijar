@@ -38,7 +38,13 @@ const Car = () => {
   }, []);
 
   const handleBook = async () => {
-    toast.success(`${daysDifference * car.price} payment successful`);
+    if (!pickUp || !dropOff) {
+      toast.error("Please select pick-up and drop-off dates");
+      return;
+    }
+    console.log(car);
+    console.log(daysDifference);
+    toast.success(`${car.price} payment successful`);
     try {
       const response = await axios.post(
         "/api/cart",
