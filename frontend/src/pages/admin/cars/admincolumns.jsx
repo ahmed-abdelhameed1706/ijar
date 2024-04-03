@@ -56,7 +56,7 @@ const MenuButton = ({ car }) => {
 
 MenuButton.propTypes = {
   car: PropTypes.shape({
-    _id: PropTypes.string.isRequired,
+    id: PropTypes.string.isRequired,
   }).isRequired,
 };
 
@@ -64,7 +64,7 @@ const AdminColumns = [
   {
     id: "ID",
     accessorKey: "carId",
-    accessorFn: (row) => row._id,
+    accessorFn: (row) => row.id,
     header: "Car ID",
   },
   {
@@ -115,7 +115,7 @@ const AdminColumns = [
   {
     id: "Owner",
     accessorKey: "carOwner",
-    accessorFn: (row) => row.ownerId.fullName,
+    accessorFn: (row) => row.owner.fullName,
     header: "Car Owner",
   },
 

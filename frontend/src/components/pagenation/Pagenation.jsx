@@ -52,7 +52,7 @@ const Pagenation = ({ page, setPage, number }) => {
           </PaginationItem>
           <PaginationItem>
             <PaginationNext
-              disabled={page === number - 1}
+              disabled={page === number - 1 || number === 0}
               onClick={() => {
                 setPage(page + 1);
               }}
