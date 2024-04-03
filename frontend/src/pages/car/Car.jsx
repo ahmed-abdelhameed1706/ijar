@@ -2,7 +2,7 @@
 import { Card } from "@/components/ui/card";
 import DateDialog from "./DateDialog";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import axios from "@/api/axios";
 import useAuthHeader from "react-auth-kit/hooks/useAuthHeader";
@@ -14,10 +14,13 @@ const Car = () => {
   const { id } = useParams();
   const [pickUp, setPickUp] = useState("");
   const [dropOff, setDropOff] = useState("");
+  const [daysDifference, setDaysDifference] = useState(0);
+  const dropOffRef = useRef(dropOff);
+  const pickUpRef = useRef(pickUp);
+  const daysDifferenceRef = useRef(daysDifference);
   const auth = useAuthHeader();
   const token = auth.split(" ")[1];
   const [car, setCar] = useState(null);
-  const [daysDifference, setDaysDifference] = useState(0);
 
   useEffect(() => {
     const getCar = async () => {
@@ -38,16 +41,18 @@ const Car = () => {
   }, []);
 
   const handleBook = async () => {
-    toast.success(`${daysDifference * car.price} payment successful`);
+    toast.success(
+      `${daysDifferenceRef.current * car.price} payment successful`
+    );
     try {
       const response = await axios.post(
         "/api/cart",
         JSON.stringify({
           carId: car.id,
-          rentalTerm: daysDifference,
-          totalCost: daysDifference * car.price,
-          endDate: dropOff,
-          startDate: pickUp,
+          rentalTerm: daysDifferenceRef.current,
+          totalCost: daysDifferenceRef.current * car.price,
+          endDate: dropOffRef.current,
+          startDate: pickUpRef.current,
         }),
         {
           headers: {
@@ -56,6 +61,7 @@ const Car = () => {
           },
         }
       );
+      console.log(response.data);
       toast.success("You book the Car successfully.");
     } catch (e) {
       toast.error(e.response.data.error);
@@ -76,6 +82,15 @@ const Car = () => {
       setDaysDifference(daysDiff);
     }
   }, [pickUp, dropOff]);
+
+  useEffect(() => {
+    dropOffRef.current = dropOff;
+    pickUpRef.current = pickUp;
+  }, [dropOff, pickUp]);
+
+  useEffect(() => {
+    daysDifferenceRef.current = daysDifference;
+  }, [daysDifference, dropOff, pickUp]);
 
   if (!car) {
     return <h2 className="flex-grow text-center pt-10">Loading...</h2>;
