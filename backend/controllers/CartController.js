@@ -64,6 +64,7 @@ class CartController {
       };
 
       const car = await Car.findOne({ _id: data.carId });
+      const user = await User.findOne({ _id: data.userId });
 
       if (!car) {
         return res.status(404).json({ error: "Not found" });
@@ -79,6 +80,8 @@ class CartController {
         await car.save();
         const cart = new Cart(data);
         await cart.save();
+        user.carts.push(cart._id);
+        await user.save();
         const { _id, ...rest } = cart._doc;
         return res.status(200).json({ id: _id, ...rest });
       } else {
@@ -180,6 +183,34 @@ class CartController {
     } catch (err) {
       console.log(err);
       return res.status(500).json({ error: err.message });
+    }
+  };
+
+  static cancelBooking = async (req, res) => {
+    try {
+      const cartId = req.params.id;
+      const userId = req.userId;
+      const cart = await Cart.findOne({
+        _id: cartId,
+        userId,
+      });
+
+      if (!cart) {
+        return res.status(401).send({ error: "Not found" });
+      }
+
+      const car = await Car.findOne({ _id: cart.carId });
+      car.available = true;
+      await car.save();
+      await Cart.findByIdAndUpdate(cart._id, { status: "Cancelled" });
+      await cart.save();
+
+      return res
+        .status(200)
+        .send({ message: "Booking cancelled successfully" });
+    } catch (err) {
+      console.log(err);
+      return res.status(500).json({ error: "Internal Server Error" });
     }
   };
 }

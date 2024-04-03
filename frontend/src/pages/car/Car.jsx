@@ -2,19 +2,22 @@
 import { Card } from "@/components/ui/card";
 import DateDialog from "./DateDialog";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
+import { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import axios from "@/api/axios";
 import useAuthHeader from "react-auth-kit/hooks/useAuthHeader";
 import { toast } from "react-toastify";
 import Images from "./Images";
+import Checkout from "@/components/checkout/Checkout";
 
 const Car = () => {
   const { id } = useParams();
-  const [pickUp, setPickUp] = useState();
-  const [dropOff, setDropOff] = useState();
-  const [daysDifference, setDaysDifference] = useState(null);
+  const [pickUp, setPickUp] = useState("");
+  const [dropOff, setDropOff] = useState("");
+  const [daysDifference, setDaysDifference] = useState(0);
+  const dropOffRef = useRef(dropOff);
+  const pickUpRef = useRef(pickUp);
+  const daysDifferenceRef = useRef(daysDifference);
   const auth = useAuthHeader();
   const token = auth.split(" ")[1];
   const [car, setCar] = useState(null);
@@ -26,6 +29,10 @@ const Car = () => {
           headers: { "Content-Type": "application/json" },
         });
         setCar(response.data);
+        const daysDiff = calculateDifference(dropOff, pickUp);
+        if (!isNaN(daysDiff)) {
+          setDaysDifference(daysDiff);
+        }
       } catch (e) {
         console.log(e.message);
       }
@@ -34,15 +41,18 @@ const Car = () => {
   }, []);
 
   const handleBook = async () => {
+    toast.success(
+      `${daysDifferenceRef.current * car.price} payment successful`
+    );
     try {
       const response = await axios.post(
         "/api/cart",
         JSON.stringify({
           carId: car.id,
-          rentalTerm: daysDifference,
-          totalCost: daysDifference * car.price,
-          endDate: dropOff,
-          startDate: pickUp,
+          rentalTerm: daysDifferenceRef.current,
+          totalCost: daysDifferenceRef.current * car.price,
+          endDate: dropOffRef.current,
+          startDate: pickUpRef.current,
         }),
         {
           headers: {
@@ -51,22 +61,43 @@ const Car = () => {
           },
         }
       );
+      console.log(response.data);
       toast.success("You book the Car successfully.");
     } catch (e) {
       toast.error(e.response.data.error);
     }
   };
 
-  useEffect(() => {
+  const calculateDifference = (dropOff, pickUp) => {
     const timeDifferenceInMs =
-      dropOff && pickUp && dropOff.getTime() - pickUp.getTime();
+      new Date(dropOff).getTime() - new Date(pickUp).getTime();
     const hoursDiff = Math.floor(timeDifferenceInMs / (1000 * 60 * 60));
-    setDaysDifference(hoursDiff / 24);
+    const daysDiff = hoursDiff / 24;
+    return daysDiff;
+  };
+
+  useEffect(() => {
+    const daysDiff = calculateDifference(dropOff, pickUp);
+    if (!isNaN(daysDiff)) {
+      setDaysDifference(daysDiff);
+    }
   }, [pickUp, dropOff]);
+
+  useEffect(() => {
+    dropOffRef.current = dropOff;
+    pickUpRef.current = pickUp;
+  }, [dropOff, pickUp]);
+
+  useEffect(() => {
+    daysDifferenceRef.current = daysDifference;
+  }, [daysDifference, dropOff, pickUp]);
 
   if (!car) {
     return <h2 className="flex-grow text-center pt-10">Loading...</h2>;
   }
+
+  // console.log(pickUp, dropOff);
+  console.log("car", car);
 
   return (
     <div className="flex max-w-full justify-center items-center">
@@ -228,21 +259,27 @@ const Car = () => {
             <hr />
             <div className="w-full flex justify-between items-center pt-4 pb-8">
               <p className="text-xl font-medium	 pr-2">Total Amount</p>
-              {daysDifference ? (
-                <p className="text-2xl font-medium	">
+              {typeof daysDifference === "number" &&
+              typeof car.price === "number" ? (
+                <p className="text-2xl font-medium">
                   ${daysDifference * car.price}
                 </p>
               ) : (
                 <Skeleton className="h-8 w-[60px]" />
               )}
             </div>
-            <Button
+            {/* <Button
               className="text-lg w-full"
               disabled={!pickUp || !dropOff}
               onClick={handleBook}
             >
               Book Now
-            </Button>
+            </Button> */}
+            <Checkout
+              car={car}
+              daysDifference={daysDifference}
+              onPaymentSuccess={handleBook}
+            />
           </Card>
         </div>
       </div>

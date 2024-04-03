@@ -15,10 +15,10 @@ import { Label } from "@/components/ui/label";
 import { useState } from "react";
 
 const DateDialog = ({ setPickUp, setDropOff }) => {
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
 
-  console.log(new Date().toISOString().slice(0, 10))
+  // console.log(new Date().toISOString().slice(0, 10));
 
   const handleChangePickUp = (event) => {
     setStartDate(event.target.value);

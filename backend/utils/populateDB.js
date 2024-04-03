@@ -3,6 +3,7 @@ import { faker } from "@faker-js/faker";
 import { getRandomCarImages } from "./generateImages";
 import User from "../models/UserSchema";
 import Cart from "../models/CartSchema";
+import bcrypt from "bcryptjs";
 
 export const seedDatabase = async (
   numOwners = 5,
@@ -22,8 +23,8 @@ export const seedDatabase = async (
     for (let i = 0; i < numOwners; i++) {
       const owner = await User.create({
         fullName: faker.person.fullName(),
-        email: faker.internet.email(),
-        password: "Password1",
+        email: faker.internet.email().toLocaleLowerCase(),
+        password: await bcrypt.hash("Password1", 12),
         phoneNumber: faker.phone.number(),
         address: faker.location.streetAddress(),
         brithDate: faker.date.birthdate({
@@ -43,8 +44,8 @@ export const seedDatabase = async (
     for (let i = 0; i < numUsers; i++) {
       const user = await User.create({
         fullName: faker.person.fullName(),
-        email: faker.internet.email(),
-        password: "Password1",
+        email: faker.internet.email().toLocaleLowerCase(),
+        password: await bcrypt.hash("Password1", 12),
         phoneNumber: faker.phone.number(),
         address: faker.location.streetAddress(),
         brithDate: faker.date.birthdate({
@@ -75,7 +76,29 @@ export const seedDatabase = async (
           engineId: faker.string.alphanumeric(17),
           description: faker.lorem.sentence(),
           ownerId: owner._id,
-          images: [await getRandomCarImages(), await getRandomCarImages()],
+          // images: [await getRandomCarImages(), await getRandomCarImages()],
+          images: [
+            faker.image.urlLoremFlickr({
+              category: "car",
+              width: 640,
+              height: 360,
+            }),
+            faker.image.urlLoremFlickr({
+              category: "car",
+              width: 640,
+              height: 360,
+            }),
+            faker.image.urlLoremFlickr({
+              category: "car",
+              width: 640,
+              height: 360,
+            }),
+            faker.image.urlLoremFlickr({
+              category: "car",
+              width: 640,
+              height: 360,
+            }),
+          ],
         });
 
         await newCar.save();
@@ -109,4 +132,4 @@ export const seedDatabase = async (
   }
 };
 
-// seedDatabase(20, 10, 4);
+// seedDatabase(5, 10, 4);

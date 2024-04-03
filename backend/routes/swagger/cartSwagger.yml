@@ -93,3 +93,58 @@ paths:
           description: Checked out successfully
         401:
           description: Unauthorized access
+  /api/cart/cancel:
+    put:
+      summary: "Cancel Booking"
+      description: "Cancel a booking in the cart"
+      tags: [Cart]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: "Authorization"
+          in: "header"
+          description: "Bearer Token"
+          required: true
+          type: "string"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+              properties:
+                id:
+                  type: string
+                  description: ID of the cart to cancel
+      responses:
+        200:
+          description: "Booking cancelled successfully"
+          schema:
+            type: "object"
+            properties:
+              message:
+                type: "string"
+                example: "Booking cancelled successfully"
+        401:
+          description: "Not found"
+          schema:
+            type: "object"
+            properties:
+              error:
+                type: "string"
+                example: "Not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            type: "object"
+            properties:
+              error:
+                type: "string"
+                example: "Internal Server Error"
+  securityDefinitions:
+    Bearer:
+      type: apiKey
+      name: Authorization
+      in: header

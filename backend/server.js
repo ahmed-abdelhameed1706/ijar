@@ -16,6 +16,7 @@ import { activityLogger } from "./utils/middlewares";
 import cookieParser from "cookie-parser";
 import path from "path";
 import { seedDatabase } from "./utils/populateDB";
+import payPalRouter from "./routes/payPalRouter";
 
 const port = 5000;
 const app = express();
@@ -81,6 +82,7 @@ app.use("/api/admin", adminRouter);
 app.use("/api", userRouter);
 app.use("/search", filterRouter);
 app.use("/api", ticketRouter);
+app.use("/api", payPalRouter);
 
 // Serve static files
 app.use(express.static(path.join(__dirname, "../frontend/dist")));

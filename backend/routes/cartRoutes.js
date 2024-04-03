@@ -14,4 +14,6 @@ cartRouter.delete("/cart/:id", verifyToken, CartController.deleteFromCart);
 
 cartRouter.post("/checkout", verifyToken, CartController.checkout);
 
+cartRouter.put("/cart", verifyToken, CartController.cancelBooking);
+
 export default cartRouter;
