@@ -72,7 +72,9 @@ const carsInfo = [
   },
 ];
 
-const MotionTop = ({ children, duration, key, className }) => {
+// db.cars.updateMany({ownerId: })
+
+const MotionTop = ({ children, key, className }) => {
   return (
     <motion.div
       key={key}
@@ -86,7 +88,7 @@ const MotionTop = ({ children, duration, key, className }) => {
         opacity: 1,
         y: 0, // Slide in to its original position
         transition: {
-          duration: duration, // Animation duration
+          duration: 0.5, // Animation duration
         },
       }}
       viewport={{ once: true }}

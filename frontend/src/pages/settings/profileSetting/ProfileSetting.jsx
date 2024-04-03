@@ -106,7 +106,6 @@ const ProfileSetting = ({ setOpenBar }) => {
           imageUrl: response.data.imageUrl,
         },
       });
-
       toast.success("Account data updated successfully.");
     } catch (e) {
       toast.error(e.response.data.message);

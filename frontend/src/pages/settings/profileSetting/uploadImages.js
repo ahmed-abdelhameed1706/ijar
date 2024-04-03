@@ -9,7 +9,7 @@ export default async function uploadImage(
   values,
   setImageUrl,
   token,
-  signIn
+  signIn,
 ) {
   const storageRef = ref(storage, `/users/${v4()}`);
 
@@ -40,7 +40,7 @@ export default async function uploadImage(
             "Content-Type": "application/json",
             authorization: token,
           },
-        }
+        },
       );
 
       return updateUserDataPromise;
@@ -63,6 +63,8 @@ export default async function uploadImage(
           imageUrl: response.data.imageUrl,
         },
       });
+      toast.success("Account data updated successfully.");
+      window.location.reload();
     })
     .catch((error) => {
       if (
