@@ -163,7 +163,7 @@ const CarsDashboardPage = () => {
       <div className="flex justify-between">
         <div className="flex flex-wrap justify-start gap-6">
           {cars.map((car, index) => (
-            <MotionTop key={index} duration={index / 2}>
+            <MotionTop key={index} duration={2 / 3}>
               <CardCar
                 car={car}
                 setCar={setCar}

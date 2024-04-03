@@ -194,10 +194,12 @@ class CartController {
         _id: cartId,
         userId,
       });
+      console.log("======= find car ========");
 
       if (!cart) {
         return res.status(401).send({ error: "Not found" });
       }
+      console.log("======= update car ========");
 
       const car = await Car.findOne({ _id: cart.carId });
       car.available = true;
