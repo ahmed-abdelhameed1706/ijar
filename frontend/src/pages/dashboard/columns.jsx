@@ -21,34 +21,54 @@ export const columns = [
   {
     id: "carName",
     accessorKey: "carName",
-    accessorFn: (row) => (row.carId ? row.carId.brandName : "N/A"),
+    accessorFn: (row) => (row.carId ? row.carId.brandName : "--"),
     header: "Car BrandName",
   },
   {
     id: "Model",
     accessorKey: "carModel",
-    accessorFn: (row) => (row.carId ? row.carId.model : "N/A"),
+    accessorFn: (row) => (row.carId ? row.carId.model : "--"),
     header: "Car Model",
   },
 
   {
     id: "Price",
     accessorKey: "carPrice",
-    accessorFn: (row) => row.totalCost,
+    accessorFn: (row) => `$${row.totalCost}`,
     header: "Total Cost",
   },
 
   {
     id: "Start Date",
     accessorKey: "startDate",
-    accessorFn: (row) => row.startDate,
+    accessorFn: (row) => {
+      const date = new Date(row.startDate);
+      const formattedDate = `${date.getFullYear()}-${(date.getMonth() + 1)
+        .toString()
+        .padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")} ${date
+        .getHours()
+        .toString()
+        .padStart(2, "0")}:${date.getMinutes().toString().padStart(2, "0")}`;
+      console.log(formattedDate);
+      return formattedDate;
+    },
     header: "Start Date",
   },
 
   {
     id: "End Date",
     accessorKey: "endDate",
-    accessorFn: (row) => row.endDate,
+    accessorFn: (row) => {
+      const date = new Date(row.endDate);
+      const formattedDate = `${date.getFullYear()}-${(date.getMonth() + 1)
+        .toString()
+        .padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")} ${date
+        .getHours()
+        .toString()
+        .padStart(2, "0")}:${date.getMinutes().toString().padStart(2, "0")}`;
+      console.log(formattedDate);
+      return formattedDate;
+    },
     header: "End Date",
   },
 
