@@ -71,34 +71,34 @@ export const seedDatabase = async (
           location: faker.location.city(),
           fuel: faker.vehicle.fuel(),
           maxSpeed: faker.number.int({ min: 100, max: 350 }),
-          price: faker.number.int({ min: 80, max: 1000 }),
+          price: faker.number.int({ min: 50, max: 150 }),
           licensePlateNumber: faker.string.alphanumeric(7).toUpperCase(),
           engineId: faker.string.alphanumeric(17),
           description: faker.lorem.sentence(),
           ownerId: owner._id,
-          // images: [await getRandomCarImages(), await getRandomCarImages()],
-          images: [
-            faker.image.urlLoremFlickr({
-              category: "car",
-              width: 640,
-              height: 360,
-            }),
-            faker.image.urlLoremFlickr({
-              category: "car",
-              width: 640,
-              height: 360,
-            }),
-            faker.image.urlLoremFlickr({
-              category: "car",
-              width: 640,
-              height: 360,
-            }),
-            faker.image.urlLoremFlickr({
-              category: "car",
-              width: 640,
-              height: 360,
-            }),
-          ],
+          images: [await getRandomCarImages(), await getRandomCarImages()],
+          // images: [
+          //   faker.image.urlLoremFlickr({
+          //     category: "car",
+          //     width: 640,
+          //     height: 360,
+          //   }),
+          //   faker.image.urlLoremFlickr({
+          //     category: "car",
+          //     width: 640,
+          //     height: 360,
+          //   }),
+          //   faker.image.urlLoremFlickr({
+          //     category: "car",
+          //     width: 640,
+          //     height: 360,
+          //   }),
+          //   faker.image.urlLoremFlickr({
+          //     category: "car",
+          //     width: 640,
+          //     height: 360,
+          //   }),
+          // ],
         });
 
         await newCar.save();
