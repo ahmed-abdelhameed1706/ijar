@@ -62,11 +62,11 @@ const Cars = ({ setCars, cars, form }) => {
       <div className="bg-gray-100 border-y">
         <Filter form={form} handleSubmit={handleSubmit} />
       </div>
-      <div className="flex flex-wrap gap-10 justify-evenly flex-grow py-6">
+      {cars.length ? <div className="flex flex-wrap gap-10 justify-evenly flex-grow py-6">
         {cars.map((car) => (
           <CarCard key={car.id} car={car} />
         ))}
-      </div>
+      </div> : <p className="text-center ">Oops, no cars were found!</p>}
       <Pagenation
         cars={cars}
         setPage={setPage}

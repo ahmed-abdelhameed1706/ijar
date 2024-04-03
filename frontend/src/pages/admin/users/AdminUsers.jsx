@@ -1,10 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from "react";
 import axios from "../../../api/axios";
 import useAuthHeader from "react-auth-kit/hooks/useAuthHeader";
 import { AdminDataTable } from "../adminDataTable";
 import { columns } from "./userColumns";
 import Pagenation from "@/components/pagenation/Pagenation";
-import { set } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
 const AdminUsers = () => {
@@ -38,7 +38,7 @@ const AdminUsers = () => {
 
   useEffect(() => {
     getAllUsers();
-  }, [dataTable, page]);
+  }, [page]);
 
   // useEffect(() => {
   //   setDataTable(data); // Set dataTable after data has been updated

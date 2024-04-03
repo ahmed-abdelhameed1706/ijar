@@ -6,15 +6,20 @@ import Cart from "../models/CartSchema";
 export default class AdminController {
   // USERS MANAGEMENT
   static getAllUsers = async (req, res) => {
-    const page = parseInt(req.query.page) || 1; // Default to page 1 if not specified
+    const page = parseInt(req.query.page) || 0; // Default to page 1 if not specified
     const limit = 10;
 
     try {
       const count = await User.countDocuments();
       const totalPages = Math.ceil(count / limit);
-      const offset = (page - 1) * limit;
-
-      const users = await User.find().skip(offset).limit(limit);
+      const users = await User.aggregate([
+        {
+          $skip: (page || 0) * limit,
+        },
+        {
+          $limit: limit,
+        },
+      ]);
 
       res.status(200).json({
         users,
@@ -67,21 +72,39 @@ export default class AdminController {
 
   // CARS MANAGEMENT
   static getAllCars = async (req, res) => {
-    const page = parseInt(req.query.page) || 1; // Default to page 1 if not specified
+    const page = parseInt(req.query.page) || 0; // Default to page 1 if not specified
     const limit = 10;
 
     try {
+      const cars = await Car.aggregate([
+        {
+          $skip: (page || 0) * limit,
+        },
+        {
+          $limit: limit,
+        },
+        {
+          $sort: { averageRate: -1 },
+        },
+        {
+          $lookup: {
+            from: "users",
+            localField: "ownerId",
+            foreignField: "_id",
+            as: "owner",
+          },
+        },
+        { $unwind: "$owner" },
+      ]);
       const count = await Car.countDocuments();
       const totalPages = Math.ceil(count / limit);
-      const offset = (page - 1) * limit;
-
-      const cars = await Car.find()
-        .skip(offset)
-        .limit(limit)
-        .populate("ownerId", "fullName");
+      const newCars = cars.map((car) => {
+        const { _id, ...rest } = car;
+        return { id: _id, ...rest };
+      });
 
       res.status(200).json({
-        cars,
+        cars: newCars,
         currentPage: page,
         totalPages,
       });
@@ -111,15 +134,14 @@ export default class AdminController {
 
   // TICKETS MANAGEMENT
   static getAllTickets = async (req, res) => {
-    const page = parseInt(req.query.page) || 1; // Default to page 1 if not specified
+    const page = parseInt(req.query.page) || 0; // Default to page 1 if not specified
     const limit = 10;
     try {
       const count = await Ticket.countDocuments();
       const totalPages = Math.ceil(count / limit);
-      const offset = (page - 1) * limit;
 
       const tickets = await Ticket.find()
-        .skip(offset)
+        .skip(page * limit)
         .limit(limit)
         .populate("createdBy", "email");
 
@@ -153,7 +175,7 @@ export default class AdminController {
       const ticket = await Ticket.findByIdAndUpdate(
         req.params.id,
         { status: req.body.status },
-        { new: true }
+        { new: true },
       );
       if (!ticket) {
         return res.status(404).json({ error: "Ticket not found" });
@@ -167,15 +189,14 @@ export default class AdminController {
 
   // CARTS MANAGEMENT
   static getAllCarts = async (req, res) => {
-    const page = parseInt(req.query.page) || 1; // Default to page 1 if not specified
+    const page = parseInt(req.query.page) || 0; // Default to page 1 if not specified
     const limit = 10;
     try {
       const count = await Cart.countDocuments();
       const totalPages = Math.ceil(count / limit);
-      const offset = (page - 1) * limit;
 
       const carts = await Cart.find()
-        .skip(offset)
+        .skip(page * limit)
         .limit(limit)
         .populate("carId", "brandName model")
         .populate("userId", "fullName");

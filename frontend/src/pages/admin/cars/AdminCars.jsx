@@ -1,44 +1,37 @@
-import { Button } from "@/components/ui/button";
+/* eslint-disable react-hooks/exhaustive-deps */
 import { AdminDataTable } from "../adminDataTable";
 import { AdminColumns } from "./admincolumns";
 import { useState } from "react";
 import axios from "../../../api/axios";
 import useAuthHeader from "react-auth-kit/hooks/useAuthHeader";
 import { useEffect } from "react";
+import Pagenation from "@/components/pagenation/Pagenation";
 
 const AdminCars = () => {
-  const [activeTab, setActiveTab] = useState("all");
+
   const [dataTable, setDataTable] = useState([]);
   const auth = useAuthHeader();
   const token = auth && auth.split(" ")[1];
+  const [page, setPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
 
-  const handleFilter = (status) => {
-    const filteredData = data.filter((item) => item.status === status);
-    setDataTable(filteredData);
-  };
-  const handleStatus = (status) => {
-    setActiveTab(status);
-    if (status === "all") {
-      setDataTable(data);
-    } else {
-      handleFilter(status);
-    }
-  };
   const getAllCars = async () => {
     try {
       const response = await axios.get("/api/admin/cars", {
         headers: {
           Authorization: token,
         },
+        params: { page },
       });
       setDataTable(response.data.cars);
+      setTotalPages(response.data.totalPages);
     } catch (error) {
       console.log(error.message);
     }
   };
   useEffect(() => {
     getAllCars();
-  }, [dataTable]);
+  }, [page]);
 
   return (
     <div>
@@ -51,6 +44,7 @@ const AdminCars = () => {
         <div className="p-4">
           <AdminDataTable columns={AdminColumns} data={dataTable} />
         </div>
+        <Pagenation page={page} setPage={setPage} number={totalPages} />
       </div>
     </div>
   );

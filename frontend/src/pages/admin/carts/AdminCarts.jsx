@@ -1,44 +1,35 @@
-import { Button } from "@/components/ui/button";
 import { AdminDataTable } from "../adminDataTable";
 import { useState } from "react";
 import axios from "../../../api/axios";
 import useAuthHeader from "react-auth-kit/hooks/useAuthHeader";
 import { useEffect } from "react";
 import { CartColumns } from "./cartsColumns";
+import Pagenation from "@/components/pagenation/Pagenation";
 
 const AdminCarts = () => {
-  const [activeTab, setActiveTab] = useState("all");
   const [dataTable, setDataTable] = useState([]);
   const auth = useAuthHeader();
   const token = auth && auth.split(" ")[1];
+  const [page, setPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
 
-  const handleFilter = (status) => {
-    const filteredData = data.filter((item) => item.status === status);
-    setDataTable(filteredData);
-  };
-  const handleStatus = (status) => {
-    setActiveTab(status);
-    if (status === "all") {
-      setDataTable(data);
-    } else {
-      handleFilter(status);
-    }
-  };
   const getAllCarts = async () => {
     try {
       const response = await axios.get("/api/admin/carts", {
         headers: {
           Authorization: token,
         },
+        params: { page },
       });
       setDataTable(response.data.carts);
+      setTotalPages(response.data.totalPages);
     } catch (error) {
-      console.log(error.message);
+      console.log(error);
     }
   };
   useEffect(() => {
     getAllCarts();
-  }, [dataTable]);
+  }, [page]);
 
   return (
     <div>
@@ -51,6 +42,7 @@ const AdminCarts = () => {
         <div className="p-4">
           <AdminDataTable columns={CartColumns} data={dataTable} />
         </div>
+        <Pagenation page={page} setPage={setPage} number={totalPages} />
       </div>
     </div>
   );
