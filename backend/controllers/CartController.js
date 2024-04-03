@@ -185,6 +185,34 @@ class CartController {
       return res.status(500).json({ error: err.message });
     }
   };
+
+  static cancelBooking = async (req, res) => {
+    try {
+      const cartId = req.params.id;
+      const userId = req.userId;
+      const cart = await Cart.findOne({
+        _id: cartId,
+        userId,
+      });
+
+      if (!cart) {
+        return res.status(401).send({ error: "Not found" });
+      }
+
+      const car = await Car.findOne({ _id: cart.carId });
+      car.available = true;
+      await car.save();
+      await Cart.findByIdAndUpdate(cart._id, { status: "Cancelled" });
+      await cart.save();
+
+      return res
+        .status(200)
+        .send({ message: "Booking cancelled successfully" });
+    } catch (err) {
+      console.log(err);
+      return res.status(500).json({ error: "Internal Server Error" });
+    }
+  };
 }
 
 export default CartController;
