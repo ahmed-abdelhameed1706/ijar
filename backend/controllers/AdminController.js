@@ -116,14 +116,14 @@ export default class AdminController {
 
   static deleteCar = async (req, res) => {
     try {
-      const carId = req.params.id;
+      const carId = req.body.id;
+      console.log("Car ID IS ", carId);
+
       const car = await Car.findById(carId);
       if (!car) {
         return res.status(404).json({ error: "Car not found" });
       }
       await Car.findByIdAndDelete(carId);
-
-      await Cart.deleteMany({ carId });
 
       res.status(200).json({ message: "Car deleted successfully" });
     } catch (err) {
@@ -175,7 +175,7 @@ export default class AdminController {
       const ticket = await Ticket.findByIdAndUpdate(
         req.params.id,
         { status: req.body.status },
-        { new: true },
+        { new: true }
       );
       if (!ticket) {
         return res.status(404).json({ error: "Ticket not found" });

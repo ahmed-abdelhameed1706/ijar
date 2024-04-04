@@ -28,9 +28,9 @@ const MenuButton = ({ user }) => {
       },
     });
 
-    console.log("Deleting user:", user._id);
     // After deleting, navigate to the next page
     navigate("/admin/users");
+    window.location.reload();
   };
 
   const changeActivity = async (user) => {
@@ -43,6 +43,7 @@ const MenuButton = ({ user }) => {
         },
       }
     );
+    window.location.reload();
   };
   return (
     <DropdownMenu>

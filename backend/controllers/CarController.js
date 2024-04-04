@@ -119,9 +119,8 @@ class CarController {
   }
 
   static async deleteCar(req, res) {
-    const carId = req.params.id;
-
     try {
+      const carId = req.params.id;
       const user = await User.findById(req.userId);
 
       if (!user || user.role === "user") {
@@ -166,7 +165,7 @@ class CarController {
           .json({ error: "End date cannot be before start date!" });
       }
       const rentalDays = Math.ceil(
-        (parsedEndDate - parsedStartDate) / (1000 * 60 * 60 * 24),
+        (parsedEndDate - parsedStartDate) / (1000 * 60 * 60 * 24)
       );
       const totalCost = car.price * rentalDays;
 
