@@ -34,7 +34,7 @@ import useSignOut from "react-auth-kit/hooks/useSignOut";
 const Delete = ({ setOpenBar }) => {
 
   const [showPassword, setShowPassword] = useState(false);
-  const [password, setPassword] = useState(false);
+  const [password, setPassword] = useState('');
 
   const auth = useAuthHeader()
   const token = auth.split(" ")[1]
@@ -47,7 +47,6 @@ const Delete = ({ setOpenBar }) => {
         toast.info("Password is required.");
         return;
       }
-      console.log(password)
       try {
         await axios.delete(
           "/api/users",

@@ -94,7 +94,6 @@ const SignupPage = () => {
         }
       );
       navigate("/login", { replace: true });
-      console.log(response);
       toast.success(response.data.message);
       setTimeout(() => {
         toast.info(
