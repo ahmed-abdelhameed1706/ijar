@@ -87,7 +87,7 @@ export default class UserController {
 
       const isPasswordCorrect = await bcrypt.compare(
         oldPassword,
-        user.password
+        user.password,
       );
       if (!isPasswordCorrect) {
         return res.status(400).json({
