@@ -11,7 +11,7 @@ adminRouter.put("/users/:id", isAdmin, AdminController.updateUser);
 
 // CARS MANAGEMENT
 adminRouter.get("/cars", isAdmin, AdminController.getAllCars);
-adminRouter.delete("/cars/:id", isAdmin, AdminController.deleteCar);
+adminRouter.delete("/cars", isAdmin, AdminController.deleteCar);
 
 // TICKETS MANAGEMENT
 adminRouter.get("/tickets", isAdmin, AdminController.getAllTickets);

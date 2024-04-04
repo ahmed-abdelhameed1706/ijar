@@ -29,6 +29,7 @@ const MenuButton = ({ cart }) => {
 
       // After deleting, navigate to the next page
       navigate("/admin/carts");
+      window.location.reload();
     } catch (error) {
       console.error("Error deleting cart:", error);
     }

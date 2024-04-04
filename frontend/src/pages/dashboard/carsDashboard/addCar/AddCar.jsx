@@ -323,6 +323,8 @@ const AddCar = ({ setOpen, setCars, cars, car, isUpdate = false }) => {
                     </FormItem>
                   )}
                 />
+                </div>
+                <div className="flex flex-col sm:flex-row gap-4">
                 <FormField
                   control={form.control}
                   name="color"
@@ -331,6 +333,19 @@ const AddCar = ({ setOpen, setCars, cars, car, isUpdate = false }) => {
                       <FormLabel>Color</FormLabel>
                       <FormControl>
                         <Input placeholder="Black" type="text" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="year"
+                  render={({ field }) => (
+                    <FormItem className="w-full">
+                      <FormLabel>Year</FormLabel>
+                      <FormControl>
+                        <Input placeholder="2023" type="number" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

@@ -30,6 +30,7 @@ const MenuButton = ({ ticket }) => {
 
       // After deleting, navigate to the next page
       navigate("/admin/tickets");
+      window.location.reload();
     } catch (error) {
       console.error("Error deleting ticket:", error);
     }
@@ -49,6 +50,7 @@ const MenuButton = ({ ticket }) => {
 
       // After deleting, navigate to the next page
       navigate("/admin/tickets");
+      window.location.reload();
     } catch (error) {
       console.error("Error updating ticket:", error);
     }
@@ -67,6 +69,7 @@ const MenuButton = ({ ticket }) => {
 
       // After deleting, navigate to the next page
       navigate("/admin/tickets");
+      window.location.reload();
     } catch (error) {
       console.error("Error updating ticket:", error);
     }

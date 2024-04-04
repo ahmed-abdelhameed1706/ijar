@@ -127,15 +127,13 @@ const CarsDashboardPage = () => {
   const handleDeleteCar = () => {
     return async () => {
       try {
-        const response = await axios.delete(`/api/cars/${car.id}`, {
+        await axios.delete(`/api/cars/${car.id}`, {
           headers: {
             "Content-Type": "application/json",
             authorization: token,
           },
         });
         toast.success("Car deleted successfully");
-
-        console.log(response);
         setCars(cars.filter((c) => c.id !== car.id));
         setCar(null);
       } catch (error) {
@@ -165,7 +163,7 @@ const CarsDashboardPage = () => {
       <div className="flex justify-between">
         <div className="flex flex-wrap justify-start gap-6">
           {cars.map((car, index) => (
-            <MotionTop key={index} duration={index / 2}>
+            <MotionTop key={index} duration={2 / 3}>
               <CardCar
                 car={car}
                 setCar={setCar}

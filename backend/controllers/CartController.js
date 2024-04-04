@@ -3,6 +3,7 @@ import Car from "../models/CarSchema";
 const cron = require("node-cron");
 import User from "../models/UserSchema";
 import { sendEmail } from "../utils/utility";
+import { ObjectId } from "mongoose";
 
 const getAllCart = async (req, res) => {
   try {
@@ -187,17 +188,22 @@ class CartController {
   };
 
   static cancelBooking = async (req, res) => {
+    console.log("======= cancel booking ======== was called");
     try {
-      const cartId = req.params.id;
+      const cartId = req.body.id;
+      console.log("cart Id: ", cartId);
       const userId = req.userId;
+      console.log("user Id: ", userId);
       const cart = await Cart.findOne({
         _id: cartId,
         userId,
       });
+      console.log("======= find car ========");
 
       if (!cart) {
         return res.status(401).send({ error: "Not found" });
       }
+      console.log("======= update car ========");
 
       const car = await Car.findOne({ _id: cart.carId });
       car.available = true;

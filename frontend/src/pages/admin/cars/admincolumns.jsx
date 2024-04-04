@@ -22,7 +22,10 @@ const MenuButton = ({ car }) => {
 
   const onDelete = async (car) => {
     try {
-      await axios.delete(`/api/admin/cars/${car._id}`, {
+      await axios.delete(`/api/admin/cars`, {
+        data: {
+          id: car.id,
+        },
         headers: {
           Authorization: token,
         },
@@ -30,6 +33,7 @@ const MenuButton = ({ car }) => {
 
       // After deleting, navigate to the next page
       navigate("/admin/cars");
+      window.location.reload();
     } catch (error) {
       console.error("Error deleting car:", error);
     }

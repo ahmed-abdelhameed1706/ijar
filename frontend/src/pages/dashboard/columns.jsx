@@ -1,22 +1,29 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  //   DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Ellipsis } from "lucide-react";
+
+import ActionsComponent from "./bookingList/ActionsComponent";
 
 export const columns = [
   {
-    id: "ID",
-    accessorKey: "cartId",
-    accessorFn: (row) => row._id,
-    header: "cart ID",
+    id: "image",
+    accessorKey: "image",
+    // accessorFn: (row) => row._id,
+    header: "Image",
+    cell: ({ row }) => {
+      const booking = row.original;
+      console.log(booking);
+      return (
+        <Avatar size="md">
+          <AvatarImage
+            src={booking.carId ? booking.carId : ""}
+            fallback={
+              <AvatarFallback>
+                {booking.carId ? booking.carId.brandName : ""}
+              </AvatarFallback>
+            }
+          />
+        </Avatar>
+      );
+    },
   },
   {
     id: "carName",
@@ -97,7 +104,7 @@ export const columns = [
               ? "bg-yellow-500"
               : booking.status === "Completed"
               ? "bg-green-500"
-              : booking.status === "Canceled"
+              : booking.status === "Cancelled"
               ? "bg-red-500"
               : booking.status === "In Progress"
               ? "bg-blue-500"
@@ -116,26 +123,7 @@ export const columns = [
     cell: ({ row }) => {
       const booking = row.original;
 
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <Ellipsis className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            {/* <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
-            >
-              Copy payment ID
-            </DropdownMenuItem> */}
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>View booking details</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
+      return <ActionsComponent booking={booking} />;
     },
   },
 ];

@@ -40,6 +40,7 @@ const BookingList = () => {
       handleFilter(status);
     }
   };
+
   const getBooking = async () => {
     try {
       const response = await axios.get("/api/carts", {
