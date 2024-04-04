@@ -83,7 +83,7 @@ const AddCar = ({ setOpen, setCars, cars, car, isUpdate = false }) => {
     },
   });
 
-  async function onSubmit(values) {
+  async function onSubmit() {
     toast.promise(uploadImages(images), {
       pending: isUpdate ? "Updating Car..." : "Adding Car...",
       error: isUpdate ? "Failed to update car." : "Failed to add car.",
@@ -94,7 +94,7 @@ const AddCar = ({ setOpen, setCars, cars, car, isUpdate = false }) => {
       if (isUpdate) {
         const response = await axios.put(
           `/api/cars/${car.id}`,
-          JSON.stringify({ ...values, images: imagesUrl }),
+          JSON.stringify({ ...form.getValues(), images: imagesUrl }),
           {
             headers: {
               "Content-Type": "application/json",
@@ -109,7 +109,7 @@ const AddCar = ({ setOpen, setCars, cars, car, isUpdate = false }) => {
       }
       const response = await axios.post(
         "/api/cars",
-        JSON.stringify({ ...values, images: imagesUrl }),
+        JSON.stringify({ ...form.getValues(), images: imagesUrl }),
         {
           headers: {
             "Content-Type": "application/json",
@@ -451,7 +451,7 @@ const AddCar = ({ setOpen, setCars, cars, car, isUpdate = false }) => {
                   </FormItem>
                 )}
               />
-              <Button className="w-full" type="submit">
+              <Button className="w-full" type="submit" onClick={onSubmit}>
                 {isUpdate ? "Update Car" : "Add Car"}
               </Button>
             </form>
