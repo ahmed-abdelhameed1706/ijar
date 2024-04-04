@@ -15,17 +15,22 @@ import useAuthHeader from "react-auth-kit/hooks/useAuthHeader";
 const ActionsComponent = ({ booking }) => {
   console.log(booking);
   const auth = useAuthHeader();
-  const token = auth.split(" ")[1];
+  const token = auth && auth.split(" ")[1];
   const handleCancelBooking = async () => {
+    console.log("cancel booking was called with id: ", booking._id);
+    console.log("token: ", token);
     try {
-      const response = await axios.put(`/api/cart`, {
-        headers: {
-          Authorization: token,
-        },
-        params: {
+      const response = await axios.put(
+        `/api/cart`,
+        {
           id: booking._id,
         },
-      });
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
       console.log(response);
     } catch (error) {
       console.log(error.message);

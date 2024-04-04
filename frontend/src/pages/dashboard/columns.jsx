@@ -104,7 +104,7 @@ export const columns = [
               ? "bg-yellow-500"
               : booking.status === "Completed"
               ? "bg-green-500"
-              : booking.status === "Canceled"
+              : booking.status === "Cancelled"
               ? "bg-red-500"
               : booking.status === "In Progress"
               ? "bg-blue-500"

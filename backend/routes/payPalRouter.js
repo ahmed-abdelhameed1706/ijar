@@ -1,4 +1,4 @@
-import PayPal from "../controllers/payPal";
+import PayPal from "../controllers/PayPal";
 import express from "express";
 
 const payPalRouter = express.Router();
