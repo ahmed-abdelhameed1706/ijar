@@ -1,7 +1,7 @@
-import Car from "../models/CarSchema";
-import User from "../models/UserSchema";
-import Comment from "../models/CommentSchema";
-import Cart from "../models/CartSchema";
+import Car from "../models/CarSchema.js";
+import User from "../models/UserSchema.js";
+import Comment from "../models/CommentSchema.js";
+import Cart from "../models/CartSchema.js";
 
 class CarController {
   static async postCar(req, res) {

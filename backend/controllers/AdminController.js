@@ -1,7 +1,7 @@
-import Car from "../models/CarSchema";
-import User from "../models/UserSchema";
-import Ticket from "../models/TicketSchema";
-import Cart from "../models/CartSchema";
+import Car from "../models/CarSchema.js";
+import User from "../models/UserSchema.js";
+import Ticket from "../models/TicketSchema.js";
+import Cart from "../models/CartSchema.js";
 
 export default class AdminController {
   // USERS MANAGEMENT

@@ -1,8 +1,8 @@
 import express from "express";
-import UserController from "../controllers/UserController";
-import { verifyToken } from "../utils/middlewares";
-import { isAdmin } from "../utils/middlewares";
-import { limiter } from "../utils/utility";
+import UserController from "../controllers/UserController.js";
+import { verifyToken } from "../utils/middlewares.js";
+import { isAdmin } from "../utils/middlewares.js";
+import { limiter } from "../utils/utility.js";
 
 const userRouter = express.Router();
 

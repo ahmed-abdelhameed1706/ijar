@@ -1,7 +1,7 @@
 import express from "express";
-import TicketController from "../controllers/TicketController";
+import TicketController from "../controllers/TicketController.js";
 
-import { isAdmin, verifyToken } from "../utils/middlewares";
+import { isAdmin, verifyToken } from "../utils/middlewares.js";
 
 const ticketRouter = express.Router();
 

@@ -1,4 +1,4 @@
-import Ticket from "../models/TicketSchema";
+import Ticket from "../models/TicketSchema.js";
 
 export default class TicketController {
   static async createTicket(req, res) {

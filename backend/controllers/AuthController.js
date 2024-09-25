@@ -1,19 +1,19 @@
-import User from "../models/UserSchema";
+import User from "../models/UserSchema.js";
 import bcrypt from "bcryptjs";
 import {
   generateAccessToken,
   generateRefreshToken,
   generateVerificationToken,
   validateToken,
-} from "../utils/middlewares";
+} from "../utils/middlewares.js";
 
-import { verifyEmailForm } from "../utils/mailFormer";
+import { verifyEmailForm } from "../utils/mailFormer.js";
 
 import jwt from "jsonwebtoken";
 
 import dotenv from "dotenv";
 
-import { sendEmail } from "../utils/utility";
+import { sendEmail } from "../utils/utility.js";
 
 import path from "path";
 

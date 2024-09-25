@@ -1,4 +1,4 @@
-import Car from "../models/CarSchema";
+import Car from "../models/CarSchema.js";
 
 export default class FilterController {
   static async filterCars(req, res) {
@@ -22,7 +22,7 @@ export default class FilterController {
         filter.brandName = {
           $regex: new RegExp(
             `[${brandName}]{${Math.ceil(brandName.length * 0.8)},}`,
-            "i",
+            "i"
           ),
         };
       if (type) filter.type = type;
@@ -30,7 +30,7 @@ export default class FilterController {
         filter.color = {
           $regex: new RegExp(
             `[${color}]{${Math.floor(color.length * 0.9)},}`,
-            "i",
+            "i"
           ),
         };
       if (model)

@@ -1,8 +1,8 @@
-import Cart from "../models/CartSchema";
-import Car from "../models/CarSchema";
-const cron = require("node-cron");
-import User from "../models/UserSchema";
-import { sendEmail } from "../utils/utility";
+import Cart from "../models/CartSchema.js";
+import Car from "../models/CarSchema.js";
+import cron from "node-cron";
+import User from "../models/UserSchema.js";
+import { sendEmail } from "../utils/utility.js";
 import { ObjectId } from "mongoose";
 
 const getAllCart = async (req, res) => {

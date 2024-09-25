@@ -1,14 +1,14 @@
-import User from "../models/UserSchema";
-import Cart from "../models/CartSchema";
-import Car from "../models/CarSchema";
-import { resetPasswordForm } from "../utils/mailFormer";
-import { sendEmail } from "../utils/utility";
+import User from "../models/UserSchema.js";
+import Cart from "../models/CartSchema.js";
+import Car from "../models/CarSchema.js";
+import { resetPasswordForm } from "../utils/mailFormer.js";
+import { sendEmail } from "../utils/utility.js";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import bcrypt from "bcryptjs";
 import { error } from "console";
 
-const path = require("path");
+import path from "path";
 
 dotenv.config();
 
@@ -87,7 +87,7 @@ export default class UserController {
 
       const isPasswordCorrect = await bcrypt.compare(
         oldPassword,
-        user.password,
+        user.password
       );
       if (!isPasswordCorrect) {
         return res.status(400).json({

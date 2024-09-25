@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
-import User from "../models/UserSchema";
+import User from "../models/UserSchema.js";
 import { createLogger, transports, format } from "winston";
 
 dotenv.config();

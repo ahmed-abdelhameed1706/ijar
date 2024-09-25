@@ -1,5 +1,5 @@
 import express from "express";
-import FilterController from "../controllers/FilterController";
+import FilterController from "../controllers/FilterController.js";
 
 const filterRouter = express.Router();
 

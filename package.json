@@ -1,0 +1,11 @@
+{
+  "name": "ijar-app",
+  "version": "1.0.0",
+  "engines": {
+    "node": "18.x"
+  },
+  "scripts": {
+    "start": "npm start --prefix backend",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false && npm install --prefix frontend && npm run build --prefix frontend && npm install --prefix backend"
+  }
+}

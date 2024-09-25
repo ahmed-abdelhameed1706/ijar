@@ -1,8 +1,8 @@
-import Car from "../models/CarSchema";
+import Car from "../models/CarSchema.js";
 import { faker } from "@faker-js/faker";
-import { getRandomCarImages } from "./generateImages";
-import User from "../models/UserSchema";
-import Cart from "../models/CartSchema";
+import { getRandomCarImages } from "./generateImages.js";
+import User from "../models/UserSchema.js";
+import Cart from "../models/CartSchema.js";
 import bcrypt from "bcryptjs";
 
 export const seedDatabase = async (
