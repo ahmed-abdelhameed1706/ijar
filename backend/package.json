@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Ijar is a web app for renting and leasing cars",
   "main": "server.js",
+  "engines": {
+    "node": "18.x"
+  },
   "dependencies": {
     "axios": "^1.6.8",
     "bcryptjs": "^2.4.3",
@@ -51,7 +54,9 @@
     "start-server": "nodemon --exec babel-node --presets @babel/preset-env ./server.js",
     "start-worker": "nodemon --exec babel-node --presets @babel/preset-env ./worker.js",
     "dev": "nodemon --exec babel-node --presets @babel/preset-env",
-    "test": "./node_modules/.bin/mocha --require @babel/register --exit"
+    "test": "./node_modules/.bin/mocha --require @babel/register --exit",
+    "start": "node server.js",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix frontend && npm run build --prefix frontend && npm install"
   },
   "author": "",
   "license": "ISC"
